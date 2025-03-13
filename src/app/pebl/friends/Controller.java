@@ -1,4 +1,4 @@
-package com.pebl.friends;
+package app.pebl.friends;
 
 public class Controller {
 	

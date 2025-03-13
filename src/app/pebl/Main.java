@@ -1,4 +1,4 @@
-package com.pebl;
+package app.pebl;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

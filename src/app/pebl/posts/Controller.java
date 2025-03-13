@@ -1,4 +1,4 @@
-package com.pebl.posts;
+package app.pebl.posts;
 
 public class Controller {
 	

@@ -1,4 +1,4 @@
-package com.pebl.login;
+package app.pebl.login;
 
 import javafx.scene.control.*;
 
