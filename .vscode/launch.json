@@ -6,6 +6,13 @@
 	"configurations": [
 		{
 			"type": "java",
+			"name": "Tester",
+			"request": "launch",
+			"mainClass": "app.pebl.Tester",
+			"projectName": "pebl-client_b8dd50bc"
+		},
+		{
+			"type": "java",
 			"name": "Main",
 			"request": "launch",
 			"mainClass": "app.pebl.Main",
