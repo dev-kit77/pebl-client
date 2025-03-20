@@ -12,7 +12,8 @@ public class Connect {
         
     }
 
-    public void gethtml(){
+    //TODO add different functions (or reuse this one) to get data on users and another for getting posts.
+    public void getResponse(){
         // Try block to check exceptions
         try {
             String val;
@@ -22,7 +23,7 @@ public class Connect {
             URL URL = new URL(
                 "https://pebble-api.fly.dev/");
  
-            // Reading the HTML content from the .HTML File
+            // Reading the response of the server
             BufferedReader br = new BufferedReader(
                 new InputStreamReader(URL.openStream()));
  

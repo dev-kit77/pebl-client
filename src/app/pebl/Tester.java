@@ -25,8 +25,8 @@ public void gethtml(){
         // by defining the URL constructors
         URL URL = new URL(
             "https://pebble-api.fly.dev/");
-
-        // Reading the HTML content from the .HTML File
+        
+        // Reading the server response
         BufferedReader br = new BufferedReader(
             new InputStreamReader(URL.openStream()));
 
