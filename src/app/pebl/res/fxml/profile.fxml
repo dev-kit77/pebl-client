@@ -4,54 +4,98 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #c9e6f0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.profile.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #c9e6f0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.profile.Controller">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" text="Switch User" />
+                  <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" text="Edit Profile" />
+                  <MenuItem mnemonicParsing="false" text="User Settings" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="false" text="How to..." />
+                  <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
    </top>
    <left>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="375.0" prefWidth="150.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="128.0" fitWidth="128.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true">
+            <ImageView fitHeight="130.0" fitWidth="130.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true">
                <image>
                   <Image url="@../img/pebble.png" />
                </image>
             </ImageView>
-            <Label layoutX="15.0" layoutY="140.0" text="Displayname">
+            <Label fx:id="displayName" layoutX="10.0" layoutY="140.0" text="Displayname">
                <font>
                   <Font name="Californian FB Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="15.0" layoutY="160.0" text="\@username">
+            <Label fx:id="username" layoutX="10.0" layoutY="162.0" text="\@username">
                <font>
                   <Font name="Californian FB Italic" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="15.0" layoutY="180.0" text="Status Message">
+            <Label fx:id="status" layoutX="10.0" layoutY="180.0" text="Status Message">
+               <font>
+                  <Font name="Californian FB" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="200.0" text="Skips:">
+               <font>
+                  <Font name="Californian FB" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="217.0" text="Age:">
+               <font>
+                  <Font name="Californian FB" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="38.0" layoutY="217.0" text="Null">
+               <font>
+                  <Font name="Californian FB" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="234.0" text="Gender:">
+               <font>
+                  <Font name="Californian FB" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="250.0" text="Location:">
+               <font>
+                  <Font name="Californian FB" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="47.0" layoutY="200.0" text="Null">
+               <font>
+                  <Font name="Californian FB" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="60.0" layoutY="234.0" text="Null">
+               <font>
+                  <Font name="Californian FB" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="70.0" layoutY="251.0" text="Null">
                <font>
                   <Font name="Californian FB" size="14.0" />
                </font>
@@ -60,6 +104,10 @@
       </AnchorPane>
    </left>
    <right>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <ScrollPane hbarPolicy="NEVER" prefHeight="375.0" prefWidth="250.0" BorderPane.alignment="CENTER">
+         <content>
+            <VBox />
+         </content>
+      </ScrollPane>
    </right>
 </BorderPane>

@@ -29,9 +29,9 @@ public class Main extends Application {
 		return fxmlLoader.load();
 	}
 
-	// public static void main(String[] args) {
-	// 	// launch(args);
-	// 	Connect connect = new Connect();
-	// 	connect.gethtml();
-	// }
+	public static void main(String[] args) {
+		launch(args);
+	 	// Connect connect = new Connect();
+	 	// connect.gethtml();
+	 }
 }

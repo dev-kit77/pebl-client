@@ -1,3 +1,6 @@
 .root {
-
+	-color: #c9e6f0;
+	-background-color:#c9e6f0;
+	-fx-background-color: #c9e6f0;
+	-fx-text-fill: #2a3e45;
 }
