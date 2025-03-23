@@ -12,12 +12,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #c9e6f0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.profile.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="400.0" style="-fx-background-color: #c9e6f0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.profile.Controller">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
+                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" text="Refresh" />
               <MenuItem mnemonicParsing="false" text="Switch User" />
                   <MenuItem mnemonicParsing="false" text="Close" />
             </items>
@@ -40,62 +41,77 @@
    <left>
       <AnchorPane prefHeight="375.0" prefWidth="150.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="130.0" fitWidth="130.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true">
+            <ImageView fx:id="imgProfilePicture" fitHeight="130.0" fitWidth="130.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true">
                <image>
                   <Image url="@../img/pebble.png" />
                </image>
             </ImageView>
-            <Label fx:id="displayName" layoutX="10.0" layoutY="140.0" text="Displayname">
+            <Label fx:id="lblDisplayName" layoutX="10.0" layoutY="140.0" text="Displayname">
                <font>
                   <Font name="Californian FB Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="username" layoutX="10.0" layoutY="162.0" text="\@username">
+            <Label fx:id="lblUsername" layoutX="10.0" layoutY="162.0" text="\@username">
                <font>
                   <Font name="Californian FB Italic" size="14.0" />
                </font>
             </Label>
-            <Label fx:id="status" layoutX="10.0" layoutY="180.0" text="Status Message">
+            <Label fx:id="lblStatus" layoutX="10.0" layoutY="180.0" text="Status Message">
                <font>
                   <Font name="Californian FB" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="200.0" text="Skips:">
+            <Label layoutX="11.0" layoutY="252.0" text="Skips:">
                <font>
                   <Font name="Californian FB" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="217.0" text="Age:">
+            <Label layoutX="11.0" layoutY="269.0" text="Age:">
                <font>
                   <Font name="Californian FB" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="38.0" layoutY="217.0" text="Null">
+            <Label fx:id="lblAge" layoutX="39.0" layoutY="269.0" text="Null">
                <font>
                   <Font name="Californian FB" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="234.0" text="Gender:">
+            <Label layoutX="11.0" layoutY="286.0" text="Gender:">
                <font>
                   <Font name="Californian FB" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="250.0" text="Location:">
+            <Label layoutX="11.0" layoutY="302.0" text="Location:">
                <font>
                   <Font name="Californian FB" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="47.0" layoutY="200.0" text="Null">
+            <Label fx:id="lblSkips" layoutX="48.0" layoutY="252.0" text="Null">
                <font>
                   <Font name="Californian FB" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="60.0" layoutY="234.0" text="Null">
+            <Label fx:id="lblGender" layoutX="58.0" layoutY="286.0" text="Null">
                <font>
                   <Font name="Californian FB" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="70.0" layoutY="251.0" text="Null">
+            <Label fx:id="lblLocation" layoutX="67.0" layoutY="302.0" text="Null">
+               <font>
+                  <Font name="Californian FB" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblFollowers" layoutX="11.0" layoutY="198.0" text="0 Followers">
+               <font>
+                  <Font name="Californian FB" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblFollowing" layoutX="11.0" layoutY="216.0" text="0 Following">
+               <font>
+                  <Font name="Californian FB" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblPostNo" layoutX="11.0" layoutY="234.0" text="0 Posts">
                <font>
                   <Font name="Californian FB" size="14.0" />
                </font>
@@ -104,10 +120,19 @@
       </AnchorPane>
    </left>
    <right>
-      <ScrollPane hbarPolicy="NEVER" prefHeight="375.0" prefWidth="250.0" BorderPane.alignment="CENTER">
-         <content>
-            <VBox />
-         </content>
-      </ScrollPane>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <ScrollPane hbarPolicy="NEVER" layoutY="25.0" prefHeight="300.0" prefWidth="250.0" style="-fx-border-color: #c9e6f0;" vbarPolicy="ALWAYS">
+               <content>
+                  <VBox />
+               </content>
+            </ScrollPane>
+            <Label layoutY="3.0" text="Posts">
+               <font>
+                  <Font name="Californian FB Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </right>
 </BorderPane>

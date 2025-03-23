@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+
+<fx:root fx:id="ancPost" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;?import javafx.scene.image.ImageView?&gt;&lt;ImageView id=&quot;lblCurrPFP&quot; fx:id=&quot;imgProfilePic&quot; fitHeight=&quot;60.0&quot; fitWidth=&quot;60.0&quot; layoutX=&quot;5.0&quot; layoutY=&quot;5.0&quot; pickOnBounds=&quot;true&quot; xmlns=&quot;http://javafx.com/javafx/23.0.1&quot; xmlns:fx=&quot;http://javafx.com/fxml/1&quot; /&gt;;" type="AnchorPane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.posts.PostController">
+   <children>
+      <ImageView id="lblCurrPFP" fx:id="imgProfilePic" fitHeight="50.0" fitWidth="50.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" />
+      <HBox alignment="CENTER_LEFT" layoutX="60.0" layoutY="5.0" spacing="5.0">
+         <children>
+            <Label id="lblCurrDispName" fx:id="lblDisplayname" focusTraversable="false" text="Display name" textFill="#2a3e45">
+               <font>
+                  <Font name="Californian FB Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label id="lblCurrUsername" fx:id="lblUsername" focusTraversable="false" opacity="0.8" text="\@Username" textFill="#2a3e45">
+               <font>
+                  <Font name="Californian FB Italic" size="10.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <TextFlow fx:id="txtBody" layoutX="60.0" layoutY="25.0" lineSpacing="1.0" />
+   </children>
+</fx:root>
