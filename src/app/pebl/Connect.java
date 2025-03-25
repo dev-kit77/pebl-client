@@ -1,21 +1,21 @@
 package app.pebl;
 
 //importing packages
+import java.util.Properties;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONValue;
+import java.net.URI;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.util.Scanner;
-import java.net.URI;
-import java.io.FileWriter;
-import java.io.File;
-import java.io.IOException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.JSONValue;
 
-//api link: // api link: https://pebble-api.fly.dev/api/
+//api link: // api link: https://pebl-api.fly.dev/api/
 
 
 public class Connect {
