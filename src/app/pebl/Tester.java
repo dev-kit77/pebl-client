@@ -60,6 +60,49 @@ public class Tester {
         return auth;
     }
 
+    public void request(String type, JSONObject body) throws IOException, InterruptedException{
+        HttpRequest request;
+        HttpResponse<String> response;
+        JSONObject authFull;
+        switch (type) {
+
+            case "register":
+                request = HttpRequest.newBuilder()
+                .uri(URI.create(api+type))
+                .POST(HttpRequest.BodyPublishers.ofString(body.toJSONString()))
+                .header("Content-Type", "application/json")
+                .build();
+
+                response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                System.out.println(response.statusCode());
+                System.out.println(response.body());
+                authFull = (JSONObject)JSONValue.parse(response.body()); //parse the response as JSON
+                auth = (String)authFull.get("token"); // update the auth token
+                authFull = null; //remove the JSON object
+
+                break;
+
+            case "auth":
+                request = HttpRequest.newBuilder()
+                .uri(URI.create(api+type))
+                .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                .header("Content-Type", "application/json")
+                .build();
+
+                response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                System.out.println(response.statusCode());
+                System.out.println(response.body());
+                authFull = (JSONObject)JSONValue.parse(response.body()); //parse the response as JSON
+                auth = (String)authFull.get("token"); // update the auth token
+                authFull = null; //remove the JSON object
+                break;
+
+            default:
+                System.out.println("No such option for request.");
+                break;
+        }
+    }
+
     /**
      * Creates a user with name Roberto, it sends a request to api/register with the body being stringified json object 
      * New account details:
@@ -71,40 +114,28 @@ public class Tester {
      * 
      */
     @SuppressWarnings("unchecked")
-    public boolean testRegister() throws IOException, InterruptedException{ //TODO test creating a new user
+    public void testRegister() throws IOException, InterruptedException{ //TODO test creating a new user
         JSONObject user = new JSONObject();
         
         user.put("password", "bob");
         user.put("username", "Roberto");
         user.put("age", 50);
         user.put("gender", true);
-
-        HttpRequest register = HttpRequest.newBuilder()
-        .uri(URI.create(api+"register"))
-        .POST(HttpRequest.BodyPublishers.ofString(user.toJSONString()))
-        .header("Content-Type", "application/json")
-        .build();
-
-        HttpResponse<String> response = client.send(register, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() == 200) {
-            auth = response.body();
-            System.out.println(response.statusCode());
-            System.out.println(auth);
-            return true;
-        }
-        else {
-            System.out.println("code: "+ response.statusCode());
-            System.out.println(user.toJSONString());
-            return false;
-        }
+        request("register", user);
         
     }
     
     /**
      * Tries to login as Roberto
-     */
-    public void testLogin(){ //TODO test logging in existing user
-        
+          * @throws InterruptedException 
+          * @throws IOException 
+          */
+         @SuppressWarnings("unchecked")
+         public void testAuth() throws IOException, InterruptedException{ //TODO test logging in existing user
+        JSONObject user = new JSONObject();
+        user.put("username", "roberto");
+        user.put("password", "bob");
+        request("auth", user);
     }
 
 
@@ -120,7 +151,8 @@ public class Tester {
     public static void main(String[] args) throws IOException, InterruptedException {
         // System.out.println(aypi);
         Tester tester = new Tester();
-        tester.testRegister();
+        // tester.testRegister();
+        tester.testAuth();
 
     }
 }
