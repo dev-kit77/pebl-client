@@ -1,7 +1,13 @@
 package app.pebl.posts;
+
 import java.util.Date;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
 
-
+/**
+ * Posts class
+ */
 public class Posts {
     private String id;
     private String sender;
