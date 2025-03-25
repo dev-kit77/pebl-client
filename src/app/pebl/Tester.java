@@ -1,51 +1,56 @@
 package app.pebl;
 
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.net.URL;
+import java.util.Properties;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import java.net.URI;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 
+// api link: https://pebble-api.fly.dev/api/
 
 public class Tester {
 
-public static void main(String[] args) {
-    Tester tester = new Tester();
-    tester.gethtml();
-}
 
-public Tester(){
-
-}
-
-public void gethtml(){
-    // Try block to check exceptions
-    try {
-        String val;
-
-        // Constructing the URL connection
-        // by defining the URL constructors
-        URL URL = new URL(
-            "https://pebble-api.fly.dev/");
-        
-        // Reading the server response
-        BufferedReader br = new BufferedReader(
-            new InputStreamReader(URL.openStream()));
-
-        /* Catching the string and  if found any null
-         character break the String */
-        while ((val = br.readLine()) != null) {
-            System.out.println(val);
+    public static String api = "https://pebble-api.fly.dev/api/";
+    private String auth; //auth token
+    private File config; //config file
+    public Tester() throws IOException{
+        config = new File(new File("./.pebl.cfg").getCanonicalPath()); //file config to config file
+        if (!config.exists()) {
+            config.createNewFile();
         }
+        // TODO read auth token from config
 
-        // Closing the file
-        br.close();
+    }
+    
+    public void testregister(){ //TODO test creating a new user
+        
+    }
+    
+    public void testlogin(){ //TODO test logging in existing user
+        
     }
 
-    // Catch block to handle exceptions
-    catch (Exception ex) {
 
-        // No file found
-        System.out.println(ex.getMessage());
+    public boolean testSave() throws IOException{ //TODO save auth to config file (make it work alongside saving other configs)
+
+        return false;
     }
-}
 
+    public boolean testChangeAuth() throws IOException{ //TODO change the auth value in the config file to a different one
+        return false;
+    }
+    
+    public static void main(String[] args) throws IOException {
+        // System.out.println(api);
+
+    }
 }

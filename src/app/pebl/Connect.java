@@ -1,48 +1,37 @@
 package app.pebl;
 
+//importing packages
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.util.Scanner;
+import java.net.URI;
+import java.io.FileWriter;
+import java.io.File;
+import java.io.IOException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONValue;
 
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.net.URL;
+//api link: // api link: https://pebble-api.fly.dev/api/
+
 
 public class Connect {
-
-
-    public Connect(){
+    private String auth;
+    private String path;
+    public Connect() throws IOException{
+        File file = new File(".");
+        path = file.getCanonicalPath();
         
     }
 
     //TODO add different functions (or reuse this one) to get data on users and another for getting posts.
-    public void getResponse(){
-        // Try block to check exceptions
-        try {
-            String val;
- 
-            // Constructing the URL connection
-            // by defining the URL constructors
-            URL URL = new URL(
-                "https://pebble-api.fly.dev/");
- 
-            // Reading the response of the server
-            BufferedReader br = new BufferedReader(
-                new InputStreamReader(URL.openStream()));
- 
-            /* Catching the string and  if found any null
-             character break the String */
-            while ((val = br.readLine()) != null) {
-                System.out.println(val);
-            }
- 
-            // Closing the file
-            br.close();
-        }
- 
-        // Catch block to handle exceptions
-        catch (Exception ex) {
- 
-            // No file found
-            System.out.println(ex.getMessage());
-        }
-    }
+    /**
+     * Method to test connection to server
+     */
 
+
+    
 }

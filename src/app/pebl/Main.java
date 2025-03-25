@@ -29,9 +29,12 @@ public class Main extends Application {
 		return fxmlLoader.load();
 	}
 
+	private static void cache(){ //TODO this.
+
+	}
+
 	public static void main(String[] args) {
 		launch(args);
-	 	// Connect connect = new Connect();
-	 	// connect.gethtml();
+	 	
 	 }
 }
