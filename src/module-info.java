@@ -5,6 +5,8 @@ module PeblClient {
 	requires javafx.media;
 	requires javafx.controls;
 	requires javafx.web;
+	requires json.simple;
+	requires java.net.http;
 
 	opens app.pebl to javafx.graphics, javafx.fxml;
 	opens app.pebl.friends to javafx.fxml;
