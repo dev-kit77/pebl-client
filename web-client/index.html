@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Pebble</title>
+</head>
+<body>
+<style>
+.hidden {display: none;}
+.topleft {position: fixed; left: 0px; top: 0px; height: 15vh; width: 80vw;}
+.rightside {position: fixed; left: 80vw; top: 0px; height: 100vw; width: 80vw;}
+</style>
+<div id="login" class="panel login hidden topleft" style="background-color: aquamarine; border: 1px solid black;">
+	<label for="loginUsername">Username</label><label for="loginPassword">Password</label><label for="loginGender">Gender</label><label for="loginAge">Age</label>
+	<input id="loginUsername" type="text" placeholder="username"><input id="loginPassword" type="text" placeholder="password"><input id="loginGender" type="checkbox"><input id="loginAge" type="number" placeholder="age">
+	<button>Log in</button>
+</div>
+<div id="register" class="panel register hidden topleft" style="background-color: aquamarine; border: 1px solid black;">
+	<label for="registerUsername">Username</label><label for="registerPassword">Password</label>
+	<input id="registerUsername" type="text" placeholder="username"><input id="registerPassword" type="text" placeholder="password">
+	<button>Sign up</button>
+</div>
+<div id="authMethod" class="panel topleft" style="background-color: aquamarine; border: 1px solid black;">
+	<button onclick="">Log in</button>
+	<button>Sign up</button>
+</div>
+<div class="panel authMethod hidden topleft" style="background-color: aquamarine; border: 1px solid black;">
+	<button>Log in</button>
+	<button>Sign up</button>
+</div>
+</body>
