@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="pebl-client:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/pebl_client_jar</output-path>
+    <root id="archive" name="pebl-client.jar">
+      <element id="module-output" name="pebl-client" />
+      <element id="library" level="project" name="lib" />
+      <element id="dir-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2/bin" />
+    </root>
+  </artifact>
+</component>

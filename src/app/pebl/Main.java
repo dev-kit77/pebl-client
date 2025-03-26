@@ -1,11 +1,7 @@
 package app.pebl;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -18,11 +14,13 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws IOException {
+		//create main scene
 		scene = new Scene(loadFXML("login"), 250, 300);
 		stage.setTitle("Login");
 		stage.setScene(scene);
 		stage.show();
 	}
+
 
 	static void setRoot(String fxml) throws IOException {
 		scene.setRoot(loadFXML(fxml));
