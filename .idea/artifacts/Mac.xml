@@ -1,0 +1,31 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Mac">
+    <output-path>$PROJECT_DIR$/out/artifacts/Mac</output-path>
+    <root id="archive" name="pebl-client-mac.jar">
+      <element id="module-output" name="pebl-client" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-simple-1.1.1.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/javafx.properties" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libdecora_sse.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libfxplugins.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libglass.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libglib-lite.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libgstreamer-lite.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libjavafx_font.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libjavafx_iio.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libjfxmedia.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libjfxmedia_avf.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libjfxwebkit.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libprism_common.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libprism_es2.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/libprism_sw.dylib" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/javafx-swt.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/javafx.base.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/javafx.controls.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/javafx.fxml.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/javafx.graphics.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/javafx.media.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/javafx.swing.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-mac/lib/javafx.web.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
