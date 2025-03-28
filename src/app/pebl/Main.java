@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Scanner;
@@ -14,38 +15,73 @@ import java.util.Scanner;
  * Main class for GUI init
  */
 public class Main extends Application {
+	//Fields
+	public static Stage primaryStage;
+
 	/**
-	 * start() method for the GUI. Initializes basic Stages.
+	 * start() method for the GUI. Initializes the login GUI.
 	 *
-	 * @param PrimaryStage The main stage of the program
+	 * @param stage The main stage of the program
 	 * @throws IOException passthrough from fxml loader
 	 */
 	@Override
-	public void start(Stage PrimaryStage) throws IOException {
+	public void start(Stage stage) throws IOException {
 		//init main stage
-		PrimaryStage = new Stage();
-		PrimaryStage.setTitle("Login");
-		PrimaryStage.setScene(new Scene(loadFXML("posts"), 450, 600));
-		PrimaryStage.show();
+		stage = new Stage();
+		stage.setTitle("Login");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setScene(new Scene(loadFXML("login"), 250, 300));
+		stage.show();
 
-		//init connections
-		Stage friendsStage = new Stage();
-		friendsStage.setTitle("Friends");
-		friendsStage.setScene(new Scene(loadFXML("connections"), 200, 500));
-		friendsStage.setResizable(false);
-		friendsStage.show();
+		primaryStage = stage;
+	}
 
-		//init profile
-		Stage profileStage = new Stage();
-		profileStage.setTitle("Profile");
-		profileStage.setScene(new Scene(loadFXML("profile"), 400, 350));
+	public static Stage initProfile() throws IOException {
+		Stage stage = new Stage();
+		stage.setTitle("Profile");
+		stage.setScene(new Scene(loadFXML("profile")));
+
+		return stage;
+	}
+
+	public static Stage initConnections() throws IOException {
+		Stage stage = new Stage();
+		stage.setTitle("Connections");
+		stage.setScene(new Scene(loadFXML("connections")));
+
+		return stage;
+	}
+
+	public static Stage initPosts() throws IOException {
+		Stage stage = new Stage();
+		stage.setTitle("Latest Posts");
+		stage.setScene(new Scene(loadFXML("posts")));
+
+		return stage;
+	}
+
+	public static Stage showSignUp() throws IOException {
+		Stage stage = new Stage();
+		stage.setTitle("Sign Up");
+		stage.setScene(new Scene(loadFXML("signup")));
+
+		return stage;
+	}
+
+	public static void showMainWindows(Stage mainStage) throws IOException {
+		//init posts window as main window
+		mainStage = initPosts();
+		mainStage.show();
+
+		//init connections window
+		Stage connectionStage = initConnections();
+		connectionStage.initOwner(mainStage);
+		connectionStage.show();
+
+		//init profile window
+		Stage profileStage = initProfile();
+		profileStage.initOwner(mainStage);
 		profileStage.show();
-
-		//init login prompt
-		Stage loginStage = new Stage();
-		loginStage.setTitle("Login");
-		loginStage.setScene(new Scene(loadFXML("login"), 250, 300));
-		loginStage.showAndWait();
 	}
 
 	/**
