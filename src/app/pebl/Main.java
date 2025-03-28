@@ -63,6 +63,10 @@ public class Main extends Application {
 		return fxmlLoader.load();
 	}
 
+
+	/**
+	 * The program run as a cli application
+	 */
 	public void cli(){
 
 	}
