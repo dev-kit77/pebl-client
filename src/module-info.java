@@ -9,7 +9,7 @@ module PeblClient {
 	requires java.net.http;
 
 	opens app.pebl to javafx.graphics, javafx.fxml;
-	opens app.pebl.friends to javafx.fxml;
+	opens app.pebl.connections to javafx.fxml;
 	opens app.pebl.profile to javafx.fxml;
 	opens app.pebl.login to javafx.fxml;
 	opens app.pebl.posts to javafx.fxml;

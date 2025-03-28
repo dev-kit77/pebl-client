@@ -1,5 +1,5 @@
-package app.pebl.friends;
+package app.pebl.signup;
 
 public class Controller {
-	
+
 }
