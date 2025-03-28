@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Main class for GUI init
@@ -62,8 +63,8 @@ public class Main extends Application {
 		return fxmlLoader.load();
 	}
 
-	private static void cache(){ //TODO this.
-		//this shouldn't be here???
+	public void cli(){
+
 	}
 
 	public static void main(String[] args) {
