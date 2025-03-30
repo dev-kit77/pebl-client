@@ -37,13 +37,7 @@ public class Main extends Application {
 	private static ArrayList<User> leaderboard = null;
 	private final static ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    static {
-        try {
-            feed = (checkServer()) ? getFeed() : null;
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
     /**
 	 * start() method for the GUI. Initializes the login GUI.

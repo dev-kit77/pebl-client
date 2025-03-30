@@ -24,21 +24,12 @@ import java.net.http.HttpResponse;
 public class Connect {
     private final HttpClient client;
     private String auth = Config.getInstance().getAuthToken();
-    public static String api = Config.getInstance().getServerAddr()+"api/"; //The api path for quick use
+    public static final String api = (Config.getInstance().getServerAddr()+"api/"); //The api path for quick use
     public Connect() {
         client = HttpClient.newHttpClient(); //The client
 
     }
 
-    /**
-     * Constructor that lets you change the auth token variable. Use only for testing purposes in the Tester class
-     * @param auth
-     */
-    public Connect(String auth) {
-        this.auth = auth;
-        client = HttpClient.newHttpClient();
-        api = "https://pebl-api.fly.dev/api/";
-    }
 
     /**
      * Updates the value of auth in the .pebl.cfg file
