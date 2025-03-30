@@ -9,14 +9,13 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  * Main class for GUI init
  */
 public class Main extends Application {
 	//Fields
-	public static Stage primaryStage;
+	private static Stage primaryStage;
 
 	/**
 	 * start() method for the GUI. Initializes the login GUI.
@@ -84,6 +83,10 @@ public class Main extends Application {
 		profileStage.show();
 	}
 
+	public static Stage getPrimaryStage() {
+		return primaryStage;
+	}
+
 	/**
 	 * FXML Loader Method.
 	 *
@@ -97,10 +100,6 @@ public class Main extends Application {
 
 		//return javafx node from fxml file
 		return fxmlLoader.load();
-	}
-
-	public void cli(){
-
 	}
 
 	public static void main(String[] args) {
