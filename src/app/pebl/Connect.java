@@ -35,7 +35,6 @@ public class Connect {
      * 
      */
     private void authUpdate(String newAuth) {
-        //TODO rework this function to get token from config class
         Config.getInstance().setAuthToken(newAuth);
 
     }

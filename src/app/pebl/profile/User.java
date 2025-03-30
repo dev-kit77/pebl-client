@@ -15,7 +15,6 @@ public class User {
     private String status;
     private int age;
     private boolean gender;
-    //TODO work on getting mutuals
     private ArrayList<String> mutuals;
     private ArrayList<Integer> posts;
     private String location;
@@ -149,10 +148,11 @@ public class User {
 
     /**
      * Sets the list of mutual friends with the current user being viewed
-     * @param mutuals
+     * @param user User currently being viewed
      */
-    public void setMutuals(ArrayList<String> mutuals) {
-        this.mutuals = mutuals;
+    public void setMutuals(User user) {
+        mutuals = new ArrayList<String>(following);
+        mutuals.retainAll(user.getFollowing());
     }
 
     /**

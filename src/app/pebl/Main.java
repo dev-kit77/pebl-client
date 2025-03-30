@@ -24,8 +24,18 @@ public class Main extends Application {
 	//Fields
 	private static Stage primaryStage;
 	private final static Connect connect = new Connect();
+	private static ArrayList<Post> feed;
+	private static User viewedUser = null;
 
-	/**
+    static {
+        try {
+            feed = (checkServer()) ? getFeed() : null;
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
 	 * start() method for the GUI. Initializes the login GUI.
 	 *
 	 * @param stage The main stage of the program
@@ -223,13 +233,17 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	//TODO fix this so it includes posts arraylist and includes location
+
 	public static User getProfile(String username) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		obj.put("username", username.toLowerCase());
 		JSONObject response = connect.request("profileGet", obj);
 		if (response != null) {
 		User profile = parseUser(response);
+			if (!response.get("username").equals(Config.getInstance().getCurrentUser().getUsername())) {
+				Config.getInstance().getCurrentUser().setMutuals(profile);
+				viewedUser = profile;
+			}
 		return profile;
 		}
 
@@ -258,7 +272,7 @@ public class Main extends Application {
 			obj.put("age", age);
 		}
 		//gender is a switch, no need to check anything
-		obj.put("gender", gender);
+		obj.put("gender", ""+gender);
 		// if status is empty, use current status
 		if (status.equals("")){
 			obj.put("status", Config.getInstance().getCurrentUser().getStatus());

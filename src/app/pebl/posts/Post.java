@@ -26,7 +26,7 @@ public class Post {
 
     /**
      *
-     * @return the String id of the post TODO change the id to integer if its discovered that its an integer!
+     * @return the String id of the post
      */
     public int getId() {
         return id;
