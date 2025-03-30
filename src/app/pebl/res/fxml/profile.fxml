@@ -66,11 +66,6 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="lblPostNo" text="0 Posts">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
             <Label fx:id="lblSkips" prefWidth="34.0" text="Skips:">
                <font>
                   <Font size="14.0" />
