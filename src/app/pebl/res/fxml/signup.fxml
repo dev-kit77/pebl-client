@@ -15,19 +15,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0" stylesheets="@../css/Format.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.prompts.SignUpCtrl">
+<VBox fx:id="layoutParent" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0" stylesheets="@../css/Format.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.prompts.SignUpCtrl">
    <children>
       <MenuBar>
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Close" onAction="#closeWindow"/>
+                  <MenuItem mnemonicParsing="false" onAction="#closeWindow" text="Close" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
                <items>
-                  <MenuItem mnemonicParsing="false" text="How to..." />
-                  <MenuItem mnemonicParsing="false" text="About" />
+                  <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
                </items>
             </Menu>
          </menus>
@@ -41,25 +40,25 @@
                         <Font size="12.0" />
                      </font>
                   </Label>
-                  <TextField promptText="E-Mail" />
+                  <TextField fx:id="iptEmail" promptText="E-Mail" />
                </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" spacing="2.0">
                <children>
                   <Label text="Username:" />
-                  <TextField promptText="Username" />
+                  <TextField fx:id="iptUsername" promptText="Username" />
                </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" spacing="2.0">
                <children>
                   <Label text="Password:" />
-                  <PasswordField promptText="Password" />
+                  <PasswordField fx:id="iptPassword" promptText="Password" />
                </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" spacing="2.0">
                <children>
                   <Label text="Confirm Password:" />
-                  <PasswordField promptText="Confirm Password" />
+                  <PasswordField fx:id="iptConfirmation" promptText="Confirm Password" />
                </children>
             </HBox>
          </children>
@@ -73,8 +72,8 @@
             <Label text="Age:" />
             <VBox alignment="CENTER" spacing="2.0">
                <children>
-                  <Label text="null" />
-                  <Slider max="120.0" />
+                  <Label fx:id="lblAge" text="0" />
+                  <Slider fx:id="iptAge" max="120.0" />
                </children>
                <padding>
                   <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
@@ -84,7 +83,7 @@
       </HBox>
       <HBox alignment="CENTER">
          <children>
-            <CheckBox mnemonicParsing="false" text="Swedish Gender" />
+            <CheckBox fx:id="iptGender" mnemonicParsing="false" text="Swedish Gender" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -93,8 +92,8 @@
       <Separator prefWidth="200.0" />
       <VBox alignment="CENTER" spacing="2.0">
          <children>
-            <CheckBox mnemonicParsing="false" prefHeight="47.0" prefWidth="191.0" text="Do You Agree for Us to Collect Whatever Data We Want?" wrapText="true" />
-            <CheckBox layoutX="64.0" layoutY="12.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="191.0" text="Do You Agree To Our Terms and Conditions?" wrapText="true" />
+            <CheckBox fx:id="iptData" mnemonicParsing="false" prefHeight="47.0" prefWidth="191.0" text="Do You Agree for Us to Collect Whatever Data We Want?" wrapText="true" />
+            <CheckBox fx:id="iptTerms" layoutX="64.0" layoutY="12.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="191.0" text="Do You Agree To Our Terms and Conditions?" wrapText="true" />
          </children>
          <padding>
             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -103,8 +102,8 @@
       <Separator prefWidth="200.0" />
       <HBox alignment="BOTTOM_RIGHT" spacing="5.0">
          <children>
-            <Button mnemonicParsing="false" text="Cancel" />
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Submit" />
+            <Button mnemonicParsing="false" onAction="#closeWindow" text="Cancel" />
+            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleSubmit" text="Submit" />
          </children>
          <padding>
             <Insets right="5.0" />
