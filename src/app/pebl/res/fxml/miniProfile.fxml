@@ -6,11 +6,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="200.0" spacing="5.0" type="HBox" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.connections.cardCtrl">
+<fx:root alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="200.0" spacing="5.0" type="HBox" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.connections.CardCtrl">
    <children>
       <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
          <children>
-            <Label id="lblDispName" fx:id="lblDisplayname1" focusTraversable="false" text="Display name" textFill="#2a3e45">
+            <Label id="lblDispName" fx:id="lblDisplayName" focusTraversable="false" text="Display name" textFill="#2a3e45">
                <font>
                   <Font name="Bold" size="14.0" />
                </font>
