@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -8,8 +9,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.posts.Controller">
+<VBox fx:id="layoutParent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="450.0" stylesheets="@../css/Format.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.posts.PostsCtrl">
    <children>
       <MenuBar>
          <menus>
@@ -17,7 +17,7 @@
                <items>
                   <MenuItem fx:id="btnRefresh" mnemonicParsing="false" text="Refresh" />
                   <MenuItem mnemonicParsing="false" text="Switch User" />
-                  <MenuItem mnemonicParsing="false" text="Close" />
+                  <MenuItem mnemonicParsing="false" text="Close" onAction="#closeWindow"/>
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
@@ -25,39 +25,45 @@
                   <MenuItem mnemonicParsing="false" text="User Settings" />
                </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="View">
+               <items>
+                  <CheckMenuItem mnemonicParsing="false" text="Connections" />
+                  <CheckMenuItem mnemonicParsing="false" text="Profile" />
+                  <CheckMenuItem mnemonicParsing="false" text="Leaderboard" />
+               </items>
+            </Menu>
             <Menu mnemonicParsing="false" text="Help">
                <items>
-                  <MenuItem mnemonicParsing="false" text="How to..." />
-                  <MenuItem mnemonicParsing="false" text="About" />
+                  <MenuItem mnemonicParsing="false" text="About" onAction="#showAbout"/>
                </items>
             </Menu>
          </menus>
       </MenuBar>
-      <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="575.0" prefWidth="450.0" style="-fx-background-color: #c9e6f0;" tabClosingPolicy="UNAVAILABLE">
+      <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="450.0" style="-fx-background-color: #c9e6f0;" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="All Posts">
                <content>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                  <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
                      <content>
-                        <VBox fx:id="fedPosts" style="-fx-background-color: #c9e6f0;" />
+                        <VBox fx:id="fedPosts" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
                      </content>
                   </ScrollPane>
                </content>
           </Tab>
             <Tab text="Following">
                <content>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                  <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
                      <content>
-                        <VBox fx:id="fedFollowing" style="-fx-background-color: #c9e6f0;" />
+                        <VBox fx:id="fedFollowing" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
                      </content>
                   </ScrollPane>
                </content>
             </Tab>
           <Tab text="From Followers">
                <content>
-                  <ScrollPane>
+                  <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
-                        <VBox fx:id="fedFollowers" style="-fx-background-color: #c9e6f0;" />
+                        <VBox fx:id="fedFollowers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
                      </content>
                   </ScrollPane>
                </content>

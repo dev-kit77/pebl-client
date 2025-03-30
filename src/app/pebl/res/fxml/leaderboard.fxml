@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../css/Format.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.prompts.LeaderboardCtrl">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" onAction="#closeWindow"/>
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="View">
+               <items>
+                  <CheckMenuItem mnemonicParsing="false" text="Connections" />
+                  <CheckMenuItem mnemonicParsing="false" text="Profile" />
+                  <CheckMenuItem mnemonicParsing="false" text="Leaderboard" />
+               </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="200.0" spacing="5.0">
+         <children>
+            <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
+               <children>
+                  <Label id="lblDispName" fx:id="lblUserDisplayname" focusTraversable="false" text="Display name" textFill="#2a3e45">
+                     <font>
+                        <Font name="Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                     <children>
+                        <Label id="lblUsername" fx:id="lblUserUsername" focusTraversable="false" text="\@Username" textFill="#2a3e45">
+                           <font>
+                              <Font name="System Italic" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblUserSkips" text="(0 Skips)">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Label id="lblStatus" fx:id="lblUserStatus" focusTraversable="false" text="Lorem Ipsum" textFill="#2a3e45" wrapText="true">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </padding>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+      <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="280.0" minWidth="200.0">
+         <content>
+            <VBox fx:id="fedBoard" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
+         </content>
+      </ScrollPane>
+   </children>
+</VBox>
