@@ -521,6 +521,7 @@ public class Main extends Application {
 		}
 	}
 
+
 	/**
 	 * Method to display the feed
 	 */
@@ -669,6 +670,19 @@ public class Main extends Application {
 			case "9":
 				System.out.println("See you next time!");
 				Config.getInstance().save(".pebl.cfg");
+				break;
+			case "10":
+				System.out.println("enter username");
+				username = input.nextLine();
+				System.out.println("enter password");
+				password = input.nextLine();
+				if (username.equals("/exit") || password.equals("/exit")) {
+					login(username, password);
+
+
+				}
+
+
 				break;
 			default:
 				System.err.println("Invalid choice");

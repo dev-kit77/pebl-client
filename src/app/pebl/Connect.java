@@ -31,6 +31,16 @@ public class Connect {
     }
 
     /**
+     * Constructor that lets you change the auth token variable. Use only for testing purposes in the Tester class
+     * @param auth
+     */
+    public Connect(String auth) {
+        this.auth = auth;
+        client = HttpClient.newHttpClient();
+        api = "https://pebl-api.fly.dev/api/";
+    }
+
+    /**
      * Updates the value of auth in the .pebl.cfg file
      * @param newAuth new authentication token to update the config file. Set this to empty string to get the value from the config file or to set the auth token to empty string.
      * 

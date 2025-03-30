@@ -17,27 +17,40 @@ import java.net.http.HttpResponse;
 // api link: https://pebl-api.fly.dev/api/
 
 public class Tester {
-    HttpClient client = HttpClient.newHttpClient(); //The client
-
-    public static String api = Config.getInstance().getServerAddr()+"api/"; //The api path for quick use
-    private String auth; //auth token
-
-
-
-    public boolean testSave() throws IOException{ //TODO save auth to config file
-
-        return false;
-    }
-
-    public boolean testChangeAuth() throws IOException{ //TODO change the auth value in the config file to a different one
-        return false;
-    }
+    /**TODO TEST
+     * check server
+     * check auth
+     * login (in)valid
+     * create post (in)valid
+     * get post (in)valid
+     * get profile (in)valid
+     * update profile (in)valid
+     * get feed
+     * get leaderboard
+     * logout and login as someone else
+     *
+     */
+//    HttpClient client = HttpClient.newHttpClient(); //The client
+//
+//    public static String api = Config.getInstance().getServerAddr()+"api/"; //The api path for quick use
+//    private String auth; //auth token
+//
+//
+//
+//    public boolean testSave() throws IOException{ //TODO save auth to config file
+//
+//        return false;
+//    }
+//
+//    public boolean testChangeAuth() throws IOException{ //TODO change the auth value in the config file to a different one
+//        return false;
+//    }
     
-    public static void main(String[] args) throws IOException, InterruptedException {
-        // System.out.println(api);
-        Tester tester = new Tester();
-        // tester.testRegister();
-
-
-    }
+//    public static void main(String[] args) throws IOException, InterruptedException {
+//        // System.out.println(api);
+//        Tester tester = new Tester();
+//        // tester.testRegister();
+//
+//
+//    }
 }
