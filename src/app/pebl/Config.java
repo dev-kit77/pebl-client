@@ -204,23 +204,23 @@ public final class Config {
 			writer = new FileOutputStream(file);
 			buffer = new PrintWriter(writer);
 
-			//Write file here TODO write additional things if needed otherwise delete this todo
-			buffer.println("auth = "+ authToken);
-			if (saveUserInformation) { //save all user data as a json if saveUserInformation is true
+			//check if current user is not null
+			if (currentUser != null) {
+				if (saveUserInformation) { //save all user data as a json if saveUserInformation is true
+					//Write file here TODO write additional things if needed otherwise delete this todo
+					buffer.println("auth = " + authToken);
 
-				JSONObject user = Main.getUserAsJSON(currentUser);
+					JSONObject user = Main.getUserAsJSON(currentUser);
 
-				if (user != null) {
-					buffer.println("user = " + user.toJSONString());
+					if (user != null) {
+						buffer.println("user = " + user.toJSONString());
+					} else {
+						System.err.println("Error, cannot write user to file");
+					}
+				} else { //just write the username if saveUserInformation is false
+
+					buffer.write("user = " + currentUser.getUsername());
 				}
-				else {
-					System.err.println("Error, cannot write user to file");
-				}
-			}
-
-			else { //just write the username if saveUserInformation is false
-
-			buffer.write("user = " + currentUser.getUsername());
 			}
 
 			//close reader and buffer
@@ -285,10 +285,18 @@ public final class Config {
 		showLeaderboard = show;
 	}
 
-	public void setAuthToken(String newAuthToken){ this.authToken = newAuthToken; }
+	public void setAuthToken(String newAuthToken){
+		this.authToken = newAuthToken;
+	}
 
-	public String getAuthToken() { return authToken; }
+	public String getAuthToken() {
+		return authToken;
+	}
 
-	public void setSaveUserInformation(boolean save){ this.saveUserInformation = save; }
-	public boolean getSaveUserInformation(){ return saveUserInformation; }
+	public void setSaveUserInformation(boolean save){
+		this.saveUserInformation = save;
+	}
+	public boolean getSaveUserInformation(){
+		return saveUserInformation;
+	}
 }
