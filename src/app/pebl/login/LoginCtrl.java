@@ -4,6 +4,7 @@ import app.pebl.Config;
 import app.pebl.Controller;
 import app.pebl.Main;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -32,7 +33,7 @@ public class LoginCtrl extends Controller {
 			System.out.println("Login Not Remembered");
 		}
 
-		//set server address on main
+		//set server address in config
 		Config.getInstance().setServerAddr(this.srvAddress);
 
 		//authUser()
@@ -48,7 +49,9 @@ public class LoginCtrl extends Controller {
 	}
 
 	public void handleSignUp() throws IOException {
-		Stage signup = Main.showSignUp();
+		Stage signup = new Stage();
+		signup.setTitle("Sign Up");
+		signup.setScene(new Scene(Main.loadFXML("signup")));
 		signup.initOwner(layoutParent.getScene().getWindow());
 		signup.initModality(Modality.APPLICATION_MODAL);
 		signup.showAndWait();

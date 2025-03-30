@@ -83,14 +83,6 @@ public class Main extends Application {
 		return stage;
 	}
 
-	public static Stage showSignUp() throws IOException {
-		Stage stage = new Stage();
-		stage.setTitle("Sign Up");
-		stage.setScene(new Scene(loadFXML("signup")));
-
-		return stage;
-	}
-
 	public static void showMainWindows(Stage mainStage) throws IOException {
 		//init posts window as main window
 		mainStage = initPosts();
@@ -130,7 +122,7 @@ public class Main extends Application {
 	 * @return javafx node contained within the fxml file
 	 * @throws IOException file error, usually means the file does not exist
 	 */
-	private static Parent loadFXML(String fxml) throws IOException {
+	public static Parent loadFXML(String fxml) throws IOException {
 		//get fxml file from the fxml folder with filename in the parameter
 		FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("res/fxml/" + fxml + ".fxml"));
 
