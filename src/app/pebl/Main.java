@@ -2,22 +2,27 @@
 package app.pebl;
 
 //imports
+import app.pebl.connections.ConnectionsCtrl;
+import app.pebl.profile.ProfileCtrl;
 import app.pebl.profile.User;
 import app.pebl.posts.Post;
+import app.pebl.prompts.LeaderboardCtrl;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONValue;
 
 /**
  * Main class for GUI init
@@ -30,6 +35,7 @@ public class Main extends Application {
 	private static ArrayList<Post> feed;
 	private static User viewedUser = null;
 	private static ArrayList<User> leaderboard = null;
+	private final static ExecutorService executor = Executors.newSingleThreadExecutor();
 
     static {
         try {
@@ -47,45 +53,128 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage stage) throws IOException {
-		//init main stage
-		stage = new Stage();
-		stage.setTitle("Login");
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.setScene(new Scene(loadFXML("login"), 250, 300));
-		stage.show();
-
-		primaryStage = stage;
+		showLogin(stage);
 	}
 
-	public static Stage initProfile() throws IOException {
+	@Override
+	public void stop() {
+		Task<Void> shutdownTask = new Task<>() {
+			@Override public Void call() {
+				//set wait cursor
+				getPrimaryStage().getScene().setCursor(Cursor.WAIT);
+
+				//save config file
+				boolean success = Config.getInstance().save(".pebl.cfg");
+
+				if (success) {
+					System.out.println("Config Saved Successfully");
+				}
+				else {
+					System.out.println("Config Saving Failed");
+				}
+
+				//set regular cursor
+				getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
+
+				//empty return
+				return null;
+			}
+		};
+
+		executor.execute(shutdownTask);
+	}
+
+	public static Stage initProfile(String username) throws IOException {
+		//init stage
 		Stage stage = new Stage();
 		stage.setTitle("Profile");
-		stage.setScene(new Scene(loadFXML("profile")));
 
+		//get loader and load scene
+		FXMLLoader loader = getFXML("profile");
+		stage.setScene(new Scene(loader.load()));
+
+		//init user
+		User displayUser;
+
+		//get user from server
+		Task<Void> getUser = new Task<>() {
+			@Override public Void call() {
+				//code goes here
+
+				//empty return
+				return null;
+			}
+		};
+
+		executor.execute(getUser);
+
+		//get controller
+		ProfileCtrl ctrl = (ProfileCtrl) loader.getController();
+		//init controller user
+		//ctrl.setUser(displayUser);
+
+		//return window to show
 		return stage;
 	}
 
-	public static Stage initConnections() throws IOException {
+	public static Stage initProfile(User displayUser) throws IOException {
+		//init stage
+		Stage stage = new Stage();
+		stage.setTitle("Profile");
+
+		//get loader and load scene
+		FXMLLoader loader = getFXML("profile");
+		stage.setScene(new Scene(loader.load()));
+
+		//get controller
+		ProfileCtrl ctrl = (ProfileCtrl) loader.getController();
+		//init controller user
+		ctrl.setUser(displayUser);
+
+		//return window to show
+		return stage;
+	}
+
+	public static Stage initConnections(User displayUser) throws IOException {
 		Stage stage = new Stage();
 		stage.setTitle("Connections");
-		stage.setScene(new Scene(loadFXML("connections")));
 
+		//get loader and load scene
+		FXMLLoader loader = getFXML("connections");
+		stage.setScene(new Scene(loader.load()));
+
+		//get controller
+		ConnectionsCtrl ctrl = (ConnectionsCtrl) loader.getController();
+		ctrl.setUser(displayUser);
+
+		//return window to show
 		return stage;
 	}
 
-	public static Stage initPosts() throws IOException {
+	public static Stage initLeaderboard(User displayUser) throws IOException {
+		Stage stage = new Stage();
+		stage.setTitle("Leaderboard");
+
+		//get loader and load scene
+		FXMLLoader loader = getFXML("leaderboard");
+		stage.setScene(new Scene(loader.load()));
+
+		//get controller
+		LeaderboardCtrl ctrl = (LeaderboardCtrl) loader.getController();
+		ctrl.setUser(displayUser);
+
+		//return window to show
+		return stage;
+	}
+
+	private static Stage initPosts() throws IOException {
+		//init stage
 		Stage stage = new Stage();
 		stage.setTitle("Latest Posts");
-		stage.setScene(new Scene(loadFXML("posts")));
+		//load fxml
+		stage.setScene(new Scene(getFXML("posts").load()));
 
-		return stage;
-	}
-
-	public static Stage showSignUp() throws IOException {
-		Stage stage = new Stage();
-		stage.setTitle("Sign Up");
-		stage.setScene(new Scene(loadFXML("signup")));
-
+		//return window to show
 		return stage;
 	}
 
@@ -95,14 +184,31 @@ public class Main extends Application {
 		mainStage.show();
 
 		//init connections window
-		Stage connectionStage = initConnections();
+		Stage connectionStage = initConnections(Config.getInstance().getCurrentUser());
 		connectionStage.initOwner(mainStage);
 		connectionStage.show();
 
 		//init profile window
-		Stage profileStage = initProfile();
+		Stage profileStage = initProfile(Config.getInstance().getCurrentUser());
 		profileStage.initOwner(mainStage);
 		profileStage.show();
+
+		//init leaderboard window
+		Stage leaderboardStage = initLeaderboard(Config.getInstance().getCurrentUser());
+		leaderboardStage.initOwner(mainStage);
+		leaderboardStage.show();
+	}
+
+	public static void showLogin(Stage stage) throws IOException {
+		//init main stage
+		stage = new Stage();
+		stage.setTitle("Login");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setScene(new Scene(getFXML("login").load(), 250, 300));
+		stage.show();
+
+		//store primary stage
+		primaryStage = stage;
 	}
 
 	public static Stage getPrimaryStage() {
@@ -116,12 +222,13 @@ public class Main extends Application {
 	 * @return javafx node contained within the fxml file
 	 * @throws IOException file error, usually means the file does not exist
 	 */
-	private static Parent loadFXML(String fxml) throws IOException {
+	public static FXMLLoader getFXML(String fxml) throws IOException {
 		//get fxml file from the fxml folder with filename in the parameter
-		FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("res/fxml/" + fxml + ".fxml"));
+		return new FXMLLoader(Main.class.getResource("res/fxml/" + fxml + ".fxml"));
+	}
 
-		//return javafx node from fxml file
-		return fxmlLoader.load();
+	public static ExecutorService getExecutor() {
+		return executor;
 	}
 
 	//Methods for kit to use
