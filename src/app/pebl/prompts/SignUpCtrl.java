@@ -2,6 +2,7 @@ package app.pebl.prompts;
 
 import app.pebl.Controller;
 import app.pebl.Main;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 
@@ -22,6 +23,10 @@ public class SignUpCtrl extends Controller {
 	 * controller init method. Begins action Listener for age label
 	 */
 	public void initialize() {
+		//set first value
+		lblAge.setText(String.valueOf(iptAge.getValue()));
+
+		//set update label with slider
 		iptAge.valueProperty().addListener((observable, oldValue, newValue) -> {
 			lblAge.setText(Long.toString(Math.round((Double) newValue)));
 		});
@@ -56,16 +61,55 @@ public class SignUpCtrl extends Controller {
 			//submit form
 			Task<Void> createUser = new Task<Void>() {
 				@Override public Void call() {
+					//init check variable
+					boolean success = false;
+
 					//create new user on server
+					try {
+						success = Main.register(iptUsername.getText(), iptPassword.getText(), Integer.parseInt(lblAge.getText()), iptGender.isSelected());
+					} catch (Exception e) {
+						//print stack trace to console
+						e.printStackTrace();
+
+						//update GUI
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								//show general error
+								showError("Exception in pebl client", e.getMessage());
+
+								//exit program
+								Platform.exit();
+							}
+						});
+					}
+
+					//update gui depending on success
+					if (success) {
+						Platform.runLater(new Runnable() {
+							@Override public void run() {
+								//close window back to login
+								closeWindow();
+							}
+						});
+					}
+					else {
+						//TODO get rid of this horrible unspecific error
+						Platform.runLater(new Runnable() {
+							@Override public void run() {
+								//show unspecific error (I have no access to what the error actually is because all I get is a boolean even though the error is given in the response)
+								showError("Sign-up Error", "There was an issue with your account creation. Please try other details.");
+							}
+						});
+					}
+
+					//null return to end thread
 					return null;
 				};
 			};
 
 			//run thread
 			Main.getExecutor().submit(createUser);
-
-			//close window back to login
-			closeWindow();
 		}
 	}
 }
