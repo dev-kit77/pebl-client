@@ -3,8 +3,10 @@ package app.pebl.login;
 import app.pebl.Config;
 import app.pebl.Controller;
 import app.pebl.Main;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
@@ -28,18 +30,108 @@ public class LoginCtrl extends Controller {
 	public void handleLogin() throws Exception {
 		//check checkbox state
 		if (chkLogin.isSelected()) {
+			//send to log
 			System.out.println("Login Remembered");
 		}
 		else {
+			//print to log
 			System.out.println("Login Not Remembered");
 		}
+
+		//set config
+		Config.getInstance().setSaveUserInformation(chkLogin.isSelected());
 
 		//set server address in config
 		Config.getInstance().setServerAddr(this.srvAddress);
 
 		Task<Void> authUser = new Task<Void>() {
 			@Override public Void call() {
+				//init conditons
+				boolean online = false;
+				boolean success = false;
+
+				Platform.runLater(new Runnable() {
+					@Override public void run() {
+						//set wait cursor
+						layoutParent.getScene().setCursor(Cursor.WAIT);
+					}
+				});
+
 				//authenticate user with server
+				try {
+					//check server connection
+					online = Main.checkServer();
+
+					if (online) {
+						success = Main.login(username.getText(), password.getText());
+					}
+				} catch (Exception e) {
+					//print stack trace to console
+					e.printStackTrace();
+
+					//update GUI
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
+
+							//exit program
+							Platform.exit();
+						}
+					});
+				}
+
+				if (!online) {
+					//update GUI
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show server error
+							showError("Connection to pebl server: " + srvAddress + " failed", "Please check your server address and try again.");
+						}
+					});
+				} else if (!success) {
+					//update GUI
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show login error
+							showError("Login failed", "Please check your Username and Password and try again.");
+						}
+					});
+				}
+				else {
+					//update GUI
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show main window set
+							try {
+								Main.showMainWindows(Main.getPrimaryStage());
+							} catch (IOException e) {
+								//print stack
+								e.printStackTrace();
+
+								//update GUI
+								Platform.runLater(new Runnable() {
+									@Override
+									public void run() {
+										//show general error
+										showError("Exception in pebl client", e.getMessage());
+
+										//exit program
+										Platform.exit();
+									}
+								});
+							}
+
+							//hide login window
+							closeWindow();
+						}
+					});
+				}
+
 				return null;
 			};
 		};
@@ -47,16 +139,9 @@ public class LoginCtrl extends Controller {
 		//run thread
 		Main.getExecutor().submit(authUser);
 
-		//check for auth
+		//print test to console
 		System.out.println("Login");
 		System.out.println("Username: " + username.getText());
-		System.out.println("Password: " + password.getText());
-
-		//show main window set
-		Main.showMainWindows(Main.getPrimaryStage());
-
-		//hide login window
-		closeWindow();
 	}
 
 	public void handleSignUp() throws IOException {
