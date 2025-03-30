@@ -30,27 +30,10 @@ public class Tester {
      * logout and login as someone else
      *
      */
-//    HttpClient client = HttpClient.newHttpClient(); //The client
-//
-//    public static String api = Config.getInstance().getServerAddr()+"api/"; //The api path for quick use
-//    private String auth; //auth token
-//
-//
-//
-//    public boolean testSave() throws IOException{ //TODO save auth to config file
-//
-//        return false;
-//    }
-//
-//    public boolean testChangeAuth() throws IOException{ //TODO change the auth value in the config file to a different one
-//        return false;
-//    }
-    
-//    public static void main(String[] args) throws IOException, InterruptedException {
-//        // System.out.println(api);
-//        Tester tester = new Tester();
-//        // tester.testRegister();
-//
-//
-//    }
+    private static String auth = "";
+    private static final HttpClient client = HttpClient.newHttpClient();
+    private
+    public Tester() {
+
+    }
 }

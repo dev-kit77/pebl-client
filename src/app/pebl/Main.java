@@ -269,7 +269,7 @@ public class Main extends Application {
 	 * @throws IOException in case of IOException
 	 * @throws InterruptedException if the http request was interrupted
 	 */
-	private static boolean register(String username, String password, int age, boolean gender) throws IOException, InterruptedException {
+	public static boolean register(String username, String password, int age, boolean gender) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		obj.put("username", username.toLowerCase());
 		obj.put("password", password);
@@ -297,7 +297,7 @@ public class Main extends Application {
 	 * @throws IOException in case of IOException
 	 * @throws InterruptedException if the http request was interrupted
 	 */
-	private static boolean login(String username, String password) throws IOException, InterruptedException {
+	public static boolean login(String username, String password) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		obj.put("username", username.toLowerCase());
 		obj.put("password", password);
@@ -318,7 +318,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static boolean checkServer() throws IOException, InterruptedException {
+	public static boolean checkServer() throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		JSONObject response = connect.request("checkOnline", obj);
 		return  (response != null);
@@ -371,7 +371,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static boolean updateProfile(int age, boolean gender, String status) throws IOException, InterruptedException {
+	public static boolean updateProfile(int age, boolean gender, String status) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		//if age is 0 use current age
 		if (age == 0){
@@ -416,7 +416,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static Post getPost(int id) throws IOException, InterruptedException {
+	public static Post getPost(int id) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		obj.put("id", id);
 		JSONObject response = connect.request("getPost", obj);
@@ -435,7 +435,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static boolean createPost(String content) throws IOException, InterruptedException {
+	public static boolean createPost(String content) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		obj.put("content", content);
 		JSONObject response = connect.request("postCreate", obj);
@@ -463,7 +463,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static ArrayList<Post> getFeed() throws IOException, InterruptedException {
+	public static ArrayList<Post> getFeed() throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		JSONObject response = connect.request("feed", obj);
 		if (response != null) {
@@ -490,7 +490,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static ArrayList<User> leaderboard() throws IOException, InterruptedException {
+	public static ArrayList<User> leaderboard() throws IOException, InterruptedException {
 		JSONArray response = connect.leaderboard();
 		if (response != null) {
 			System.out.println("Leaderboard fetched");
@@ -516,7 +516,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static boolean follow(String username) throws IOException, InterruptedException {
+	public static boolean follow(String username) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject(); //TODO test follow
 		obj.put("username", username.toLowerCase());
 		JSONObject response = connect.request("follow", obj);
@@ -544,7 +544,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static boolean like(int id) throws IOException, InterruptedException {
+	public static boolean like(int id) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject(); //TODO test like
 		obj.put("id", id);
 		JSONObject response = connect.request("like", obj);
@@ -563,7 +563,7 @@ public class Main extends Application {
 	 * Method to check if there is current user data stored in Config
 	 * @return True if there is user data stored, False if it is not stored.
 	 */
-	private static boolean checkCurrentUser(){
+	public static boolean checkCurrentUser(){
 		if (Config.getInstance().getCurrentUser() != null || !Config.getInstance().getCurrentUser().getUsername().equals("null")) {
 			return true;
 		}
@@ -577,7 +577,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static void displayLeaderboard() throws IOException, InterruptedException {
+	public static void displayLeaderboard() throws IOException, InterruptedException {
 		if (leaderboard != null) {
 			for (User user : leaderboard) {
 				System.out.println("Name: "+user.getUsername()+", Skips: "+user.getSkips());
@@ -592,7 +592,7 @@ public class Main extends Application {
 	 * Method to display post
 	 * @param post Post object
 	 */
-	private static void displayPost(Post post) {
+	public static void displayPost(Post post) {
 		if (post != null) {
 			System.out.println("Id: "+post.getId());
 			System.out.println("Author: "+post.getSender());
@@ -609,7 +609,7 @@ public class Main extends Application {
 	/**
 	 * Method to display currently viewed user
 	 */
-	private static void displayUser(){
+	public static void displayUser(){
 		if (viewedUser != null) {
 			System.out.println("Username: "+viewedUser.getUsername());
 			System.out.println("Skips: "+viewedUser.getSkips());
@@ -632,7 +632,7 @@ public class Main extends Application {
 	/**
 	 * Method to display the feed
 	 */
-	private static void displayFeed() {
+	public static void displayFeed() {
 		if (feed != null) {
 			for (Post post : feed) {
 				System.out.println("-------------------------------------------------------------");
@@ -650,7 +650,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static void cli() throws IOException, InterruptedException {
+	public static void cli() throws IOException, InterruptedException {
 		Scanner input = new Scanner(System.in);
 		System.out.print("Hello! and welcome to Pebl.social!");
 		String choice;
