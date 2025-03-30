@@ -14,14 +14,9 @@
          <children>
             <HBox alignment="CENTER_LEFT" spacing="5.0">
                <children>
-                  <Label id="lblCurrDispName" fx:id="lblDisplayname" focusTraversable="false" text="Display name" textFill="#2a3e45">
+                  <Label id="lblCurrUsername" fx:id="lblUsername" focusTraversable="false" onMouseClicked="#openProfile" opacity="0.8" text="Username" textFill="#2a3e45">
                      <font>
-                        <Font name="Roboto Condensed Regular" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label id="lblCurrUsername" fx:id="lblUsername" focusTraversable="false" opacity="0.8" text="\@Username" textFill="#2a3e45">
-                     <font>
-                        <Font name="Roboto Condensed Italic" size="10.0" />
+                        <Font name="Roboto Condensed Italic" size="14.0" />
                      </font>
                   </Label>
                </children>
@@ -31,6 +26,7 @@
       <Text fx:id="txtBody" strokeType="OUTSIDE" strokeWidth="0.0" />
       <HBox alignment="CENTER_RIGHT" spacing="2.0">
          <children>
+            <Label fx:id="lblSkips" text="0 Skips" />
             <ToggleButton fx:id="btnSkip" mnemonicParsing="false" onAction="#toggleSkip" styleClass="button" stylesheets="@../css/Format.css" text="Skip" />
          </children>
       </HBox>

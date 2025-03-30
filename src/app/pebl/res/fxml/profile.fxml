@@ -19,7 +19,7 @@
             <items>
                   <MenuItem fx:id="btnRefresh" mnemonicParsing="false" text="Refresh" />
               <MenuItem mnemonicParsing="false" text="Switch User" />
-                  <MenuItem mnemonicParsing="false" text="Close" onAction="#closeWindow"/>
+                  <MenuItem mnemonicParsing="false" onAction="#closeWindow" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -37,7 +37,7 @@
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-                  <MenuItem mnemonicParsing="false" text="About" onAction="#showAbout"/>
+                  <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
             </items>
           </Menu>
         </menus>
@@ -46,14 +46,9 @@
    <left>
       <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="2.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="lblDisplayName" text="Displayname">
+            <Label fx:id="lblUsername" text="Username">
                <font>
-                  <Font name="Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblUsername" text="\@username">
-               <font>
-                  <Font name="Roboto Condensed Italic" size="13.0" />
+                  <Font name="Roboto Condensed Italic" size="18.0" />
                </font>
             </Label>
             <Label fx:id="lblStatus" text="Status Message">
@@ -76,7 +71,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label prefWidth="34.0" text="Skips:">
+            <Label fx:id="lblSkips" prefWidth="34.0" text="Skips:">
                <font>
                   <Font size="14.0" />
                </font>
@@ -86,12 +81,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label text="Gender: null">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label text="Location: null">
+            <Label fx:id="lblGender" text="Gender: null">
                <font>
                   <Font size="14.0" />
                </font>
@@ -112,7 +102,7 @@
             </Label>
             <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="275.0" minWidth="250.0" style="-fx-border-color: #c9e6f0;">
                <content>
-                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
+                  <VBox fx:id="feedUserPosts" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
                </content>
             </ScrollPane>
          </children>

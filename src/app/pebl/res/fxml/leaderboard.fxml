@@ -39,14 +39,9 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
                <children>
-                  <Label id="lblDispName" fx:id="lblUserDisplayname" focusTraversable="false" text="Display name" textFill="#2a3e45">
-                     <font>
-                        <Font name="Bold" size="14.0" />
-                     </font>
-                  </Label>
                   <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                      <children>
-                        <Label id="lblUsername" fx:id="lblUserUsername" focusTraversable="false" text="\@Username" textFill="#2a3e45">
+                        <Label id="lblUsername" fx:id="lblUserUsername" focusTraversable="false" text="Username" textFill="#2a3e45" onMouseClicked="#openProfile">
                            <font>
                               <Font name="System Italic" size="10.0" />
                            </font>

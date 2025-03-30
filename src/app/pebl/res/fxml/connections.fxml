@@ -46,33 +46,37 @@
         </menus>
       </MenuBar>
       <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="200.0" spacing="5.0">
-         <children>
-            <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="100.0" spacing="2.0">
-               <children>
-                  <Label id="lblDispName" fx:id="lblCurrDisplayname" focusTraversable="false" text="Display name" textFill="#2a3e45">
-                     <font>
-                        <Font name="Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label id="lblUsername" fx:id="lblCurrUsername" focusTraversable="false" text="\@Username" textFill="#2a3e45">
-                     <font>
-                        <Font name="Italic" size="10.0" />
-                     </font>
-                  </Label>
-                  <Label id="lblStatus" fx:id="lblCurrStatus" focusTraversable="false" text="Lorem Ipsum" textFill="#2a3e45" wrapText="true">
-                     <font>
-                        <Font size="12.0" />
-                     </font>
-                  </Label>
-               </children>
-               <padding>
-                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-               </padding>
-            </VBox>
-         </children>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
+          <children>
+              <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
+                  <children>
+                      <Label id="lblDispName" fx:id="lblCurrUsername" focusTraversable="false" text="Display name" onMouseClicked="#openProfile" textFill="#2a3e45">
+                          <font>
+                              <Font name="Bold" size="14.0" />
+                          </font>
+                      </Label>
+                      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                          <children>
+                              <Label fx:id="lblCurrSkips" text="(0 Skips)">
+                                  <font>
+                                      <Font size="10.0" />
+                                  </font>
+                              </Label>
+                          </children>
+                      </HBox>
+                      <Label id="lblStatus" fx:id="lblCurrStatus" focusTraversable="false" text="Lorem Ipsum" textFill="#2a3e45" wrapText="true">
+                          <font>
+                              <Font size="12.0" />
+                          </font>
+                      </Label>
+                  </children>
+                  <padding>
+                      <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                  </padding>
+              </VBox>
+          </children>
+          <padding>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+          </padding>
       </HBox>
       <Accordion prefHeight="404.0" prefWidth="200.0" style="-fx-background-color: #c9e6f0;" stylesheets="@../css/Format.css">
         <panes>
