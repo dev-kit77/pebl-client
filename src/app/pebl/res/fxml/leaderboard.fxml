@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -11,22 +10,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../css/Format.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.prompts.LeaderboardCtrl">
    <children>
       <MenuBar>
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" onAction="#closeWindow"/>
+              <MenuItem mnemonicParsing="false" onAction="#closeWindow" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="View">
                <items>
-
-                   <MenuItem mnemonicParsing="false" text="Connections" onAction="#showConnections"/>
-                   <MenuItem mnemonicParsing="false" text="Profile" onAction="#showProfile" />
-                   <MenuItem mnemonicParsing="false" text="Leaderboard" onAction="#showLeaderboard" />
+                   <MenuItem mnemonicParsing="false" onAction="#showConnections" text="Connections" />
+                   <MenuItem mnemonicParsing="false" onAction="#showProfile" text="Profile" />
+                   <MenuItem mnemonicParsing="false" onAction="#showLeaderboard" text="Leaderboard" />
                </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -40,21 +37,21 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
                <children>
+                  <Label fx:id="lblCurrUsername" focusTraversable="false" onMouseClicked="#showProfile" text="username" textFill="#2a3e45">
+                     <font>
+                        <Font name="Bold" size="14.0" />
+                     </font>
+                  </Label>
                   <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                      <children>
-                        <Label id="lblUsername" fx:id="lblUserUsername" focusTraversable="false" text="Username" textFill="#2a3e45" onMouseClicked="#showProfile">
-                           <font>
-                              <Font name="System Italic" size="10.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="lblUserSkips" text="(0 Skips)">
+                        <Label fx:id="lblCurrSkips" text="(0 Skips)">
                            <font>
                               <Font size="10.0" />
                            </font>
                         </Label>
                      </children>
                   </HBox>
-                  <Label id="lblStatus" fx:id="lblUserStatus" focusTraversable="false" text="Lorem Ipsum" textFill="#2a3e45" wrapText="true">
+                  <Label fx:id="lblCurrStatus" focusTraversable="false" text="Lorem Ipsum" textFill="#2a3e45" wrapText="true">
                      <font>
                         <Font size="12.0" />
                      </font>

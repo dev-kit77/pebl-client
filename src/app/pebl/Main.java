@@ -5,6 +5,7 @@ package app.pebl;
 import app.pebl.connections.ConnectionsCtrl;
 import app.pebl.profile.ProfileCtrl;
 import app.pebl.profile.User;
+import app.pebl.prompts.LeaderboardCtrl;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
@@ -67,6 +68,39 @@ public class Main extends Application {
 		executor.execute(shutdownTask);
 	}
 
+	public static Stage initProfile(String username) throws IOException {
+		//init stage
+		Stage stage = new Stage();
+		stage.setTitle("Profile");
+
+		//get loader and load scene
+		FXMLLoader loader = getFXML("profile");
+		stage.setScene(new Scene(loader.load()));
+
+		//init user
+		User displayUser;
+
+		//get user from server
+		Task<Void> getUser = new Task<>() {
+			@Override public Void call() {
+				//code goes here
+
+				//empty return
+				return null;
+			}
+		};
+
+		executor.execute(getUser);
+
+		//get controller
+		ProfileCtrl ctrl = (ProfileCtrl) loader.getController();
+		//init controller user
+		//ctrl.setUser(displayUser);
+
+		//return window to show
+		return stage;
+	}
+
 	public static Stage initProfile(User displayUser) throws IOException {
 		//init stage
 		Stage stage = new Stage();
@@ -101,6 +135,22 @@ public class Main extends Application {
 		return stage;
 	}
 
+	public static Stage initLeaderboard(User displayUser) throws IOException {
+		Stage stage = new Stage();
+		stage.setTitle("Leaderboard");
+
+		//get loader and load scene
+		FXMLLoader loader = getFXML("leaderboard");
+		stage.setScene(new Scene(loader.load()));
+
+		//get controller
+		LeaderboardCtrl ctrl = (LeaderboardCtrl) loader.getController();
+		ctrl.setUser(displayUser);
+
+		//return window to show
+		return stage;
+	}
+
 	private static Stage initPosts() throws IOException {
 		//init stage
 		Stage stage = new Stage();
@@ -126,6 +176,11 @@ public class Main extends Application {
 		Stage profileStage = initProfile(Config.getInstance().getCurrentUser());
 		profileStage.initOwner(mainStage);
 		profileStage.show();
+
+		//init leaderboard window
+		Stage leaderboardStage = initLeaderboard(Config.getInstance().getCurrentUser());
+		leaderboardStage.initOwner(mainStage);
+		leaderboardStage.show();
 	}
 
 	public static void showLogin(Stage stage) throws IOException {

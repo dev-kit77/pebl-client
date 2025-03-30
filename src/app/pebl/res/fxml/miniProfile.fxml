@@ -10,7 +10,7 @@
    <children>
       <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
          <children>
-            <Label id="lblDispName" fx:id="lblUsername" focusTraversable="false" text="Display name" onMouseClicked="#showProfile" textFill="#2a3e45">
+            <Label fx:id="lblUsername" focusTraversable="false" onMouseClicked="#showProfile" text="username" textFill="#2a3e45">
                <font>
                   <Font name="Bold" size="14.0" />
                </font>
