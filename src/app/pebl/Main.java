@@ -110,6 +110,7 @@ public class Main extends Application {
 		return fxmlLoader.load();
 	}
 
+	//Methods for kit to use
 	/**
 	 * Method to parse a JSONObject of data of a user to a User object
 	 * @param response JSONObject
@@ -130,7 +131,7 @@ public class Main extends Application {
 		return new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString()));
 	}
 
-	//TODO methods for kit to use in application
+	//Methods for kit to use
 
 	/**
 	 * Method to register a new user
@@ -236,9 +237,23 @@ public class Main extends Application {
 	 */
 	private static boolean updateProfile(int age, boolean gender, String status) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
-		obj.put("age", age);
+		//if age is 0 use current age
+		if (age == 0){
+		obj.put("age", Config.getInstance().getCurrentUser().getAge());
+
+		}
+		else {
+			obj.put("age", age);
+		}
+		//gender is a switch, no need to check anything
 		obj.put("gender", gender);
-		obj.put("status", status);
+		// if status is empty, use current status
+		if (status.equals("")){
+			obj.put("status", Config.getInstance().getCurrentUser().getStatus());
+		}
+		else {
+			obj.put("status", status);
+		}
 		JSONObject response = connect.request("updateProfile", obj);
 		if (response != null) {
 			System.out.println("updateProfile response: " + response.toJSONString());

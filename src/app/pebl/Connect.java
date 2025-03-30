@@ -290,14 +290,14 @@ public class Connect {
                 }
                 break;
 
-            case "like":
+            case "like": //liking post
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api+"post/skip"))
                         .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
                         .header("Content-Type", "application/json")
                         .header("Authorization", "Basic " + auth)
                         .build();
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                response = client.send(request, HttpResponse.BodyHandlers.ofString()); //json body: {"id": id} id is integer id of post
                 System.out.println("Sending to: "+request.uri().toString());
                 if (response.statusCode() == 200) {
                     System.out.println("like successful " + response.body().toString());
