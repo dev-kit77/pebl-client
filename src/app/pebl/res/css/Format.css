@@ -1,6 +1,48 @@
+@font-face {
+	src:url("../font/RobotoCondensed-VariableFont_wght.ttf") format('truetype');
+}
+
+@font-face {
+	src:url("../font/RobotoCondensed-Italic-VariableFont_wght.ttf") format('truetype');
+}
+
 .root {
 	-color: #c9e6f0;
-	-background-color:#c9e6f0;
+	-background-color: #c9e6f0;
 	-fx-background-color: #c9e6f0;
 	-fx-text-fill: #2a3e45;
+	-fx-font-family: "Roboto Condensed", sans-serif;
+}
+
+.label {
+	-fx-text-fill: #2a3e45;
+	-fx-font-family: "Roboto Condensed", sans-serif;
+}
+
+.button {
+	-fx-background-color: #f2fcff;
+	-fx-border-color: #92999c;
+	-fx-background-radius: 30;
+	-fx-border-radius: 30;
+	-fx-text-fill: #2a3e45;
+	-fx-font-size: 14;
+	-fx-font-family: "Roboto Condensed", sans-serif;
+}
+
+.text-field {
+	-fx-background-color: #f2fcff;
+	-fx-border-color: #92999c;
+	-fx-background-radius: 30;
+	-fx-border-radius: 30;
+	-fx-text-fill: #2a3e45;
+	-fx-font-family: "Roboto Condensed Italic", sans-serif;
+}
+
+.password-field {
+	-fx-background-color: #f2fcff;
+	-fx-border-color: #92999c;
+	-fx-background-radius: 30;
+	-fx-border-radius: 30;
+	-fx-text-fill: #2a3e45;
+	-fx-font-family: "Roboto Condensed Italic", sans-serif;
 }
