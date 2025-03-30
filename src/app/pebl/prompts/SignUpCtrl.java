@@ -1,6 +1,8 @@
 package app.pebl.prompts;
 
 import app.pebl.Controller;
+import app.pebl.Main;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
@@ -72,6 +74,15 @@ public class SignUpCtrl extends Controller {
 		}
 		else {
 			//submit form
+			Task<Void> createUser = new Task<Void>() {
+				@Override public Void call() {
+					//create new user on server
+					return null;
+				};
+			};
+
+			//run thread
+			Main.getExecutor().submit(createUser);
 
 			//close window back to login
 			closeWindow();

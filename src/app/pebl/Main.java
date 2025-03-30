@@ -12,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Main class for GUI init
@@ -19,6 +21,7 @@ import java.io.IOException;
 public class Main extends Application {
 	//Fields
 	private static Stage primaryStage;
+	private final static ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	/**
 	 * start() method for the GUI. Initializes the login GUI.
@@ -56,7 +59,7 @@ public class Main extends Application {
 			}
 		};
 
-		new Thread(shutdownTask).start();
+		executor.execute(shutdownTask);
 	}
 
 	public static Stage initProfile(User displayUser) throws IOException {

@@ -27,6 +27,26 @@ public class ProfileCtrl extends Controller {
 	VBox feedUserPosts;
 
 	public void refresh() {
+		//get user data
+		Task<Void> userRefresh = new Task<>() {
+			@Override public Void call() {
+				//code to do this goes here
+				return null;
+			};
+		};
+
+		//get user posts from server
+		Task<Void> profileRefresh = new Task<>() {
+			@Override public Void call() {
+				//code to do this goes here
+				return null;
+			};
+		};
+
+		//run tasks
+		Main.getExecutor().execute(userRefresh);
+		Main.getExecutor().execute(profileRefresh);
+
 		//update fields
 		lblUsername.setText(displayUser.getUsername());
 		lblStatus.setText("\"" + displayUser.getStatus() + "\"");

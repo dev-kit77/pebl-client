@@ -3,6 +3,7 @@ package app.pebl.login;
 import app.pebl.Config;
 import app.pebl.Controller;
 import app.pebl.Main;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -36,7 +37,17 @@ public class LoginCtrl extends Controller {
 		//set server address in config
 		Config.getInstance().setServerAddr(this.srvAddress);
 
-		//authUser()
+		Task<Void> authUser = new Task<Void>() {
+			@Override public Void call() {
+				//authenticate user with server
+				return null;
+			};
+		};
+
+		//run thread
+		Main.getExecutor().submit(authUser);
+
+		//check for auth
 		System.out.println("Login");
 		System.out.println("Username: " + username.getText());
 		System.out.println("Password: " + password.getText());
