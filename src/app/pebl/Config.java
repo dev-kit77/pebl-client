@@ -29,7 +29,7 @@ public final class Config {
         }
     }
 
-    private String authToken;
+    private String authToken = null;
 	private User currentUser = null;
 	private String serverAddr;
 	private boolean showProfile;
@@ -226,7 +226,6 @@ public final class Config {
 			//close reader and buffer
 			buffer.close();
 			writer.close();
-
 			//return true for success
 			return true;
 		}

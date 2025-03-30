@@ -54,6 +54,7 @@ public class Connect {
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api))
                         .GET()
+                        .header("Content-Type", "application/json")
                         .build();
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 System.out.println("sending to: "+response.uri().toString());
@@ -70,9 +71,14 @@ public class Connect {
                 break;
 
             case "checkAuth": //check if auth token is valid
+                body.put("token", auth);
+                body.put("error", "none");
+                body.put("success", "true");
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api))
-                        .POST(HttpRequest.BodyPublishers.ofString(body.toJSONString())) // json -> {"error":"none", "success":"true", "token": {the auth token}}
+                        .PUT(HttpRequest.BodyPublishers.ofString(body.toJSONString())) // json -> {"error":"none", "success":"true", "token": {the auth token}}
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", auth)
                         .build();
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 System.out.println("sending to: "+response.uri().toString());

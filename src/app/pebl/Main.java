@@ -12,6 +12,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
@@ -26,6 +28,7 @@ public class Main extends Application {
 	private final static Connect connect = new Connect();
 	private static ArrayList<Post> feed;
 	private static User viewedUser = null;
+	private static ArrayList<User> leaderboard = null;
 
     static {
         try {
@@ -169,7 +172,6 @@ public class Main extends Application {
 			User temp = getProfile(username.toLowerCase());
 			if (temp != null) {
 				Config.getInstance().setCurrentUser(temp);
-				Config.getInstance().getCurrentUser().setLocation(temp.getLocation());
 				return true;
 			}
 
@@ -220,7 +222,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static boolean checkAuth() throws IOException, InterruptedException {
+	public static boolean checkAuth() throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		JSONObject response = connect.request("checkAuth", obj);
 		return  (response != null);
@@ -336,6 +338,7 @@ public class Main extends Application {
 			if (temp != null) {
 			Config.getInstance().setCurrentUser(temp);
 			}
+			leaderboard = leaderboard();
 			return true;
 		}
 		else {
@@ -364,6 +367,7 @@ public class Main extends Application {
 				//create post object and add it to posts array list
 				posts.add(new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString())));
 			}
+			feed = posts;
 			return posts; //return teh array list
 		}
 		else {
@@ -405,7 +409,7 @@ public class Main extends Application {
 	 * @throws InterruptedException
 	 */
 	private static boolean follow(String username) throws IOException, InterruptedException {
-		JSONObject obj = new JSONObject();
+		JSONObject obj = new JSONObject(); //TODO test follow
 		obj.put("username", username.toLowerCase());
 		JSONObject response = connect.request("follow", obj);
 		if (response != null) {
@@ -433,7 +437,7 @@ public class Main extends Application {
 	 * @throws InterruptedException
 	 */
 	private static boolean like(int id) throws IOException, InterruptedException {
-		JSONObject obj = new JSONObject();
+		JSONObject obj = new JSONObject(); //TODO test like
 		obj.put("id", id);
 		JSONObject response = connect.request("like", obj);
 		if (response != null) {
@@ -452,7 +456,7 @@ public class Main extends Application {
 	 * @return True if there is user data stored, False if it is not stored.
 	 */
 	private static boolean checkCurrentUser(){
-		if (Config.getInstance().getCurrentUser() != null) {
+		if (Config.getInstance().getCurrentUser() != null || !Config.getInstance().getCurrentUser().getUsername().equals("null")) {
 			return true;
 		}
 		else {
@@ -460,9 +464,213 @@ public class Main extends Application {
 		}
 	}
 
-	//TODO cli
-	private static void cli() {
+	/**
+	 * Method that displays the leaderboard as
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static void displayLeaderboard() throws IOException, InterruptedException {
+		if (leaderboard != null) {
+			for (User user : leaderboard) {
+				System.out.println("Name: "+user.getUsername()+", Skips: "+user.getSkips());
+			}
+		}
+		else {
+			System.err.println("You haven't created your first post of the day");
+		}
+	}
 
+	/**
+	 * Method to display post
+	 * @param post Post object
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static void displayPost(Post post) throws IOException, InterruptedException {
+		if (post != null) {
+			System.out.println("Id: "+post.getId());
+			System.out.println("Author: "+post.getSender());
+			System.out.println("Content: "+post.getId());
+			System.out.println("Skips: "+post.getId());
+			System.out.println("Date: "+post.getId());
+
+		}
+		else {
+			System.err.println("null post");
+		}
+	}
+
+	/**
+	 * Method to display currently viewed user
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static void displayUser() throws IOException, InterruptedException {
+		if (viewedUser != null) {
+			System.out.println("Username: "+viewedUser.getUsername());
+			System.out.println("Skips: "+viewedUser.getSkips());
+			System.out.println("Followers "+viewedUser.getFollowers().toString());
+			System.out.println("Following "+viewedUser.getFollowing().toString());
+			System.out.println("Status: "+viewedUser.getStatus());
+			System.out.println("Age: "+viewedUser.getAge());
+			System.out.println("Gender: "+viewedUser.getGender());
+			System.out.println("Posts: "+viewedUser.getPosts().toString());
+			System.out.println("Location: "+viewedUser.getLocation());
+			System.out.println("Mutual friends "+Config.getInstance().getCurrentUser().getMutuals().toString());
+
+		}
+		else {
+			System.err.println("null user");
+		}
+	}
+
+	private static void displayFeed(){
+		if (feed != null) {
+
+		}
+		else {
+			System.err.println("null feed");
+		}
+	}
+
+	/**
+	 * The app but in cli form
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static void cli() throws IOException, InterruptedException {
+		Scanner input = new Scanner(System.in);
+		System.out.print("Hello! and welcome to Pebl.social!");
+		String choice;
+		String username;
+		String password;
+		int age;
+		boolean gender;
+		String content;
+		String id;
+		String status;
+
+		//if completely new user
+		if (!checkCurrentUser() && (Config.getInstance().getAuthToken() == null || Config.getInstance().getAuthToken().equals("null"))) {
+			System.out.println("You are not yet register, lets get that started");
+
+			System.out.println("Please enter your new username or type /exit to exit: ");
+			username = input.next();
+			System.out.println("Please enter your new password or type /exit to exit: ");
+
+			password = input.nextLine();
+			System.out.println("Please enter your new age (integers only) or type /exit to exit: ");
+			age = input.nextInt();
+			input.nextLine();
+			System.out.println("Please enter your gender (true or false) or type /exit to exit: ");
+			gender = input.nextBoolean();
+			input.nextLine();
+			if (username.equals("/exit") || password.equals("/exit")) {
+				return;
+			}
+			else {
+				if (!register(username, password, age, gender)) {
+					System.err.println("Error registering user");
+					return;
+				};
+			}
+
+
+
+		}
+		// if was logged in before
+		else if (Config.getInstance().getAuthToken() != null || !Config.getInstance().getCurrentUser().equals("null")) {
+			if (!checkAuth()){
+				System.err.println("You have been logged out.");
+				System.out.println("Please enter your new username or type /exit to exit: ");
+				username = input.next();
+				System.out.println("Please enter your new password or type /exit to exit: ");
+
+				password = input.nextLine();
+				if (username.equals("/exit") || password.equals("/exit")) {
+					return;
+				}
+
+				if (!login(username, password)) {
+					System.err.println("Error logging in user");
+					return;
+				};
+				System.out.println("Welcome back!");
+
+			}
+		}
+		System.out.println("What would you like to do? Reminder: Leaderboards can only be viewed and refreshed after you create a post\nType a number to select of the following\n1: create post, 2: view specific post, 3: view profile of a user (including yourself), 4: view leaderboard, 5: Like a specific post, 6: Follow a specific user, 7: change your profile (age, gender and status), 8: View the latest 50 posts in the feed, 9: exit");
+		choice = input.next();
+		switch (choice) {
+			case "1":
+				System.out.println("Enter content for post or type /exit to cancel: ");
+				content = input.next();
+				if (!content.equals("/exit")) {
+					createPost(content);
+				}
+				break;
+			case "2":
+				System.out.println("Enter id of post or type /exit to cancel: ");
+				id = input.nextLine();
+				if (!id.equals("/exit")) {
+					displayPost(getPost(Integer.parseInt(id)));
+				}
+				break;
+			case "3":
+				System.out.println("Enter username or type /exit to cancel: ");
+				username = input.nextLine();
+				if (!username.equals("/exit")) {
+					getProfile(username);
+					displayUser();
+				}
+				break;
+			case "4":
+				displayLeaderboard();
+				break;
+			case "5":
+				System.out.println("Enter id of post you want to offer a skip (like) or type /exit to cancel: ");
+				id = input.nextLine();
+				if (!id.equals("/exit")) {
+					like(Integer.parseInt(id));
+				}
+				break;
+			case "6":
+				System.out.println("Enter username you want ot follow or type /exit to cancel: ");
+				username = input.nextLine();
+				if (!username.equals("/exit")) {
+					follow(username);
+				}
+				break;
+			case "7":
+				System.out.println("Enter your new age (integers only) or type /exit to cancel: ");
+				try {
+					age = input.nextInt();
+					input.nextLine();
+				System.out.println("Enter your new gender (true or false only) or type /exit to cancel: ");
+				gender = input.nextBoolean();
+				input.nextLine();
+				System.out.println("Enter your new status or type /exit to cancel: ");
+				status = input.nextLine();
+				updateProfile(age, gender, status);
+				} catch (InputMismatchException e) {
+					System.err.println("You have entered an invalid value for age or gender, please try again later.");
+
+				}
+				break;
+			case "8":
+				if (getFeed() != null) {
+					displayFeed();
+				}
+				break;
+			case "9":
+				System.out.println("See you next time!");
+				Config.getInstance().save(".pebl.cfg");
+				break;
+			default:
+				System.err.println("Invalid choice");
+				break;
+
+		}
 	}
 
 	public static void main(String[] args) {
