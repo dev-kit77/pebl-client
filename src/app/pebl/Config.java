@@ -15,6 +15,7 @@ import java.util.Scanner;
  */
 public final class Config {
 	private final static Config instance = new Config();
+	private String authToken;
 	private User currentUser;
 	private String serverAddr;
 	private boolean showProfile;
@@ -109,7 +110,7 @@ public final class Config {
 			reader = new FileReader(file);
 			buffer = new BufferedReader(reader);
 
-			//Read Data Here
+			//Read Data Here TODO
 
 			//close reader and buffer
 			buffer.close();
@@ -167,7 +168,7 @@ public final class Config {
 			writer = new FileOutputStream(file);
 			buffer = new PrintWriter(writer);
 
-			//Write file here
+			//Write file here TODO
 
 			//close reader and buffer
 			buffer.close();
@@ -229,4 +230,8 @@ public final class Config {
 	public void setShowLeaderboard(boolean show) {
 		showLeaderboard = show;
 	}
+
+	public void setAuthToken(String newAuthToken){ this.authToken = newAuthToken; }
+
+	public String getAuthToken() { return authToken; }
 }

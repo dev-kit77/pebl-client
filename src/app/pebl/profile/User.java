@@ -1,8 +1,6 @@
 package app.pebl.profile;
 import java.util.ArrayList;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+
 
 
 
@@ -17,6 +15,10 @@ public class User {
     private String status;
     private int age;
     private boolean gender;
+    //TODO work on getting mutuals
+    private ArrayList<String> mutuals;
+    private ArrayList<Integer> posts;
+    private String location;
 
     /**
      * User constructor
@@ -135,6 +137,52 @@ public class User {
         this.gender = gender;
     }
 
+    /**
+     *
+     * @return the list of mutual friends with the current user being viewed
+     */
+    public ArrayList<String> getMutuals() {
+        return mutuals;
+    }
 
+    /**
+     * Sets the list of mutual friends with the current user being viewed
+     * @param mutuals
+     */
+    public void setMutuals(ArrayList<String> mutuals) {
+        this.mutuals = mutuals;
+    }
+
+    /**
+     *
+     * @return Array list of post ids
+     */
+    public ArrayList<Integer> getPosts() {
+        return posts;
+    }
+
+    /**
+     * Adds the post ID to the users posts array list
+     * @param postID integer
+     */
+    public void setPosts(int postID) {
+        posts.add(postID);
+    }
+
+    /**
+     *
+     * @return String location of user
+     */
+    public String getLocation() {
+        return location;
+    }
+
+    /**
+     *
+     * @param location String
+     */
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }
 

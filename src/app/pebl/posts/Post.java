@@ -6,8 +6,8 @@ import java.util.Date;
  * Posts class
  */
 public class Post {
-    private String id;
-    private String sender;
+    private int id;
+    private String author;
     private String content;
     private int skips;
     private Date date;
@@ -16,9 +16,9 @@ public class Post {
      * Post Constructor
      * Must be called after sending a request to get the Post that was just made.
      */
-    public Post(String id, String sender, String content, int skips, long timestamp) {
+    public Post(int id, String author, String content, int skips, long timestamp) {
         this.id = id;
-        this.sender = sender;
+        this.author = author;
         this.content = content;
         this.skips = skips;
         this.date = new Date((long) timestamp);
@@ -28,16 +28,16 @@ public class Post {
      *
      * @return the String id of the post TODO change the id to integer if its discovered that its an integer!
      */
-    public String getId() {
+    public int getId() {
         return id;
     }
 
     /**
      *
-     * @return the username of the sender
+     * @return the username of the author
      */
     public String getSender() {
-        return sender;
+        return author;
     }
 
     /**

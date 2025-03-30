@@ -2,21 +2,20 @@
 package app.pebl;
 
 //imports
-import app.pebl.connections.ConnectionsCtrl;
-import app.pebl.profile.ProfileCtrl;
 import app.pebl.profile.User;
-import app.pebl.prompts.LeaderboardCtrl;
+import app.pebl.posts.Post;
 import javafx.application.Application;
-import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONValue;
 
 /**
  * Main class for GUI init
@@ -24,7 +23,7 @@ import java.util.concurrent.Executors;
 public class Main extends Application {
 	//Fields
 	private static Stage primaryStage;
-	private final static ExecutorService executor = Executors.newSingleThreadExecutor();
+	private final static Connect connect = new Connect();
 
 	/**
 	 * start() method for the GUI. Initializes the login GUI.
@@ -34,131 +33,45 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage stage) throws IOException {
-		showLogin(stage);
+		//init main stage
+		stage = new Stage();
+		stage.setTitle("Login");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setScene(new Scene(loadFXML("login"), 250, 300));
+		stage.show();
 
-		//test user
-		Config.getInstance().setCurrentUser(new User("kitty", 27773, new ArrayList<String>(),new ArrayList<String>(), "I love cats", 18, false));
+		primaryStage = stage;
 	}
 
-	@Override
-	public void stop() {
-		Task<Void> shutdownTask = new Task<>() {
-			@Override public Void call() {
-				//set wait cursor
-				getPrimaryStage().getScene().setCursor(Cursor.WAIT);
-
-				//save config file
-				boolean success = Config.getInstance().save(".pebl.cfg");
-
-				if (success) {
-					System.out.println("Config Saved Successfully");
-				}
-				else {
-					System.out.println("Config Saving Failed");
-				}
-
-				//set regular cursor
-				getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
-
-				//empty return
-				return null;
-			}
-		};
-
-		executor.execute(shutdownTask);
-	}
-
-	public static Stage initProfile(String username) throws IOException {
-		//init stage
+	public static Stage initProfile() throws IOException {
 		Stage stage = new Stage();
 		stage.setTitle("Profile");
+		stage.setScene(new Scene(loadFXML("profile")));
 
-		//get loader and load scene
-		FXMLLoader loader = getFXML("profile");
-		stage.setScene(new Scene(loader.load()));
-
-		//init user
-		User displayUser;
-
-		//get user from server
-		Task<Void> getUser = new Task<>() {
-			@Override public Void call() {
-				//code goes here
-
-				//empty return
-				return null;
-			}
-		};
-
-		executor.execute(getUser);
-
-		//get controller
-		ProfileCtrl ctrl = (ProfileCtrl) loader.getController();
-		//init controller user
-		//ctrl.setUser(displayUser);
-
-		//return window to show
 		return stage;
 	}
 
-	public static Stage initProfile(User displayUser) throws IOException {
-		//init stage
-		Stage stage = new Stage();
-		stage.setTitle("Profile");
-
-		//get loader and load scene
-		FXMLLoader loader = getFXML("profile");
-		stage.setScene(new Scene(loader.load()));
-
-		//get controller
-		ProfileCtrl ctrl = (ProfileCtrl) loader.getController();
-		//init controller user
-		ctrl.setUser(displayUser);
-
-		//return window to show
-		return stage;
-	}
-
-	public static Stage initConnections(User displayUser) throws IOException {
+	public static Stage initConnections() throws IOException {
 		Stage stage = new Stage();
 		stage.setTitle("Connections");
+		stage.setScene(new Scene(loadFXML("connections")));
 
-		//get loader and load scene
-		FXMLLoader loader = getFXML("connections");
-		stage.setScene(new Scene(loader.load()));
-
-		//get controller
-		ConnectionsCtrl ctrl = (ConnectionsCtrl) loader.getController();
-		ctrl.setUser(displayUser);
-
-		//return window to show
 		return stage;
 	}
 
-	public static Stage initLeaderboard(User displayUser) throws IOException {
-		Stage stage = new Stage();
-		stage.setTitle("Leaderboard");
-
-		//get loader and load scene
-		FXMLLoader loader = getFXML("leaderboard");
-		stage.setScene(new Scene(loader.load()));
-
-		//get controller
-		LeaderboardCtrl ctrl = (LeaderboardCtrl) loader.getController();
-		ctrl.setUser(displayUser);
-
-		//return window to show
-		return stage;
-	}
-
-	private static Stage initPosts() throws IOException {
-		//init stage
+	public static Stage initPosts() throws IOException {
 		Stage stage = new Stage();
 		stage.setTitle("Latest Posts");
-		//load fxml
-		stage.setScene(new Scene(getFXML("posts").load()));
+		stage.setScene(new Scene(loadFXML("posts")));
 
-		//return window to show
+		return stage;
+	}
+
+	public static Stage showSignUp() throws IOException {
+		Stage stage = new Stage();
+		stage.setTitle("Sign Up");
+		stage.setScene(new Scene(loadFXML("signup")));
+
 		return stage;
 	}
 
@@ -168,31 +81,14 @@ public class Main extends Application {
 		mainStage.show();
 
 		//init connections window
-		Stage connectionStage = initConnections(Config.getInstance().getCurrentUser());
+		Stage connectionStage = initConnections();
 		connectionStage.initOwner(mainStage);
 		connectionStage.show();
 
 		//init profile window
-		Stage profileStage = initProfile(Config.getInstance().getCurrentUser());
+		Stage profileStage = initProfile();
 		profileStage.initOwner(mainStage);
 		profileStage.show();
-
-		//init leaderboard window
-		Stage leaderboardStage = initLeaderboard(Config.getInstance().getCurrentUser());
-		leaderboardStage.initOwner(mainStage);
-		leaderboardStage.show();
-	}
-
-	public static void showLogin(Stage stage) throws IOException {
-		//init main stage
-		stage = new Stage();
-		stage.setTitle("Login");
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.setScene(new Scene(getFXML("login").load(), 250, 300));
-		stage.show();
-
-		//store primary stage
-		primaryStage = stage;
 	}
 
 	public static Stage getPrimaryStage() {
@@ -206,13 +102,303 @@ public class Main extends Application {
 	 * @return javafx node contained within the fxml file
 	 * @throws IOException file error, usually means the file does not exist
 	 */
-	public static FXMLLoader getFXML(String fxml) throws IOException {
+	private static Parent loadFXML(String fxml) throws IOException {
 		//get fxml file from the fxml folder with filename in the parameter
-		return new FXMLLoader(Main.class.getResource("res/fxml/" + fxml + ".fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("res/fxml/" + fxml + ".fxml"));
+
+		//return javafx node from fxml file
+		return fxmlLoader.load();
 	}
 
-	public static ExecutorService getExecutor() {
-		return executor;
+	/**
+	 * Method to parse a JSONObject of data of a user to a User object
+	 * @param response JSONObject
+	 * @return User object
+	 */
+	private static User parseUser(JSONObject response) {
+		User user =  new User(response.get("username").toString(), Integer.parseInt(response.get("skips").toString()), new ArrayList<String>((JSONArray) (response.get("followers"))), new ArrayList<String>((JSONArray) (response.get("following"))), response.get("status").toString(), Integer.parseInt(response.get("age").toString()), Boolean.parseBoolean(response.get("gender").toString()));
+		user.setLocation(response.get("location").toString());
+		return user;
+	}
+
+	/**
+	 * Method to parse a JSONObject of data of a post to a Post object
+	 * @param response JSONObject
+	 * @return Post object
+	 */
+	private static Post parsePost(JSONObject response) {
+		return new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString()));
+	}
+
+	//TODO methods for kit to use in application
+
+	/**
+	 * Method to register a new user
+	 * @param username String
+	 * @param password String
+	 * @param age integer
+	 * @param gender boolean
+	 * @return True if the register was successful and False if it failed.
+	 * @throws IOException in case of IOException
+	 * @throws InterruptedException if the http request was interrupted
+	 */
+	private static boolean register(String username, String password, int age, boolean gender) throws IOException, InterruptedException {
+		JSONObject obj = new JSONObject();
+		obj.put("username", username);
+		obj.put("password", password);
+		obj.put("age", age);
+		obj.put("gender", gender);
+		JSONObject response = connect.request("register", obj);
+		if (response != null) {
+			User temp = getProfile(username);
+			if (temp != null) {
+				Config.getInstance().setCurrentUser(temp);
+				Config.getInstance().getCurrentUser().setLocation(temp.getLocation());
+				return true;
+			}
+
+
+		}
+		System.err.println("ERROR: Could not register user");
+		return false;
+	}
+
+	/**
+	 * Method to log in an existing user by entering their username and password
+	 * @param username String
+	 * @param password String
+	 * @return True if login was successful and False if it failed
+	 * @throws IOException in case of IOException
+	 * @throws InterruptedException if the http request was interrupted
+	 */
+	private static boolean login(String username, String password) throws IOException, InterruptedException {
+		JSONObject obj = new JSONObject();
+		obj.put("username", username);
+		obj.put("password", password);
+		JSONObject response = connect.request("auth", obj);
+		return  (response != null);
+	}
+
+	/**
+	 * Method to check if the server is online
+	 * @return True if server is online and False if it is offline
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static boolean checkServer() throws IOException, InterruptedException {
+		JSONObject obj = new JSONObject();
+		JSONObject response = connect.request("checkOnline", obj);
+		return  (response != null);
+	}
+
+	/**
+	 * Method to check if the auth token is valid
+	 * @return True if the token is valid and False if it is invalid
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static boolean checkAuth() throws IOException, InterruptedException {
+		JSONObject obj = new JSONObject();
+		JSONObject response = connect.request("checkAuth", obj);
+		return  (response != null);
+	}
+
+	/**
+	 * Method to view the profile of a user specified by their username
+	 * @param username String
+	 * @return User object if successful or null if failed
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static User getProfile(String username) throws IOException, InterruptedException {
+		JSONObject obj = new JSONObject();
+		obj.put("username", username);
+		JSONObject response = connect.request("profileGet", obj);
+		if (response != null) {
+		User profile = new User(response.get("username").toString(), Integer.parseInt(response.get("skips").toString()), new ArrayList<String>((JSONArray) (response.get("followers"))), new ArrayList<String>((JSONArray) (response.get("following"))), response.get("status").toString(), Integer.parseInt(response.get("age").toString()), Boolean.parseBoolean(response.get("gender").toString()));
+		profile.setLocation(response.get("location").toString());
+		return profile;
+		}
+
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * method to update profile, at the end it calls
+	 * @param age int
+	 * @param gender boolean
+	 * @param status String
+	 * @return true if success, false if fail
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static boolean updateProfile(int age, boolean gender, String status) throws IOException, InterruptedException {
+		JSONObject obj = new JSONObject();
+		obj.put("age", age);
+		obj.put("gender", gender);
+		obj.put("status", status);
+		JSONObject response = connect.request("updateProfile", obj);
+		if (response != null) {
+			System.out.println("updateProfile response: " + response.toJSONString());
+			User temp;
+			if ((temp = getProfile(Config.getInstance().getCurrentUser().getUsername())) != null) {
+				Config.getInstance().setCurrentUser(temp);
+				Config.getInstance().getCurrentUser().setLocation(temp.getLocation());
+				return true;
+			}
+			else {
+				System.err.println("Error fetching updated profile");
+				return false;
+			}
+		}
+		else {
+			System.err.println("Error updating profile");
+			return false;
+		}
+	}
+
+	/**
+	 *Method to get a specific post by its id.
+	 * @param id integer id of post
+	 * @return the Post object if successful, or null if failed
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static Post getPost(int id) throws IOException, InterruptedException {
+		JSONObject obj = new JSONObject();
+		obj.put("id", id);
+		JSONObject response = connect.request("getPost", obj);
+		if (response != null) {
+
+			return new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString()));
+		}
+		System.err.println("Error fetching post");
+		return null;
+	}
+
+	/**
+	 * Method to create a post
+	 * @param content String of content
+	 * @return true if successful, false if failed
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static boolean createPost(String content) throws IOException, InterruptedException {
+		JSONObject obj = new JSONObject();
+		obj.put("content", content);
+		JSONObject response = connect.request("postCreate", obj);
+		if (response != null) {
+			System.out.println("Post created: " + response.toJSONString());
+			//update the profile with the new post
+			User temp = getProfile(Config.getInstance().getCurrentUser().getUsername());
+			if (temp != null) {
+			Config.getInstance().setCurrentUser(temp);
+			}
+			return true;
+		}
+		else {
+			System.err.println("Error creating post");
+			return false;
+		}
+
+	}
+
+
+	/**
+	 * Method to get feed, returns the latest 50 posts in teh feed
+	 * @return Array list of at max 50 Post objects
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static ArrayList<Post> getFeed() throws IOException, InterruptedException {
+		JSONObject obj = new JSONObject();
+		JSONObject response = connect.request("feed", obj);
+		if (response != null) {
+			System.out.println("Feed fetched");
+			ArrayList<Post> posts = new ArrayList<Post>();
+			JSONArray postsArray = (JSONArray) response.get("feed");
+			for (int i = 0; i < postsArray.size(); i++) {
+				JSONObject post = (JSONObject) postsArray.get(i); //convert jsonarray element object to json object
+				//create post object and add it to posts array list
+				posts.add(new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString())));
+			}
+			return posts; //return teh array list
+		}
+		else {
+			System.err.println("Error fetching feed");
+			return null;
+		}
+	}
+
+	/**
+	 * Method to fetch leaderboard
+	 * @return ArrayList of User objects
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static ArrayList<User> leaderboard() throws IOException, InterruptedException {
+		JSONArray response = connect.leaderboard();
+		if (response != null) {
+			System.out.println("Leaderboard fetched");
+			ArrayList<User> users = new ArrayList<User>();
+			for (int i = 0; i < response.size(); i++) {
+				JSONObject user = (JSONObject) response.get(i); //convert the jsonarray element object to json object
+				//create user object and add it to users array list
+				users.add(parseUser(user));
+
+			}
+			return users;
+		}
+		else {
+			System.err.println("Error fetching leaderboard");
+			return null;
+		}
+	}
+
+	/**
+	 *Method to follow another user.
+	 * @param username String of the username you want to follow
+	 * @return True is successfully following, false if action failed
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static boolean follow(String username) throws IOException, InterruptedException {
+		JSONObject obj = new JSONObject();
+		obj.put("username", username);
+		JSONObject response = connect.request("follow", obj);
+		if (response != null) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	 * Method to like a post
+	 * @param id Integer id of the post
+	 * @return True if liked successfully, false if action failed.
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static boolean like(int id) throws IOException, InterruptedException {
+		JSONObject obj = new JSONObject();
+		obj.put("id", id);
+		JSONObject response = connect.request("like", obj);
+		if (response != null) {
+			return true;
+
+		}
+		else {
+			return false;
+		}
+	}
+
+	//TODO cli
+	private static void cli() {
+
 	}
 
 	public static void main(String[] args) {

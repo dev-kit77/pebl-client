@@ -2,6 +2,8 @@ package app.pebl;
 
 //importing packages
 import java.util.Properties;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import java.net.URI;
@@ -20,11 +22,11 @@ import java.net.http.HttpResponse;
 
 public class Connect {
     private final HttpClient client;
-    private String auth;
-    public static String api = "https://pebl-api.fly.dev/api/"; //The api path for quick use
-    public Connect() throws IOException {
+    private String auth = Config.getInstance().getAuthToken();
+    public static String api = Config.getInstance().getServerAddr()+"api/"; //The api path for quick use
+    public Connect() {
         client = HttpClient.newHttpClient(); //The client
-        auth("");
+
     }
 
     /**
@@ -32,54 +34,18 @@ public class Connect {
      * @param newAuth new authentication token to update the config file. Set this to empty string to get the value from the config file or to set the auth token to empty string.
      * 
      */
-    private void auth(String newAuth) throws IOException {
-
-        File config = new File(new File("./.pebl.cfg").getCanonicalPath()); //teh config file
-        //Create the config file if it doesn't exist
-        if (!config.exists()) {
-            config.createNewFile();
-        }
-        FileInputStream file = null;
-        FileOutputStream fos = null;
-        try {
-            file = new FileInputStream(config.getAbsolutePath());
-            fos = new FileOutputStream(config.getAbsoluteFile());
-            Properties prop = new Properties();
-            prop.load(file);
-            if (!newAuth.isEmpty()) {
-                prop.setProperty("auth", newAuth);
-                prop.store(fos, null);
-
-            }
-            else {
-
-                auth = prop.getProperty("auth", "");
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("config file not found");
-        } catch (IOException e) {
-            System.out.println("IOException with config file");
-        }
-         finally {
-            if (file != null) {
-                try {
-                    file.close();
-                    assert fos != null;
-                    fos.close();
-                } 
-                catch (Exception e) {
-                    System.err.println("Error closing config file input stream or output stream");
-                }
-            }
-        }
+    private void authUpdate(String newAuth) {
+        //TODO rework this function to get token from config class
+        Config.getInstance().setAuthToken(newAuth);
 
     }
 
     /**
-     * Method to handle all http requests, just enter from the options [chechOnline, checkAuth, register, auth, profileGet, profileUpdate, postGet, postCreate, feed, leaderboard]
+     * Method to handle all http requests, just enter from the options [checkOnline, checkAuth, register, auth, profileGet, profileUpdate, postGet, postCreate, feed, leaderboard]
      * @param type where you are sending the request to
      * @param body the body
      */
+    @SuppressWarnings("unused")
     public JSONObject request(String type, JSONObject body) throws IOException, InterruptedException{
         HttpRequest request;
         HttpResponse<String> response;
@@ -93,9 +59,10 @@ public class Connect {
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 System.out.println("sending to: "+response.uri().toString());
                 if (response.statusCode() == 200) {
-                    System.out.println("Server is online");
+                    System.out.println("Server is online "+response.body());
                     System.out.println("status code: "+response.statusCode());
-
+                    responseJSON = new JSONObject();
+                    return responseJSON;
                 }
                 else {
                     System.out.println("Server is not online");
@@ -111,8 +78,10 @@ public class Connect {
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 System.out.println("sending to: "+response.uri().toString());
                 if (response.statusCode() == 200) {
-                    System.out.println("Token is valid");
+                    System.out.println("Token is valid "+response.body());
                     System.out.println("Status code"+ response.statusCode());
+                    responseJSON = new JSONObject();
+                    return responseJSON;
                 }
                 else {
                     System.out.println("Token is invalid or there is a server problem");
@@ -131,16 +100,17 @@ public class Connect {
                 System.out.println("sending to: "+response.uri().toString());
 
                 if (response.statusCode() == 200) {
-                    System.out.println("register ok");
+                    System.out.println("register ok" + response.body().toString());
                     System.out.println("Status code: "+response.statusCode());
                     responseJSON = (JSONObject)JSONValue.parse(response.body()); //parse the response as JSON
                     auth = (String)responseJSON.get("token"); // update the auth token
-                    auth(auth);
+                    authUpdate(auth);
                     System.out.println("Status code: "+response.statusCode());
+                    return responseJSON;
                 }
                 else {
-                    System.out.println("register failed");
-                    auth("");
+                    System.out.println("register failed, Username unavailable");
+                    authUpdate("");
                     System.out.println("Status code: "+response.statusCode());
                 }
 
@@ -157,11 +127,12 @@ public class Connect {
                 System.out.println("Sending to: "+request.uri().toString()+"\nresponse: "+response.body());
 
                 if (response.statusCode() == 200) {
-                    System.out.println("auth ok");
+                    System.out.println("auth token received " + response.body().toString());
                     responseJSON = (JSONObject)JSONValue.parse(response.body()); //parse the response as JSON
                     auth = (String)responseJSON.get("token"); // update the auth token
-                    auth(auth);
+                    authUpdate(auth);
                     System.out.println("Status code: "+response.statusCode());
+                    return responseJSON;
                 }
                 else {
                     System.out.println("Invalid username or password or server problem");
@@ -174,7 +145,7 @@ public class Connect {
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api+"user/profile"))
                         .GET()
-                        .header("Content-Type", "application/json") //TODO content type
+                        .header("Content-Type", "application/json")
                         .header("target", body.get("username").toString())
                         .build();
 
@@ -182,7 +153,7 @@ public class Connect {
                 System.out.println("Sending to: "+request.uri().toString()+"\nresponse: "+response.body());
 
                 if (response.statusCode() == 200) {
-                    System.out.println("profile obtained");
+                    System.out.println("profile obtained "+ response.body().toString());
                     System.out.println("status code: "+response.statusCode());
 
                     responseJSON = (JSONObject)JSONValue.parse(response.body());
@@ -208,9 +179,11 @@ public class Connect {
                 System.out.println("Sending to: "+request.uri().toString()+"\nresponse: "+response.body());
 
                 if (response.statusCode() == 200) {
-                    System.out.println("profile updated");
+                    System.out.println("profile updated " + response.body().toString());
                     System.out.println("status code: "+response.statusCode());
+                    responseJSON = new JSONObject();
 
+                    return responseJSON;
                 }
                 else {
                     System.out.println("error updating profile");
@@ -224,7 +197,7 @@ public class Connect {
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api+"post/get"))
                         .GET()
-                        .header("Content-Type", "application/json") //TODO content type
+                        .header("Content-Type", "application/json")
                         .header("id", body.get("id").toString())
                         .build();
 
@@ -232,7 +205,7 @@ public class Connect {
                 System.out.println("Sending to: "+request.uri().toString()+"\nresponse: "+response.body());
 
                 if (response.statusCode() == 200) {
-                    System.out.println("post obtained");
+                    System.out.println("post obtained "+ response.body().toString());
                     System.out.println("status code: "+response.statusCode());
 
                     responseJSON = (JSONObject)JSONValue.parse(response.body());
@@ -256,9 +229,12 @@ public class Connect {
                 System.out.println("Sending to: "+request.uri().toString());
 
                 if (response.statusCode() == 200) {
-                    System.out.println("post created and posted");
+                    System.out.println("post created and posted "+ response.body().toString());
                     System.out.println("status code: "+response.statusCode());
                     System.out.println("body: "+response.body());
+                    responseJSON = new JSONObject();
+
+                    return responseJSON;
                 }
                 else {
                     System.out.println("error creating post"+"\nstatus code: "+response.statusCode());
@@ -276,7 +252,7 @@ public class Connect {
 
                 System.out.println("Sending to: "+request.uri().toString()+"\nresponse: "+response.body());
                 if (response.statusCode() == 200) {
-                    System.out.println("feed obtained");
+                    System.out.println("feed obtained " + response.body().toString());
                     System.out.println("status code: "+response.statusCode());
 
                     responseJSON = (JSONObject)JSONValue.parse(response.body());
@@ -289,27 +265,53 @@ public class Connect {
                 }
                 break;
 
-            case "leaderboard": // get leaderboard  information
+            case "follow": //following a user
                 request = HttpRequest.newBuilder()
-                        .uri(URI.create(api+"leaderboard"))
-                        .GET()
+                        .uri(URI.create(api+"user/follow"))
+                        .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
                         .header("Content-Type", "application/json")
+                        .header("Authorization", "Basic " + auth)
                         .build();
 
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                System.out.println("Sending to: "+request.uri().toString()+"\nresponse: "+response.body());
+                System.out.println("Sending to: "+request.uri().toString());
                 if (response.statusCode() == 200) {
-                    System.out.println("leaderboard obtained");
-                    System.out.println("status code: "+response.statusCode());
-
-                    responseJSON = (JSONObject)JSONValue.parse(response.body());
+                    System.out.println("follow successful " + response.body().toString());
+                    responseJSON = new JSONObject();
                     return responseJSON;
                 }
-                else {
-                    System.out.println("error getting leaderboard");
-                    System.out.println("status code: "+response.statusCode());
+                else if (response.statusCode() == 404) {
+                    System.out.println("user not found");
 
+                }
+                else if (response.statusCode() == 409) {
+                    System.out.println("Already following user");
+
+                }
+                break;
+
+            case "like":
+                request = HttpRequest.newBuilder()
+                        .uri(URI.create(api+"post/skip"))
+                        .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", "Basic " + auth)
+                        .build();
+                response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                System.out.println("Sending to: "+request.uri().toString());
+                if (response.statusCode() == 200) {
+                    System.out.println("like successful " + response.body().toString());
+                    responseJSON = (JSONObject)JSONValue.parse(response.body()); //TODO replace with empty object incase nothing gets returned
+                    return responseJSON;
+                }
+                else if (response.statusCode() == 404) {
+                    System.out.println("Post ID not found");
+                }
+                else if (response.statusCode() == 402) {
+                    System.out.println("User has no more skips");
+                }
+                else if (response.statusCode() == 401) {
+                    System.out.println("User cannot like their own post");
                 }
                 break;
 
@@ -320,6 +322,39 @@ public class Connect {
         return null;
     }
 
+    /**
+     * Method to request the leaderboard of users
+     * @return JSONArray of users
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public JSONArray leaderboard() throws IOException, InterruptedException {
+        HttpRequest request;
+        HttpResponse<String> response;
+        JSONArray responseJSON = new JSONArray();
+        request = HttpRequest.newBuilder()
+                .uri(URI.create(api+"leaderboard"))
+                .GET()
+                .header("Content-Type", "application/json")
+                .build();
 
+        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println("Sending to: "+request.uri().toString()+"\nresponse: "+response.body());
+        if (response.statusCode() == 200) {
+            System.out.println("leaderboard obtained "+ response.body().toString());
+            System.out.println("status code: "+response.statusCode());
+
+            responseJSON = (JSONArray)JSONValue.parse(response.body());
+            return responseJSON;
+        }
+        else {
+            System.out.println("error getting leaderboard");
+            System.out.println("status code: "+response.statusCode());
+            return null;
+
+        }
+
+    }
     
 }
