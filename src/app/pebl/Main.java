@@ -2,8 +2,11 @@
 package app.pebl;
 
 //imports
+import app.pebl.profile.User;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -25,17 +28,38 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage stage) throws IOException {
-		//init main stage
-		stage = new Stage();
-		stage.setTitle("Login");
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.setScene(new Scene(loadFXML("login"), 250, 300));
-		stage.show();
-
-		primaryStage = stage;
+		showLogin(stage);
 	}
 
-	public static Stage initProfile() throws IOException {
+	@Override
+	public void stop() {
+		Task<Void> shutdownTask = new Task<>() {
+			@Override public Void call() {
+				//set wait cursor
+				getPrimaryStage().getScene().setCursor(Cursor.WAIT);
+
+				//save config file
+				boolean success = Config.getInstance().save(".pebl.cfg");
+
+				if (success) {
+					System.out.println("Config Saved Successfully");
+				}
+				else {
+					System.out.println("Config Saving Failed");
+				}
+
+				//set regular cursor
+				getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
+
+				//empty return
+				return null;
+			}
+		};
+
+		new Thread(shutdownTask).start();
+	}
+
+	public static Stage initProfile(User displayUser) throws IOException {
 		Stage stage = new Stage();
 		stage.setTitle("Profile");
 		stage.setScene(new Scene(loadFXML("profile")));
@@ -43,7 +67,7 @@ public class Main extends Application {
 		return stage;
 	}
 
-	public static Stage initConnections() throws IOException {
+	public static Stage initConnections(User displayUser) throws IOException {
 		Stage stage = new Stage();
 		stage.setTitle("Connections");
 		stage.setScene(new Scene(loadFXML("connections")));
@@ -73,14 +97,26 @@ public class Main extends Application {
 		mainStage.show();
 
 		//init connections window
-		Stage connectionStage = initConnections();
+		Stage connectionStage = initConnections(Config.getInstance().getCurrentUser());
 		connectionStage.initOwner(mainStage);
 		connectionStage.show();
 
 		//init profile window
-		Stage profileStage = initProfile();
+		Stage profileStage = initProfile(Config.getInstance().getCurrentUser());
 		profileStage.initOwner(mainStage);
 		profileStage.show();
+	}
+
+	public static void showLogin(Stage stage) throws IOException {
+		//init main stage
+		stage = new Stage();
+		stage.setTitle("Login");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setScene(new Scene(loadFXML("login"), 250, 300));
+		stage.show();
+
+		//store primary stage
+		primaryStage = stage;
 	}
 
 	public static Stage getPrimaryStage() {
