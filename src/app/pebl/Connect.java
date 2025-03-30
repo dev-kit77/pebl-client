@@ -174,7 +174,7 @@ public class Connect {
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api+"user/profile"))
                         .GET()
-                        .header("Content-Type", "application/json")
+                        .header("Content-Type", "application/json") //TODO content type
                         .header("target", body.get("username").toString())
                         .build();
 
@@ -224,7 +224,7 @@ public class Connect {
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api+"post/get"))
                         .GET()
-                        .header("Content-Type", "application/json")
+                        .header("Content-Type", "application/json") //TODO content type
                         .header("id", body.get("id").toString())
                         .build();
 
