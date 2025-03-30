@@ -37,8 +37,6 @@ public class Main extends Application {
 	private static ArrayList<User> leaderboard = null;
 	private final static ExecutorService executor = Executors.newSingleThreadExecutor();
 
-
-
     /**
 	 * start() method for the GUI. Initializes the login GUI.
 	 *
@@ -571,7 +569,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public static void displayLeaderboard() throws IOException, InterruptedException {
+	private static void displayLeaderboard() throws IOException, InterruptedException {
 		if (leaderboard != null) {
 			for (User user : leaderboard) {
 				System.out.println("Name: "+user.getUsername()+", Skips: "+user.getSkips());
@@ -586,7 +584,7 @@ public class Main extends Application {
 	 * Method to display post
 	 * @param post Post object
 	 */
-	public static void displayPost(Post post) {
+	private static void displayPost(Post post) {
 		if (post != null) {
 			System.out.println("Id: "+post.getId());
 			System.out.println("Author: "+post.getSender());
@@ -603,7 +601,7 @@ public class Main extends Application {
 	/**
 	 * Method to display currently viewed user
 	 */
-	public static void displayUser(){
+	private static void displayUser(){
 		if (viewedUser != null) {
 			System.out.println("Username: "+viewedUser.getUsername());
 			System.out.println("Skips: "+viewedUser.getSkips());
@@ -626,7 +624,7 @@ public class Main extends Application {
 	/**
 	 * Method to display the feed
 	 */
-	public static void displayFeed() {
+	private static void displayFeed() {
 		if (feed != null) {
 			for (Post post : feed) {
 				System.out.println("-------------------------------------------------------------");
