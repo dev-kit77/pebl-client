@@ -30,11 +30,7 @@ public class SignUpCtrl extends Controller {
 	public void handleSubmit() {
 		if (iptEmail.getText().isEmpty() || iptUsername.getText().isEmpty() || iptPassword.getText().isEmpty() || iptConfirmation.getText().isEmpty()) {
 			//display missing info err
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Error");
-			alert.setHeaderText("Email, Username and Password are Required");
-			alert.setContentText("Please fill all the required fields to continue");
-			alert.showAndWait();
+			showError("Email, Username and Password are Required","Please fill all the required fields to continue");
 		}
 		else if (!iptPassword.getText().equals(iptConfirmation.getText())) {
 			//set password fields to null
@@ -42,35 +38,19 @@ public class SignUpCtrl extends Controller {
 			iptConfirmation.setText(null);
 
 			//display password mismatch err
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Error");
-			alert.setHeaderText("Password and Confirm Password Do Not Match");
-			alert.setContentText("Please confirm pasword to continue");
-			alert.showAndWait();
+			showError("Please confirm Pasword to continue","Password and Confirm Password Do Not Match");
 		}
 		else if (iptAge.getValue() < 13) {
 			//display age err
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Error");
-			alert.setHeaderText("You must be greater than 13 to use this Service.");
-			alert.setContentText("Please select an age greater than 13 to continue");
-			alert.showAndWait();
+			showError("You must be greater than 13 to use this Service.","Please select an age greater than 13 to continue");
 		}
 		else if (!iptData.isSelected()) {
 			//display data collection err
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Error");
-			alert.setHeaderText("You must agree to our data collection to use this Service.");
-			alert.setContentText("Please agree to our data collection to continue");
-			alert.showAndWait();
+			showError("You must agree to our data collection to use this Service.", "Please agree to our data collection to continue");
 		}
 		else if (!iptTerms.isSelected()) {
 			//display terms err
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Error");
-			alert.setHeaderText("You must agree to our Terms and Conditions to use this Service.");
-			alert.setContentText("Please agree to our Terms and Conditions to continue");
-			alert.showAndWait();
+			showError("You must agree to our Terms and Conditions to use this Service.", "Please agree to our Terms and Conditions to continue");
 		}
 		else {
 			//submit form
