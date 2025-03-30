@@ -1,10 +1,13 @@
 package app.pebl.posts;
 
+import app.pebl.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+
+import java.io.IOException;
 
 public class PostCtrl extends AnchorPane {
 	@FXML Label lblUsername;
@@ -41,5 +44,8 @@ public class PostCtrl extends AnchorPane {
 		lblSkips.setText(Integer.toString(skips));
 	}
 
-
+	public void showProfile() throws IOException {
+		//open new profile window with user
+		Main.initProfile(post.getSender()).show();
+	}
 }

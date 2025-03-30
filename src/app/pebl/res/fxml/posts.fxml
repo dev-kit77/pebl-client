@@ -21,9 +21,9 @@
             </Menu>
             <Menu mnemonicParsing="false" text="View">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Connections" />
-                  <MenuItem mnemonicParsing="false" text="Profile" />
-                  <MenuItem mnemonicParsing="false" text="Leaderboard" />
+                  <MenuItem mnemonicParsing="false" text="Connections" onAction="#showConnections"/>
+                  <MenuItem mnemonicParsing="false" text="Profile" onAction="#showProfile"/>
+                  <MenuItem mnemonicParsing="false" text="Leaderboard" onAction="#showLeaderboard"/>
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
