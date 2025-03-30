@@ -89,7 +89,7 @@ public class Connect {
                 }
                 break;
 
-            case "register": //create new account and get auth token Warning: the username must be all lowercase
+            case "register": //create new account and get auth token Warning: the username must be all lowercase (), must include{username, password, age, gender}
                 request = HttpRequest.newBuilder()
                 .uri(URI.create(api+"register"))
                 .POST(HttpRequest.BodyPublishers.ofString(body.toJSONString()))
@@ -141,7 +141,7 @@ public class Connect {
 
                 break;
 
-            case "profileGet": // get user profile
+            case "profileGet": // get user profile json body must have {username: String username of user}
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api+"user/profile"))
                         .GET()
@@ -172,7 +172,7 @@ public class Connect {
                         .uri(URI.create(api+"user/profile"))
                         .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
                         .header("Content-Type", "application/json")
-                        .header("Authorization", "Basic " + auth)
+                        .header("Authorization", auth)
                         .build();
 
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -217,12 +217,12 @@ public class Connect {
                 }
                 break;
 
-            case "postCreate": // make post
+            case "postCreate": // make post must include {}
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api+"post/create"))
                         .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
                         .header("Content-Type", "application/json")
-                        .header("Authorization", "Basic " + auth)
+                        .header("Authorization", auth)
                         .build();
 
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -270,7 +270,7 @@ public class Connect {
                         .uri(URI.create(api+"user/follow"))
                         .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
                         .header("Content-Type", "application/json")
-                        .header("Authorization", "Basic " + auth)
+                        .header("Authorization", auth)
                         .build();
 
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -295,7 +295,7 @@ public class Connect {
                         .uri(URI.create(api+"post/skip"))
                         .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
                         .header("Content-Type", "application/json")
-                        .header("Authorization", "Basic " + auth)
+                        .header("Authorization", auth)
                         .build();
                 response = client.send(request, HttpResponse.BodyHandlers.ofString()); //json body: {"id": id} id is integer id of post
                 System.out.println("Sending to: "+request.uri().toString());

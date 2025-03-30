@@ -1,12 +1,17 @@
 package app.pebl;
 
 import app.pebl.profile.User;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -14,15 +19,25 @@ import java.util.Scanner;
  * Singleton Class for holding config information
  */
 public final class Config {
-	private final static Config instance = new Config();
-	private String authToken;
-	private User currentUser;
+	private final static Config instance;
+
+    static {
+        try {
+            instance = new Config();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String authToken;
+	private User currentUser = null;
 	private String serverAddr;
 	private boolean showProfile;
 	private boolean showConnections;
 	private boolean showLeaderboard;
+	private boolean saveUserInformation;
 
-	public Config() {
+	public Config() throws InterruptedException {
 		//attempt loading
 		boolean success = load(".pebl.cfg");
 
@@ -78,7 +93,7 @@ public final class Config {
 	 * @param filePath the path of the file to save to, as String.
 	 * @return boolean: true if successful, false if otherwise.
 	 */
-	public boolean load(String filePath) {
+	public boolean load(String filePath) throws InterruptedException {
 		//object declarations
 		FileReader reader;
 		BufferedReader buffer;
@@ -110,8 +125,29 @@ public final class Config {
 			reader = new FileReader(file);
 			buffer = new BufferedReader(reader);
 
-			//Read Data Here TODO
+			//Read Data Here TODO read more values if needed, otherwise, delete this todo
+			String line;
+			while ((line = buffer.readLine()) != null) {
+				if ((line).contains("auth = ")){
+					setAuthToken(line.split("\\s",3)[2]);
+				}
+				else if (line.contains("saveUserInformation = ")) {
+					setSaveUserInformation(Boolean.parseBoolean(line.split("\\s",3)[2]));
+				}
+				else if ((line).contains("user = ")){
+					if (saveUserInformation) {
 
+					JSONObject response = (JSONObject) JSONValue.parse(line.split("\\s",3)[2]);
+					User temp = Main.parseUser(response);
+					setCurrentUser(temp);
+					}
+					else {
+						User temp = Main.getProfile(line.split("\\s", 3)[2]);
+						setCurrentUser(temp);
+					}
+
+				}
+			}
 			//close reader and buffer
 			buffer.close();
 			reader.close();
@@ -168,7 +204,24 @@ public final class Config {
 			writer = new FileOutputStream(file);
 			buffer = new PrintWriter(writer);
 
-			//Write file here TODO
+			//Write file here TODO write additional things if needed otherwise delete this todo
+			buffer.println("auth = "+ authToken);
+			if (saveUserInformation) { //save all user data as a json if saveUserInformation is true
+
+				JSONObject user = Main.getUserAsJSON(currentUser);
+
+				if (user != null) {
+					buffer.println("user = " + user.toJSONString());
+				}
+				else {
+					System.err.println("Error, cannot write user to file");
+				}
+			}
+
+			else { //just write the username if saveUserInformation is false
+
+			buffer.write("user = " + currentUser.getUsername());
+			}
 
 			//close reader and buffer
 			buffer.close();
@@ -183,8 +236,10 @@ public final class Config {
 
 			//return false for failure
 			return false;
-		}
-	}
+		} catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 	public static Config getInstance() {
 		return instance;
@@ -234,4 +289,7 @@ public final class Config {
 	public void setAuthToken(String newAuthToken){ this.authToken = newAuthToken; }
 
 	public String getAuthToken() { return authToken; }
+
+	public void setSaveUserInformation(boolean save){ this.saveUserInformation = save; }
+	public boolean getSaveUserInformation(){ return saveUserInformation; }
 }

@@ -31,7 +31,7 @@ public class User {
      * @param age int
      * @param gender boolean
      */
-    public User(String username, int skips, ArrayList<String> followers, ArrayList<String> following, String status, int age, boolean gender) {
+    public User(String username, int skips, ArrayList<String> followers, ArrayList<String> following, String status, int age, boolean gender, ArrayList<Integer> posts, String location) {
         this.username = username;
         this.skips = skips;
         this.followers = followers;
@@ -39,6 +39,8 @@ public class User {
         this.status = status;
         this.age = age;
         this.gender = gender;
+        this.posts = posts;
+        this.location = location;
     }
 
     /**
@@ -162,11 +164,11 @@ public class User {
     }
 
     /**
-     * Adds the post ID to the users posts array list
-     * @param postID integer
+     * Sets the post ID array list to new array list of post id's
+     * @param posts ArrayList<Integer> of post ID's
      */
-    public void setPosts(int postID) {
-        posts.add(postID);
+    public void setPosts(ArrayList<Integer> posts) {
+        this.posts = posts;
     }
 
     /**
@@ -184,5 +186,7 @@ public class User {
     public void setLocation(String location) {
         this.location = location;
     }
+
+
 }
 
