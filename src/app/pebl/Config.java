@@ -17,6 +17,9 @@ public final class Config {
 	private final static Config instance = new Config();
 	private User currentUser;
 	private String serverAddr;
+	private boolean showProfile;
+	private boolean showConnections;
+	private boolean showLeaderboard;
 
 	public Config() {
 		//attempt loading
@@ -201,5 +204,29 @@ public final class Config {
 
 	public void setServerAddr(String addr) {
 		this.serverAddr = addr;
+	}
+
+	public boolean profileShown() {
+		return showProfile;
+	}
+
+	public void setProfileShown(boolean show) {
+		showProfile = show;
+	}
+
+	public boolean connectionsShown() {
+		return showConnections;
+	}
+
+	public void setShowConnections(boolean show) {
+		showConnections = show;
+	}
+
+	public boolean leaderboardShown() {
+		return showLeaderboard;
+	}
+
+	public void setShowLeaderboard(boolean show) {
+		showLeaderboard = show;
 	}
 }
