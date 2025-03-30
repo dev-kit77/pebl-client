@@ -22,6 +22,7 @@ import org.json.simple.JSONValue;
 /**
  * Main class for GUI init
  */
+@SuppressWarnings("JavadocDeclaration")
 public class Main extends Application {
 	//Fields
 	private static Stage primaryStage;
@@ -483,10 +484,8 @@ public class Main extends Application {
 	/**
 	 * Method to display post
 	 * @param post Post object
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	private static void displayPost(Post post) throws IOException, InterruptedException {
+	private static void displayPost(Post post) {
 		if (post != null) {
 			System.out.println("Id: "+post.getId());
 			System.out.println("Author: "+post.getSender());
@@ -502,10 +501,8 @@ public class Main extends Application {
 
 	/**
 	 * Method to display currently viewed user
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	private static void displayUser() throws IOException, InterruptedException {
+	private static void displayUser(){
 		if (viewedUser != null) {
 			System.out.println("Username: "+viewedUser.getUsername());
 			System.out.println("Skips: "+viewedUser.getSkips());
@@ -524,9 +521,16 @@ public class Main extends Application {
 		}
 	}
 
-	private static void displayFeed(){
+	/**
+	 * Method to display the feed
+	 */
+	private static void displayFeed() {
 		if (feed != null) {
-
+			for (Post post : feed) {
+				System.out.println("-------------------------------------------------------------");
+				displayPost(post);
+				System.out.println("-------------------------------------------------------------");
+			}
 		}
 		else {
 			System.err.println("null feed");
@@ -551,7 +555,7 @@ public class Main extends Application {
 		String status;
 
 		//if completely new user
-		if (!checkCurrentUser() && (Config.getInstance().getAuthToken() == null || Config.getInstance().getAuthToken().equals("null"))) {
+		if (!checkCurrentUser() && (Config.getInstance().getAuthToken() == null)) {
 			System.out.println("You are not yet register, lets get that started");
 
 			System.out.println("Please enter your new username or type /exit to exit: ");
@@ -572,14 +576,14 @@ public class Main extends Application {
 				if (!register(username, password, age, gender)) {
 					System.err.println("Error registering user");
 					return;
-				};
+				}
 			}
 
 
 
 		}
 		// if was logged in before
-		else if (Config.getInstance().getAuthToken() != null || !Config.getInstance().getCurrentUser().equals("null")) {
+		else if (Config.getInstance().getAuthToken() != null || !(Config.getInstance().getCurrentUser() == null)) {
 			if (!checkAuth()){
 				System.err.println("You have been logged out.");
 				System.out.println("Please enter your new username or type /exit to exit: ");
@@ -594,7 +598,7 @@ public class Main extends Application {
 				if (!login(username, password)) {
 					System.err.println("Error logging in user");
 					return;
-				};
+				}
 				System.out.println("Welcome back!");
 
 			}

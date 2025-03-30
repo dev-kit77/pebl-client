@@ -20,6 +20,7 @@ import java.net.http.HttpResponse;
 //api link: // api link: https://pebl-api.fly.dev/api/
 
 
+@SuppressWarnings("JavadocDeclaration")
 public class Connect {
     private final HttpClient client;
     private String auth = Config.getInstance().getAuthToken();
