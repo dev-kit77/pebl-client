@@ -4,10 +4,10 @@ import app.pebl.Config;
 import app.pebl.Controller;
 import app.pebl.Main;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -35,22 +35,31 @@ public class ProfileCtrl extends Controller {
 	VBox feedUserPosts;
 	@FXML
 	MenuItem edit;
+	@FXML
+	MenuItem follow;
+	@FXML
+	Button btnFollow;
+	private boolean followed;
 
 	public void refresh() {
 		//get user data
 		Task<Void> userRefresh = new Task<>() {
 			@Override public Void call() {
-				//code to do this goes here
+				//code goes here
+
+				//empty return
 				return null;
-			};
+			}
 		};
 
 		//get user posts from server
 		Task<Void> profileRefresh = new Task<>() {
 			@Override public Void call() {
-				//code to do this goes here
+				//code goes here
+
+				//empty return
 				return null;
-			};
+			}
 		};
 
 		//run tasks
@@ -71,6 +80,15 @@ public class ProfileCtrl extends Controller {
 		}
 		else {
 			lblGender.setText("No Gender");
+		}
+
+		if (followed) {
+			btnFollow.setText("Unfollow");
+			follow.setText("Unfollow");
+		}
+		else {
+			btnFollow.setText("Follow");
+			follow.setText("Follow");
 		}
 
 		//add posts to Vbox here
@@ -111,6 +129,27 @@ public class ProfileCtrl extends Controller {
 	}
 
 	public void showLeaderboard() throws IOException {
-
+		Main.initLeaderboard(displayUser).show();
 	}
+
+	public void toggleFollow(ActionEvent event) {
+		if (followed) {
+			btnFollow.setText("Follow");
+			follow.setText("Follow");
+			followed = false;
+
+			//set user as not followed
+		}
+		else {
+			btnFollow.setText("Unfollow");
+			follow.setText("Unfollow");
+			followed = true;
+
+			//set user as followed
+		}
+
+		refresh();
+	}
+
+
 }

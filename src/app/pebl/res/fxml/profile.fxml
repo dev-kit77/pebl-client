@@ -7,31 +7,33 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.Button?>
 <BorderPane fx:id="layoutParent" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #c9e6f0;" stylesheets="@../css/Format.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.profile.ProfileCtrl">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" text="Refresh" onAction="#refresh" />
+                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
                   <MenuItem mnemonicParsing="false" onAction="#closeWindow" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem fx:id="edit" mnemonicParsing="false" text="Edit Profile" onAction="#handleEdit"/>
-                <MenuItem fx:id="edit" mnemonicParsing="false" text="Follow" onAction="#handleEdit"/>
+              <MenuItem fx:id="edit" mnemonicParsing="false" onAction="#handleEdit" text="Edit Profile" />
+                <MenuItem fx:id="follow" mnemonicParsing="false" onAction="#toggleFollow" text="Follow" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="View">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Connections" onAction="#showConnections" />
-                  <MenuItem mnemonicParsing="false" text="Profile" onAction="#showProfile" />
-                  <MenuItem mnemonicParsing="false" text="Leaderboard" onAction="#showLeaderboard" />
+                  <MenuItem mnemonicParsing="false" onAction="#showConnections" text="Connections" />
+                  <MenuItem mnemonicParsing="false" onAction="#showProfile" text="Profile" />
+                  <MenuItem mnemonicParsing="false" onAction="#showLeaderboard" text="Leaderboard" />
                </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -80,6 +82,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
+            <Button fx:id="btnFollow" mnemonicParsing="false" styleClass="button" stylesheets="@../css/Format.css" text="Follow" onAction="#toggleFollow"/>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
