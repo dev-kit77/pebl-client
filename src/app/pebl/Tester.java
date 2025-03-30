@@ -36,10 +36,7 @@ public class Tester {
     private static ArrayList<User> leaderboard;
     private static User viewedUser;
 
-
-
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Main.cli();
     }
 }
