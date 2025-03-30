@@ -11,6 +11,7 @@ public class PostCtrl extends AnchorPane {
 	@FXML Text txtBody;
 	@FXML Label lblSkips;
 	@FXML ToggleButton btnSkip;
+	private Post post;
 
 	public void toggleSkip() {
 		if (btnSkip.isSelected()) {
@@ -23,11 +24,14 @@ public class PostCtrl extends AnchorPane {
 		}
 	}
 
-	public void setPost(Post post) {
+	public void setPost(Post newPost) {
 		//update fields
-		lblUsername.setText(post.getSender());
-		txtBody.setText(post.getContent());
-		lblSkips.setText(Integer.toString(post.getSkips()));
+		lblUsername.setText(newPost.getSender());
+		txtBody.setText(newPost.getContent());
+		lblSkips.setText(Integer.toString(newPost.getSkips()));
+
+		//link post object
+		this.post = newPost;
 	}
 
 	public void setPost(String sender, String content, int skips) {

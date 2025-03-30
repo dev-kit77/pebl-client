@@ -62,7 +62,7 @@ public class LoginCtrl extends Controller {
 	public void handleSignUp() throws IOException {
 		Stage signup = new Stage();
 		signup.setTitle("Sign Up");
-		signup.setScene(new Scene(Main.loadFXML("signup")));
+		signup.setScene(new Scene(Main.getFXML("signup").load()));
 		signup.initOwner(layoutParent.getScene().getWindow());
 		signup.initModality(Modality.APPLICATION_MODAL);
 		signup.showAndWait();

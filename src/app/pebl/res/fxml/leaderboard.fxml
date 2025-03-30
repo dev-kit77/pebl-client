@@ -23,9 +23,10 @@
           </Menu>
           <Menu mnemonicParsing="false" text="View">
                <items>
-                  <CheckMenuItem mnemonicParsing="false" text="Connections" />
-                  <CheckMenuItem mnemonicParsing="false" text="Profile" />
-                  <CheckMenuItem mnemonicParsing="false" text="Leaderboard" />
+
+                   <MenuItem mnemonicParsing="false" text="Connections" onAction="#showConnections"/>
+                   <MenuItem mnemonicParsing="false" text="Profile" onAction="#showProfile" />
+                   <MenuItem mnemonicParsing="false" text="Leaderboard" onAction="#showLeaderboard" />
                </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -41,7 +42,7 @@
                <children>
                   <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                      <children>
-                        <Label id="lblUsername" fx:id="lblUserUsername" focusTraversable="false" text="Username" textFill="#2a3e45" onMouseClicked="#openProfile">
+                        <Label id="lblUsername" fx:id="lblUserUsername" focusTraversable="false" text="Username" textFill="#2a3e45" onMouseClicked="#showProfile">
                            <font>
                               <Font name="System Italic" size="10.0" />
                            </font>

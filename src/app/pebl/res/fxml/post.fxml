@@ -14,7 +14,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" spacing="5.0">
                <children>
-                  <Label id="lblCurrUsername" fx:id="lblUsername" focusTraversable="false" onMouseClicked="#openProfile" opacity="0.8" text="Username" textFill="#2a3e45">
+                  <Label id="lblCurrUsername" fx:id="lblUsername" focusTraversable="false" onMouseClicked="#showProfile" opacity="0.8" text="Username" textFill="#2a3e45">
                      <font>
                         <Font name="Roboto Condensed Italic" size="14.0" />
                      </font>

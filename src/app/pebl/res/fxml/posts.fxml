@@ -15,21 +15,15 @@
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
-                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" text="Refresh" />
-                  <MenuItem mnemonicParsing="false" text="Switch User" />
+                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" text="Refresh" onAction="#refresh"/>
                   <MenuItem mnemonicParsing="false" text="Close" onAction="#closeWindow"/>
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="User Settings" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="View">
                <items>
-                  <CheckMenuItem mnemonicParsing="false" text="Connections" />
-                  <CheckMenuItem mnemonicParsing="false" text="Profile" />
-                  <CheckMenuItem mnemonicParsing="false" text="Leaderboard" />
+                  <MenuItem mnemonicParsing="false" text="Connections" />
+                  <MenuItem mnemonicParsing="false" text="Profile" />
+                  <MenuItem mnemonicParsing="false" text="Leaderboard" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">

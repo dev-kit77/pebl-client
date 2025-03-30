@@ -19,23 +19,15 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" text="Refresh" />
-              <MenuItem fx:id="btnSwitch" mnemonicParsing="false" text="Switch User" />
-                  <MenuItem fx:id="btnView" mnemonicParsing="false" text="View Selected User" />
+                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" text="Refresh" onAction="#refresh" />
                   <MenuItem fx:id="btnClose" mnemonicParsing="false" onAction="#closeWindow" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem fx:id="btnFollow" mnemonicParsing="false" text="Follow Selected" />
-                  <MenuItem fx:id="btnRemove" mnemonicParsing="false" text="Remove Selected" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="View">
                <items>
-                  <CheckMenuItem mnemonicParsing="false" text="Connections" />
-                  <CheckMenuItem mnemonicParsing="false" text="Profile" />
-                  <CheckMenuItem mnemonicParsing="false" text="Leaderboard" />
+                  <MenuItem mnemonicParsing="false" text="Connections" onAction="#showConnections"/>
+                  <MenuItem mnemonicParsing="false" text="Profile" onAction="#showProfile" />
+                  <MenuItem mnemonicParsing="false" text="Leaderboard" onAction="#showLeaderboard" />
                </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -49,7 +41,7 @@
           <children>
               <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
                   <children>
-                      <Label id="lblDispName" fx:id="lblCurrUsername" focusTraversable="false" text="Display name" onMouseClicked="#openProfile" textFill="#2a3e45">
+                      <Label id="lblDispName" fx:id="lblCurrUsername" focusTraversable="false" text="Display name" onMouseClicked="#showProfile" textFill="#2a3e45">
                           <font>
                               <Font name="Bold" size="14.0" />
                           </font>

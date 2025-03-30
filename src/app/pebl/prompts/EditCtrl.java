@@ -21,11 +21,9 @@ public class EditCtrl extends Controller {
 	@FXML
 	CheckBox chkGender;
 
-	public EditCtrl() {
-		this.currUser = Config.getInstance().getCurrentUser();
-	}
-
 	public void initialize() {
+		this.currUser = Config.getInstance().getCurrentUser();
+
 		lblUsername.setText(currUser.getUsername());
 		ageSlider.setValue(currUser.getAge());
 		chkGender.setSelected(currUser.getGender());

@@ -18,21 +18,20 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
                   <MenuItem fx:id="btnRefresh" mnemonicParsing="false" text="Refresh" onAction="#refresh" />
-              <MenuItem mnemonicParsing="false" text="Switch User" />
                   <MenuItem mnemonicParsing="false" onAction="#closeWindow" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Edit Profile" />
-                  <MenuItem mnemonicParsing="false" text="User Settings" />
+              <MenuItem fx:id="edit" mnemonicParsing="false" text="Edit Profile" onAction="#handleEdit"/>
+                <MenuItem fx:id="edit" mnemonicParsing="false" text="Follow" onAction="#handleEdit"/>
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="View">
                <items>
-                  <CheckMenuItem mnemonicParsing="false" text="Connections" />
-                  <CheckMenuItem mnemonicParsing="false" text="Profile" />
-                  <CheckMenuItem mnemonicParsing="false" text="Leaderboard" />
+                  <MenuItem mnemonicParsing="false" text="Connections" onAction="#showConnections" />
+                  <MenuItem mnemonicParsing="false" text="Profile" onAction="#showProfile" />
+                  <MenuItem mnemonicParsing="false" text="Leaderboard" onAction="#showLeaderboard" />
                </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -66,12 +65,12 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="lblSkips" prefWidth="34.0" text="Skips:">
+            <Label fx:id="lblSkips" text="Skips">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label text="Age: 0">
+            <Label fx:id="lblAge" text="Age">
                <font>
                   <Font size="14.0" />
                </font>
