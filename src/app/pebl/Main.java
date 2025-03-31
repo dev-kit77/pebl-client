@@ -318,8 +318,13 @@ public class Main extends Application {
 	 * @return User object
 	 */
 	public static User parseUser(JSONObject response) {
-		User user =  new User(response.get("username").toString(), Integer.parseInt(response.get("skips").toString()), new ArrayList<String>((JSONArray) (response.get("followers"))), new ArrayList<String>((JSONArray) (response.get("following"))), response.get("status").toString(), Integer.parseInt(response.get("age").toString()), Boolean.parseBoolean(response.get("gender").toString()), new ArrayList<Integer>((JSONArray)response.get("posts")), response.get("location").toString());
-		return user;
+		//return null incase paramter is null
+
+		if (response == null) {
+			System.err.println("Parameter is null");
+			return null;
+		}
+        return new User(response.get("username").toString(), Integer.parseInt(response.get("skips").toString()), new ArrayList<String>((JSONArray) (response.get("followers"))), new ArrayList<String>((JSONArray) (response.get("following"))), response.get("status").toString(), Integer.parseInt(response.get("age").toString()), Boolean.parseBoolean(response.get("gender").toString()), new ArrayList<Integer>((JSONArray)response.get("posts")), response.get("location").toString());
 	}
 
 	/**
@@ -328,13 +333,58 @@ public class Main extends Application {
 	 * @return Post object
 	 */
 	public static Post parsePost(JSONObject response) {
+		//return null incase paramter is null
+
+		if (response == null) {
+			System.err.println("Parameter is null");
+		}
 		return new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString()));
 	}
 
-	public static JSONObject getUserAsJSON(User user) throws IOException, InterruptedException {
+	/**
+	 * Method to get the JSON representation of a User object
+	 * @param user String
+	 * @return JSONObject representation of the User object
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public static JSONObject getUserAsJSON(User user) {
+		//return null incase paramter is null
+		if (user == null) {
+			System.err.println("User is null");
+			return null;
+		}
+		//create the temporary JSONObject
 		JSONObject json = new JSONObject();
+
+		//create a temporary JSONArray to convert ArrayLists to JSONArrays
+		JSONArray jsonArray = new JSONArray();
+
+		//Populate it
 		json.put("username", user.getUsername().toLowerCase());
-		return connect.request("profileGet", json);
+		json.put("gender", ""+user.getGender());
+		json.put("age", user.getAge());
+		json.put("location", user.getLocation());
+		json.put("status", user.getStatus());
+		json.put("skips", user.getSkips());
+
+		//add the followers, put in json, clear the JSONArray afterward and repeat with "following"
+		jsonArray.addAll(user.getFollowers());
+		json.put("followers", jsonArray);
+		jsonArray.clear();
+
+		//add the following, put in json, clear the JSONArray afterward and repeat with posts
+		jsonArray.addAll(user.getFollowing());
+		json.put("following", jsonArray);
+		jsonArray.clear();
+
+		//add the following, put in json, clear the JSONArray afterward
+		jsonArray.addAll(user.getPosts());
+		json.put("posts", jsonArray);
+		jsonArray.clear();
+
+		//return the json object
+		return json;
 	}
 
 	//Methods for kit to use
@@ -350,12 +400,18 @@ public class Main extends Application {
 	 * @throws InterruptedException if the http request was interrupted
 	 */
 	public static boolean register(String username, String password, int age, boolean gender) throws IOException, InterruptedException {
+
+		//create the body object to be passed into connect.request() and populate it with necessary fields
 		JSONObject obj = new JSONObject();
 		obj.put("username", username.toLowerCase());
 		obj.put("password", password);
 		obj.put("age", age);
 		obj.put("gender", gender);
+
+		//send the request
 		JSONObject response = connect.request("register", obj);
+
+		//if the process was successful
 		if (response != null) {
 			User temp = getProfile(username.toLowerCase());
 			if (temp != null) {
@@ -365,7 +421,6 @@ public class Main extends Application {
 
 
 		}
-		System.err.println("ERROR: Could not register user");
 		return false;
 	}
 
@@ -430,8 +485,7 @@ public class Main extends Application {
 		obj.put("username", username.toLowerCase());
 		JSONObject response = connect.request("profileGet", obj);
 		if (response != null) {
-		User profile = parseUser(response);
-		return profile;
+            return parseUser(response);
 		}
 		else {
 			return null;
@@ -447,6 +501,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
+	//TODO have this output exceptions or at least rework it
 	public static boolean updateProfile(int age, boolean gender, String status) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		//if age is 0 use current age
@@ -460,7 +515,7 @@ public class Main extends Application {
 		//gender is a switch, no need to check anything
 		obj.put("gender", ""+gender);
 		// if status is empty, use current status
-		if (status.equals("")){
+		if (status.isEmpty()){
 			obj.put("status", Config.getInstance().getCurrentUser().getStatus());
 		}
 		else {
@@ -511,6 +566,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
+	//TODO rework this to also add skips to the current user (Every post user creates = one skip to their account)
 	public static boolean createPost(String content) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		obj.put("content", content);
@@ -640,12 +696,7 @@ public class Main extends Application {
 	 * @return True if there is user data stored, False if it is not stored.
 	 */
 	public static boolean checkCurrentUser(){
-		if (Config.getInstance().getCurrentUser() != null) {
-			return true;
-		}
-		else {
-			return false;
-		}
+        return Config.getInstance().getCurrentUser() != null;
 	}
 
 	/**
@@ -653,7 +704,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static void displayLeaderboard() throws IOException, InterruptedException {
+	private static void displayLeaderboard() {
 		if (leaderboard != null) {
 			for (User user : leaderboard) {
 				System.out.println("Name: "+user.getUsername()+", Skips: "+user.getSkips());
@@ -704,15 +755,14 @@ public class Main extends Application {
 		}
 	}
 
-					System.out.println(checkAuth());
-					choice = null;
 
 	/**
 	 * Method to display the feed
 	 */
 	private static void displayFeed() {
-		if (feed != null) {
-			for (Post post : feed) {
+		if (feed != null) { // check if we have the feed stored
+
+			for (Post post : feed) { //display the post objects one by one
 				System.out.println("-------------------------------------------------------------");
 				displayPost(post);
 				System.out.println("-------------------------------------------------------------");
