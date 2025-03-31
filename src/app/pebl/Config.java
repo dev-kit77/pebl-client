@@ -3,13 +3,8 @@ package app.pebl;
 import app.pebl.profile.User;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -31,9 +26,6 @@ public final class Config {
 	private User currentUser;
 	private String serverAddr;
 	private boolean cacheUser;
-	private boolean showProfile;
-	private boolean showConnections;
-	private boolean showLeaderboard;
 
 	public final String defaultAddress = "https://pebl-api.fly.dev/";
 
@@ -267,30 +259,6 @@ public final class Config {
 		this.serverAddr = addr;
 	}
 
-	public boolean profileShown() {
-		return showProfile;
-	}
-
-	public void setProfileShown(boolean show) {
-		showProfile = show;
-	}
-
-	public boolean connectionsShown() {
-		return showConnections;
-	}
-
-	public void setShowConnections(boolean show) {
-		showConnections = show;
-	}
-
-	public boolean leaderboardShown() {
-		return showLeaderboard;
-	}
-
-	public void setShowLeaderboard(boolean show) {
-		showLeaderboard = show;
-	}
-
 	public void setAuthToken(String newAuthToken){
 		this.authToken = newAuthToken;
 	}
@@ -299,10 +267,11 @@ public final class Config {
 		return authToken;
 	}
 
-	public void setSaveUserInformation(boolean save){
+	public void setUserCache(boolean save){
 		this.cacheUser = save;
 	}
-	public boolean getSaveUserInformation(){
+
+	public boolean getUserCache(){
 		return cacheUser;
 	}
 }
