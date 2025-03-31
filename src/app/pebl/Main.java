@@ -17,11 +17,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
@@ -34,10 +36,12 @@ public class Main extends Application {
 	//Fields
 	private static Stage primaryStage;
 	private final static Connect connect = new Connect();
-	private static ArrayList<Post> feed;
-	private static User viewedUser = null;
-	private static ArrayList<User> leaderboard = null;
+	public static ArrayList<Post> feed;
+	public static ArrayList<Post> filteredFeed; //used to temporarily store filtered feed
+	public static User viewedUser = null; //user that is not currentUser data is loaded here
+	public static ArrayList<User> leaderboard = null;
 	private final static ExecutorService executor = Executors.newSingleThreadExecutor();
+	public static ArrayList<String> closeFriends  = null;
 
     /**
 	 * start() method for the GUI. Initializes the login GUI.
@@ -375,8 +379,13 @@ public class Main extends Application {
 	 * @return User object
 	 */
 	public static User parseUser(JSONObject response) {
-		User user =  new User(response.get("username").toString(), Integer.parseInt(response.get("skips").toString()), new ArrayList<String>((JSONArray) (response.get("followers"))), new ArrayList<String>((JSONArray) (response.get("following"))), response.get("status").toString(), Integer.parseInt(response.get("age").toString()), Boolean.parseBoolean(response.get("gender").toString()), new ArrayList<Integer>((JSONArray)response.get("posts")), response.get("location").toString());
-		return user;
+		//return null incase paramter is null
+
+		if (response == null) {
+			System.err.println("Parameter is null");
+			return null;
+		}
+        return new User(response.get("username").toString(), Integer.parseInt(response.get("skips").toString()), new ArrayList<String>((JSONArray) (response.get("followers"))), new ArrayList<String>((JSONArray) (response.get("following"))), response.get("status").toString(), Integer.parseInt(response.get("age").toString()), Boolean.parseBoolean(response.get("gender").toString()), new ArrayList<Integer>((JSONArray)response.get("posts")), response.get("location").toString());
 	}
 
 	/**
@@ -385,13 +394,58 @@ public class Main extends Application {
 	 * @return Post object
 	 */
 	public static Post parsePost(JSONObject response) {
+		//return null incase paramter is null
+
+		if (response == null) {
+			System.err.println("Parameter is null");
+		}
 		return new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString()));
 	}
 
-	public static JSONObject getUserAsJSON(User user) throws IOException, InterruptedException {
+	/**
+	 * Method to get the JSON representation of a User object
+	 * @param user String
+	 * @return JSONObject representation of the User object
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public static JSONObject getUserAsJSON(User user) {
+		//return null incase paramter is null
+		if (user == null) {
+			System.err.println("User is null");
+			return null;
+		}
+		//create the temporary JSONObject
 		JSONObject json = new JSONObject();
+
+		//create a temporary JSONArray to convert ArrayLists to JSONArrays
+		JSONArray jsonArray = new JSONArray();
+
+		//Populate it
 		json.put("username", user.getUsername().toLowerCase());
-		return connect.request("profileGet", json);
+		json.put("gender", ""+user.getGender());
+		json.put("age", user.getAge());
+		json.put("location", user.getLocation());
+		json.put("status", user.getStatus());
+		json.put("skips", user.getSkips());
+
+		//add the followers, put in json, clear the JSONArray afterward and repeat with "following"
+		jsonArray.addAll(user.getFollowers());
+		json.put("followers", jsonArray);
+		jsonArray.clear();
+
+		//add the following, put in json, clear the JSONArray afterward and repeat with posts
+		jsonArray.addAll(user.getFollowing());
+		json.put("following", jsonArray);
+		jsonArray.clear();
+
+		//add the following, put in json, clear the JSONArray afterward
+		jsonArray.addAll(user.getPosts());
+		json.put("posts", jsonArray);
+		jsonArray.clear();
+
+		//return the json object
+		return json;
 	}
 
 	//Methods for kit to use
@@ -407,12 +461,20 @@ public class Main extends Application {
 	 * @throws InterruptedException if the http request was interrupted
 	 */
 	public static boolean register(String username, String password, int age, boolean gender) throws IOException, InterruptedException {
+
+		//create the body object to be passed into connect.request() and populate it with necessary fields
 		JSONObject obj = new JSONObject();
 		obj.put("username", username.toLowerCase());
 		obj.put("password", password);
-		obj.put("age", String.valueOf(age));
-		obj.put("gender", String.valueOf(gender));
+		obj.put("age", age);
+
+		//convert gender to String
+		obj.put("gender", ""+gender);
+
+		//send the request
 		JSONObject response = connect.request("register", obj);
+
+		//if the process was successful
 		if (response != null) {
 			User temp = getProfile(username.toLowerCase());
 			if (temp != null) {
@@ -422,7 +484,6 @@ public class Main extends Application {
 
 
 		}
-		System.err.println("ERROR: Could not register user");
 		return false;
 	}
 
@@ -434,20 +495,36 @@ public class Main extends Application {
 	 * @throws IOException in case of IOException
 	 * @throws InterruptedException if the http request was interrupted
 	 */
-	//TODO i think its trying to log in twice
+
 	public static boolean login(String username, String password) throws IOException, InterruptedException {
+
+		//Create body for request and populate it
 		JSONObject obj = new JSONObject();
 		obj.put("username", username.toLowerCase());
 		obj.put("password", password);
+
+		//send request nd store response
 		JSONObject response = connect.request("auth", obj);
+
+		//if successful
+		if (response != null) {
+			// fetch profile data
 		User temp = getProfile(username.toLowerCase());
-		if (temp != null) {
-			Config.getInstance().setCurrentUser(temp);
+
+			//if successful
+			if (temp != null) {
+				//update the currentUser
+				Config.getInstance().setCurrentUser(temp);
+				return true;
+			}
+
 		}
+		//fail
 		else {
 			System.err.println("ERROR: Could not login user");
 		}
-		return  (response != null);
+		//return false if fail
+		return false;
 	}
 
 	/**
@@ -457,8 +534,13 @@ public class Main extends Application {
 	 * @throws InterruptedException
 	 */
 	public static boolean checkServer() throws IOException, InterruptedException {
+		//create json obj to pass to connect.request
 		JSONObject obj = new JSONObject();
+
+		//send request
 		JSONObject response = connect.request("checkOnline", obj);
+
+		//returns true if successful, false if failed
 		return  (response != null);
 	}
 
@@ -469,8 +551,13 @@ public class Main extends Application {
 	 * @throws InterruptedException
 	 */
 	public static boolean checkAuth() throws IOException, InterruptedException {
+		//create body json object to pass to request
 		JSONObject obj = new JSONObject();
+
+		//send request
 		JSONObject response = connect.request("checkAuth", obj);
+
+		//return true if successful, false if fail
 		return  (response != null);
 	}
 
@@ -483,9 +570,15 @@ public class Main extends Application {
 	 */
 
 	public static User getProfile(String username) throws IOException, InterruptedException {
+		//create json body for request and populate it
 		JSONObject obj = new JSONObject();
 		obj.put("target", username.toLowerCase());
+
+		//send request and store the response
 		JSONObject response = connect.request("profileGet", obj);
+
+
+		//if success
 		if (response != null) {
 			User profile = parseUser(response);
 
@@ -502,6 +595,7 @@ public class Main extends Application {
 		return profile;
 		}
 		else {
+			//return null if failed.
 			return null;
 		}
 	}
@@ -515,38 +609,59 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
+
 	public static boolean updateProfile(int age, boolean gender, String status) throws IOException, InterruptedException {
+		//create json body for request and populate it
 		JSONObject obj = new JSONObject();
+
 		//if age is 0 use current age
 		if (age == 0){
-		obj.put("age", Config.getInstance().getCurrentUser().getAge());
+			//get current age
+			obj.put("age", Config.getInstance().getCurrentUser().getAge());
 
 		}
 		else {
+			//else use param age
 			obj.put("age", age);
 		}
+
 		//gender is a switch, no need to check anything
 		obj.put("gender", ""+gender);
+
+
 		// if status is empty, use current status
-		if (status.equals("")){
+		if (status.isEmpty()){
+			//get current status
 			obj.put("status", Config.getInstance().getCurrentUser().getStatus());
 		}
 		else {
+			//else use param status
 			obj.put("status", status);
 		}
+		//send request and store response
 		JSONObject response = connect.request("profileUpdate", obj);
+
+
+		//success
 		if (response != null) {
-			System.out.println("updateProfile response: " + response.toJSONString());
+			System.out.println("Updated profile to include: "+obj);
+
+			//fetch updated profile
 			User temp;
+			//if getProfile(currentUser's username) is not null
 			if ((temp = getProfile(Config.getInstance().getCurrentUser().getUsername().toLowerCase())) != null) {
+
+				//update current user
 				Config.getInstance().setCurrentUser(temp);
 				return true;
 			}
+			// fail to fetch profile
 			else {
 				System.err.println("Error fetching updated profile");
 				return false;
 			}
 		}
+		//fail
 		else {
 			System.err.println("Error updating profile");
 			return false;
@@ -560,14 +675,23 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
+
 	public static Post getPost(int id) throws IOException, InterruptedException {
+
+		//create json body to pass into request and populate it
 		JSONObject obj = new JSONObject();
 		obj.put("id", id);
-		JSONObject response = connect.request("getPost", obj);
-		if (response != null) {
 
+		//send request and save response
+		JSONObject response = connect.request("getPost", obj);
+
+		//if success
+		if (response != null) {
+			//parse json into Post and return it
 			return new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString()));
 		}
+
+		// fail
 		System.err.println("Error fetching post");
 		return null;
 	}
@@ -580,19 +704,31 @@ public class Main extends Application {
 	 * @throws InterruptedException
 	 */
 	public static boolean createPost(String content) throws IOException, InterruptedException {
+		//create json body to pass into request and populate it
 		JSONObject obj = new JSONObject();
 		obj.put("content", content);
+
+		//send request and save response
 		JSONObject response = connect.request("postCreate", obj);
+
+		//success
 		if (response != null) {
-			System.out.println("Post created: " + response.toJSONString());
+			System.out.println("Post created: " + response);
+
 			//update the profile with the new post
 			User temp = getProfile(Config.getInstance().getCurrentUser().getUsername().toLowerCase());
+
+			// if fetch successful
 			if (temp != null) {
-			Config.getInstance().setCurrentUser(temp);
+				//update user
+				Config.getInstance().setCurrentUser(temp);
 			}
+
+			//fetch leaderboard
 			leaderboard = leaderboard();
 			return true;
 		}
+		//fail
 		else {
 			System.err.println("Error creating post");
 			return false;
@@ -603,82 +739,145 @@ public class Main extends Application {
 
 	/**
 	 * Method to get feed, returns the latest 50 posts in teh feed
+	 * This Method must only be called to fetch new data on feed. The variable feed can be accessed at any time, however, its initial value is null
 	 * @return Array list of at max 50 Post objects
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
 	public static ArrayList<Post> getFeed() throws IOException, InterruptedException {
+		//create json body to pass into request and populate it
 		JSONObject obj = new JSONObject();
+
+		//send request and save response
 		JSONObject response = connect.request("feed", obj);
+
+		//success
 		if (response != null) {
 			System.out.println("Feed fetched");
+
+			//temporary list to add Post objects from JsonArray of posts in response.
 			ArrayList<Post> posts = new ArrayList<Post>();
+
+			//temporary jsonArray to
 			JSONArray postsArray = (JSONArray) response.get("feed");
+			//iterating over the jsonarray
 			for (int i = 0; i < postsArray.size(); i++) {
-				JSONObject post = (JSONObject) postsArray.get(i); //convert jsonarray element object to json object
-				//create post object and add it to posts array list
-				posts.add(new Post(Integer.parseInt(post.get("id").toString()), post.get("author").toString(), post.get("content").toString(), Integer.parseInt(post.get("likes").toString()), Long.parseLong(post.get("time").toString())));
+				//convert jsonarray element object to json object
+				JSONObject post = (JSONObject) postsArray.get(i);
+
+				//parse from JSONObject to post object and add it to posts array list
+				posts.add(parsePost(post));
 			}
+			//update feed variable
 			feed = posts;
-			return posts; //return teh array list
+
+			return feed; //return feed
 		}
+		//fail
 		else {
 			System.err.println("Error fetching feed");
 			return null;
 		}
 	}
 
+
+
+
+
 	/**
-	 * Method to fetch leaderboard
+	 * Method to fetch leaderboard and update the variable leaderboard.
+	 * This Method must only be called to fetch new data on leaderboard. The variable leaderboard can be accessed at any time, however, its initial value is null
 	 * @return ArrayList of User objects
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
 	public static ArrayList<User> leaderboard() throws IOException, InterruptedException {
+
+
+		//send request and save response
 		JSONArray response = connect.leaderboard();
+
+		//success
 		if (response != null) {
+
 			System.out.println("Leaderboard fetched");
+
+			//temporary list to add User objects from JsonArray of users in response
 			ArrayList<User> users = new ArrayList<User>();
+
+			//iterating over the jsonarray
 			for (int i = 0; i < response.size(); i++) {
+
+				//convert jsonarray element object to json object
 				JSONObject user = (JSONObject) response.get(i); //convert the jsonarray element object to json object
 				//create user object and add it to users array list
 				users.add(parseUser(user));
 
 			}
-			return users;
+			//update leaderboard variable and return it
+			leaderboard = users;
+
+			return leaderboard;
 		}
+
+		//fail
 		else {
 			System.err.println("Error fetching leaderboard");
 			return null;
 		}
 	}
 
+
+
 	/**
-	 *Method to follow another user.
+	 * Method to toggle following another user.
+	 *
 	 * @param username String of the username you want to follow
-	 * @return True is successfully following, false if action failed
+	 * @return True if method was successful, False if method failed
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
+
 	public static boolean follow(String username) throws IOException, InterruptedException {
-		JSONObject obj = new JSONObject(); //TODO test follow
+
+		//create json body to pass into request and populate it
+		JSONObject obj = new JSONObject();
 		obj.put("username", username.toLowerCase());
+
+		//send request and save response
 		JSONObject response = connect.request("follow", obj);
+
+		//success
 		if (response != null) {
+			//create temporary user to update the current user
 			User temp = getProfile(Config.getInstance().getCurrentUser().getUsername().toLowerCase());
+			//if getting the profile was successful
 			if (temp != null) {
+				//update currentUser
 				Config.getInstance().setCurrentUser(temp);
+
+				// let know in console if the result was following the user or unfollowing the user.
+				//if following
+				if (Config.getInstance().getCurrentUser().getFollowers().contains(username)) {
+					System.out.println("Now Following "+ username);
+				}
+				//if unfollowing
+				else {
+					System.out.println("Now Unfollowing "+ username);
+				}
+				return true;
 			}
+			// if getting profile failed
 			else {
 				System.err.println("Error updating user profile with new followed username");
-				return false;
+
 			}
-			return true;
 		}
+		//fail
 		else {
 			System.err.println("Error following user");
-			return false;
 		}
+		return false;
 	}
 
 	/**
@@ -688,15 +887,27 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
+
 	public static boolean like(int id) throws IOException, InterruptedException {
-		JSONObject obj = new JSONObject(); //TODO test like
+
+		//create json body to pass into request and populate it
+		JSONObject obj = new JSONObject();
 		obj.put("id", id);
+
+		//send request and save response
 		JSONObject response = connect.request("like", obj);
+
+		//success
 		if (response != null) {
-			System.out.println("Like successfully");
+			System.out.println("Liked post!");
+
+			//update current user
+			Config.getInstance().setCurrentUser(getProfile(Config.getInstance().getCurrentUser().getUsername().toLowerCase()));
 			return true;
 
 		}
+
+		//fail
 		else {
 			System.err.println("Error liking post");
 			return false;
@@ -707,13 +918,9 @@ public class Main extends Application {
 	 * Method to check if there is current user data stored in Config
 	 * @return True if there is user data stored, False if it is not stored.
 	 */
+
 	public static boolean checkCurrentUser(){
-		if (Config.getInstance().getCurrentUser() != null) {
-			return true;
-		}
-		else {
-			return false;
-		}
+        return Config.getInstance().getCurrentUser() != null;
 	}
 
 	/**
@@ -721,7 +928,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static void displayLeaderboard() throws IOException, InterruptedException {
+	private static void displayLeaderboard() {
 		if (leaderboard != null) {
 			for (User user : leaderboard) {
 				System.out.println("Name: "+user.getUsername()+", Skips: "+user.getSkips());
@@ -772,15 +979,14 @@ public class Main extends Application {
 		}
 	}
 
-					System.out.println(checkAuth());
-					choice = null;
 
 	/**
 	 * Method to display the feed
 	 */
 	private static void displayFeed() {
-		if (feed != null) {
-			for (Post post : feed) {
+		if (feed != null) { // check if we have the feed stored
+
+			for (Post post : feed) { //display the post objects one by one
 				System.out.println("-------------------------------------------------------------");
 				displayPost(post);
 				System.out.println("-------------------------------------------------------------");
@@ -790,6 +996,126 @@ public class Main extends Application {
 			System.err.println("null feed");
 		}
 	}
+
+
+	/**
+	 * Method that filters the feed to only include your followers posts or followings posts. The Method filters the feed and stores it in filteredFeed which can be accessed at any time being a public variable
+	 * @param query True for "FOLLOWERS ONLY". False for "FOLLOWINGS ONLY"
+	 * @return
+	 */
+	public static void filterFeed(boolean query) {
+		//check if feed is empty before running
+		if (feed == null){
+			System.err.println("feed is empty");
+			return;
+		}
+
+		//copy feed to filter feed
+		filteredFeed = new ArrayList<Post>(feed);
+
+		//if FOLLOWERS ONLY
+		if (query){
+
+			//remove elements whose authors are not store in current user's follower's list
+			filteredFeed.removeIf(element -> !Config.getInstance().getCurrentUser().getFollowers().contains(element.getSender()));
+		}
+
+		//if FOLLOWINGS ONLY
+		else{
+
+			//remove elements whose authors are not store in current user's following's list
+			filteredFeed.removeIf(element -> !Config.getInstance().getCurrentUser().getFollowing().contains(element.getSender()));
+		}
+	}
+
+	/**
+	 * Method UPDATES the public static variable closeFriends with an ArrayList of user's close friends (followers who the user follows back)
+	 * Access the closeFriends variable for fast return, use this method only to refresh it.
+	 * @return True if successfully updated closeFriends, False if it failed
+	 */
+	public static boolean getCloseFriends() throws IOException, InterruptedException {
+
+		//store the followings list and store it for usage
+		ArrayList<String> following = new ArrayList<String>(Config.getInstance().getCurrentUser().getFollowing());
+
+		//get iterator
+		Iterator<String> iter = following.iterator();
+
+
+		//Store close friends here
+		ArrayList<String> friends = new ArrayList<String>();
+
+
+		// for each follow in following list
+		while (iter.hasNext()) {
+			//call iter.next() and store in a string for later use
+			String username = iter.next();
+
+
+			//create json body for request and populate it
+			JSONObject obj = new JSONObject();
+			obj.put("username", username);
+
+			//send request and store response
+			JSONObject response = connect.request("profileGet", obj);
+
+			//if there was an error in getting profile, abort program
+			if (response == null) {
+				System.err.println("Error fetching user profile for close friends fetch");
+				return false;
+			}
+
+			//get following from response and check if it has current user's username, if yes, add username to close friends
+			if (((JSONArray)response.get("following")).contains(Config.getInstance().getCurrentUser().getUsername())) {
+				friends.add(username);
+			}
+
+		}
+
+		//return close friends and update
+		closeFriends = friends;
+		return true;
+
+	}
+
+	/**
+	 * Method to display the filtered feed in console
+	 */
+	private static void displayFilterFeed() {
+		//check if it is null
+		if (filteredFeed != null) { // check if we have the feed stored
+
+			//iterate over its Posts and display them
+			for (Post post : filteredFeed) { //display the post objects one by one
+				System.out.println("-------------------------------------------------------------");
+				displayPost(post);
+				System.out.println("-------------------------------------------------------------");
+			}
+		}
+		//if null
+		else {
+			System.err.println("null filtered feed");
+		}
+	}
+
+
+	/**
+	 * Method to display the FILTERED feed
+	 */
+	private static void displayFilteredFeed() {
+		if (filteredFeed != null) { // check if we have the feed stored
+
+			for (Post post : feed) { //display the post objects one by one
+				System.out.println("-------------------------------------------------------------");
+				displayPost(post);
+				System.out.println("-------------------------------------------------------------");
+			}
+		}
+		else {
+			System.err.println("null filtered feed");
+		}
+	}
+
 
 	/**
 	 * The app but in cli form
@@ -929,7 +1255,7 @@ public class Main extends Application {
 					break;
 				case "9":
 					System.out.println("See you next time!");
-					Config.getInstance().save(".pebl.cfg"); //TODO ensure currentUser exists before saving
+					Config.getInstance().save(".pebl.cfg"); //TODO work on saving
 					break;
 				case "10":
 					System.out.println("enter username");
