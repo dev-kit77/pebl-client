@@ -47,17 +47,45 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage stage) throws IOException {
-		if (Config.getInstance().getAuthToken() == null) {
-			showLogin(stage);
-		}
-		else {
-			Task<Void> startupTask = new Task<>() {
-				@Override
-				public Void call() {
-					try {
-						//get username from config file and load in user to config object
-						Config.getInstance().setCurrentUser(getProfile(Config.getInstance().getUsername()));
-					} catch (Exception e) {
+		Task<Void> startupTask = new Task<>() {
+			@Override
+			public Void call() {
+			//init bypassLogin
+			boolean bypassLogin = false;
+
+			try {
+				//check auth token
+				bypassLogin = checkAuth();
+			} catch (Exception e) {
+				//print stack to log
+				e.printStackTrace();
+
+				//update GUI
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						//show general error
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText("Exception in pebl client");
+						alert.setContentText(e.getMessage());
+						alert.showAndWait();
+
+						//exit program
+						Platform.exit();
+					}
+				});
+			}
+
+			//update gui depending on login
+			if (bypassLogin) {
+				try {
+					//get username from config file and load in user to config object
+					Config.getInstance().setCurrentUser(getProfile(Config.getInstance().getUsername()));
+				} catch (Exception e) {
+						//print stack to log
+						e.printStackTrace();
+
 						//update GUI
 						Platform.runLater(new Runnable() {
 							@Override
@@ -83,7 +111,9 @@ public class Main extends Application {
 								//show main windows
 								showMainWindows(primaryStage);
 							} catch (Exception e) {
-								//update GUI
+								//print stack to log
+								e.printStackTrace();
+
 								//show general error
 								Alert alert = new Alert(Alert.AlertType.ERROR);
 								alert.setTitle("Error");
@@ -96,15 +126,42 @@ public class Main extends Application {
 							}
 						}
 					});
-
-					//empty return
-					return null;
 				}
-			};
+			else {
+				//update gui
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						try	{
+							//show main windows
+							showLogin(primaryStage);
+						} catch (Exception e) {
+							//print stack to log
+							e.printStackTrace();
 
-			//execute task
-			executor.execute(startupTask);
-		}
+							//show general error
+							Alert alert = new Alert(Alert.AlertType.ERROR);
+							alert.setTitle("Error");
+							alert.setHeaderText("Exception in pebl client");
+							alert.setContentText(e.getMessage());
+							alert.showAndWait();
+
+							//exit program
+							Platform.exit();
+						}
+					}
+				});
+			}
+
+
+			//empty return
+			return null;
+			}
+		};
+
+		//execute task
+		executor.execute(startupTask);
+
 	}
 
 	@Override
