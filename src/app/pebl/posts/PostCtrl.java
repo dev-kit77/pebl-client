@@ -4,16 +4,15 @@ import app.pebl.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 
 public class PostCtrl extends VBox {
-	@FXML Label lblUsername;
+	@FXML Text lblUsername;
 	@FXML Text txtBody;
-	@FXML Label lblSkips;
+	@FXML Text lblSkips;
 	@FXML Button btnSkip;
 	private Post post;
 
@@ -26,7 +25,7 @@ public class PostCtrl extends VBox {
 		//update fields
 		lblUsername.setText(newPost.getSender());
 		txtBody.setText(newPost.getContent());
-		lblSkips.setText(Integer.toString(newPost.getSkips()));
+		lblSkips.setText(newPost.getSkips() + " Skips");
 
 		//link post object
 		this.post = newPost;
