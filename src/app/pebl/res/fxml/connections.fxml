@@ -76,9 +76,9 @@
                   <Font name="Roboto Condensed Regular" size="13.0" />
                </font>
                <content>
-                  <ScrollPane hbarPolicy="NEVER">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
-                        <VBox fx:id="feedMutuals" />
+                        <VBox fx:id="feedMutuals" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
                      </content>
                   </ScrollPane>
                </content>
@@ -88,9 +88,9 @@
                   <Font name="Roboto Condensed Regular" size="13.0" />
                </font>
                <content>
-                  <ScrollPane hbarPolicy="NEVER">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
-                        <VBox fx:id="feedFollowing" />
+                        <VBox fx:id="feedFollowing" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
                      </content>
                   </ScrollPane>
                </content>
@@ -100,9 +100,9 @@
                   <Font name="Roboto Condensed Regular" size="13.0" />
                </font>
                <content>
-                  <ScrollPane hbarPolicy="NEVER">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
-                        <VBox fx:id="feedFollowers" />
+                        <VBox fx:id="feedFollowers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
                      </content>
                   </ScrollPane>
                </content>
