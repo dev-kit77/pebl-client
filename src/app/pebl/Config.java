@@ -1,18 +1,16 @@
 package app.pebl;
 
 import app.pebl.profile.User;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Properties;
 import java.util.Scanner;
 
 /**
@@ -29,13 +27,15 @@ public final class Config {
         }
     }
 
-    private String authToken = null;
-	private User currentUser = null;
+    private String authToken;
+	private User currentUser;
 	private String serverAddr;
+	private boolean cacheUser;
 	private boolean showProfile;
 	private boolean showConnections;
 	private boolean showLeaderboard;
-	private boolean saveUserInformation;
+
+	public final String defaultAddress = "https://pebl-api.fly.dev/";
 
 	public Config() throws InterruptedException {
 		//attempt loading
@@ -57,7 +57,7 @@ public final class Config {
 		//File loading failed completely: exit
 		else {
 			//set default config values here
-			serverAddr = "https://pebl-api.fly.dev/";
+			serverAddr = defaultAddress;
 
 			//print error
 			System.err.println("\033[1;91m" + "Err: Config file \".pebl.cfg\" does not exist. Creating..." + "\033[0m");
@@ -95,8 +95,8 @@ public final class Config {
 	 */
 	public boolean load(String filePath) throws InterruptedException {
 		//object declarations
-		FileReader reader;
-		BufferedReader buffer;
+		FileInputStream reader;
+		Properties prop = new Properties();
 
 		//define file object of fileName
 		File file = new File(filePath);
@@ -122,42 +122,46 @@ public final class Config {
 		//begin reading file
 		try {
 			//declare file reading objects
-			reader = new FileReader(file);
-			buffer = new BufferedReader(reader);
+			reader = new FileInputStream(file);
 
-			//Read Data Here TODO read more values if needed, otherwise, delete this todo
-			String line;
-			while ((line = buffer.readLine()) != null) {
-				if ((line).contains("auth = ")){
-					setAuthToken(line.split("\\s",3)[2]);
-				}
-				else if (line.contains("saveUserInformation = ")) {
-					setSaveUserInformation(Boolean.parseBoolean(line.split("\\s",3)[2]));
-				}
-				else if ((line).contains("user = ")){
-					if (saveUserInformation) {
+			prop.load(reader);
 
-					JSONObject response = (JSONObject) JSONValue.parse(line.split("\\s",3)[2]);
-					User temp = Main.parseUser(response);
-					setCurrentUser(temp);
-					}
-					else {
-						User temp = Main.getProfile(line.split("\\s", 3)[2]);
-						setCurrentUser(temp);
-					}
+			//get server address
+			serverAddr = prop.getProperty("server-address");
 
-				}
+			//get user cache status
+			cacheUser = Boolean.parseBoolean(prop.getProperty("cache-user"));
+
+			//if user data cached
+			if (cacheUser) {
+				//get authtoken from file
+				authToken = prop.getProperty("auth-token");
+
+				//get current user from server
+				currentUser = Main.getProfile(prop.getProperty("user"));
 			}
-			//close reader and buffer
-			buffer.close();
+
 			reader.close();
 
 			//return true for success
 			return true;
 		}
 		catch(IOException e) {
-			//print error to handle exception
-			System.err.println("\033[0;91m" + "Err: IO error: " + e + "\033[0m");
+			//update GUI
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					//show general error
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText("Exception in pebl client");
+					alert.setContentText(e.getMessage());
+					alert.showAndWait();
+
+					//exit program
+					Platform.exit();
+				}
+			});
 
 			//return false for failure
 			return false;
@@ -175,7 +179,17 @@ public final class Config {
 	public boolean save(String filePath) {
 		//object declarations
 		FileOutputStream writer;
-		PrintWriter buffer;
+		Properties prop = new Properties();
+
+		//set properties
+		prop.setProperty("server-address", serverAddr);
+		prop.setProperty("cache-user", Boolean.toString(cacheUser));
+
+		//check is user is to be cached
+		if (cacheUser) {
+			prop.setProperty("auth-token", authToken);
+			prop.setProperty("user", currentUser.getUsername());
+		}
 
 		//define file object for filename parameter
 		File file = new File(filePath);
@@ -202,42 +216,34 @@ public final class Config {
 		try {
 			//declare file reading objects
 			writer = new FileOutputStream(file);
-			buffer = new PrintWriter(writer);
 
-			//check if current user is not null
-			if (currentUser != null) {
-				if (saveUserInformation) { //save all user data as a json if saveUserInformation is true
-					//Write file here TODO write additional things if needed otherwise delete this todo
-					buffer.println("auth = " + authToken);
-
-					JSONObject user = Main.getUserAsJSON(currentUser);
-
-					if (user != null) {
-						buffer.println("user = " + user.toJSONString());
-					} else {
-						System.err.println("Error, cannot write user to file");
-					}
-				} else { //just write the username if saveUserInformation is false
-
-					buffer.write("user = " + currentUser.getUsername());
-				}
-			}
+			prop.store(writer, "pebl-config");
 
 			//close reader and buffer
-			buffer.close();
 			writer.close();
 			//return true for success
 			return true;
 		}
 		catch(IOException e) {
-			//print error to handle exception
-			System.err.println("\033[0;91m" + "Err: IO error: " + e + "\033[0m");
+			//update GUI
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					//show general error
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText("Exception in pebl client");
+					alert.setContentText(e.getMessage());
+					alert.showAndWait();
+
+					//exit program
+					Platform.exit();
+				}
+			});
 
 			//return false for failure
 			return false;
-		} catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+		}
     }
 
 	public static Config getInstance() {
@@ -294,9 +300,9 @@ public final class Config {
 	}
 
 	public void setSaveUserInformation(boolean save){
-		this.saveUserInformation = save;
+		this.cacheUser = save;
 	}
 	public boolean getSaveUserInformation(){
-		return saveUserInformation;
+		return cacheUser;
 	}
 }

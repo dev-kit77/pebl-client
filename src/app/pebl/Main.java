@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
@@ -52,9 +53,6 @@ public class Main extends Application {
 	public void stop() {
 		Task<Void> shutdownTask = new Task<>() {
 			@Override public Void call() {
-				//set wait cursor
-				getPrimaryStage().getScene().setCursor(Cursor.WAIT);
-
 				//save config file
 				boolean success = Config.getInstance().save(".pebl.cfg");
 
@@ -65,15 +63,21 @@ public class Main extends Application {
 					System.out.println("Config Saving Failed");
 				}
 
-				//set regular cursor
-				getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
-
 				//empty return
 				return null;
 			}
 		};
 
+		//execute task
 		executor.execute(shutdownTask);
+
+		//shutdown executor
+		try {
+			executor.shutdown();
+			executor.awaitTermination(120, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static Stage initProfile(String username) throws IOException {
