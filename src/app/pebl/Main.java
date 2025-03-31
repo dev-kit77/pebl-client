@@ -548,7 +548,7 @@ public class Main extends Application {
 			for (int i = 0; i < postsArray.size(); i++) {
 				JSONObject post = (JSONObject) postsArray.get(i); //convert jsonarray element object to json object
 				//create post object and add it to posts array list
-				posts.add(new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString())));
+				posts.add(new Post(Integer.parseInt(post.get("id").toString()), post.get("author").toString(), post.get("content").toString(), Integer.parseInt(post.get("likes").toString()), Long.parseLong(post.get("time").toString())));
 			}
 			feed = posts;
 			return posts; //return teh array list
