@@ -35,6 +35,15 @@ public class Controller {
 		stage.showAndWait();
 	}
 
+	public void showAlert(String header, String content)  {
+		//create alert
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Alert");
+		alert.setHeaderText(header);
+		alert.setContentText(content);
+		alert.showAndWait();
+	}
+
 	public void showError(String header, String content) {
 		//create alert
 		Alert alert = new Alert(Alert.AlertType.ERROR);

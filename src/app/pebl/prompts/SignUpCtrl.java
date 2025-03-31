@@ -88,7 +88,7 @@ public class SignUpCtrl extends Controller {
 					if (success) {
 						Platform.runLater(new Runnable() {
 							@Override public void run() {
-								//close window back to login
+								//close window
 								closeWindow();
 							}
 						});
