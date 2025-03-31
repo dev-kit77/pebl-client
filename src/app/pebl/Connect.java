@@ -63,7 +63,7 @@ public class Connect {
      * @param body the body
      */
     @SuppressWarnings("unused")
-    //TODO add GETS to /user/profile for close friends
+
     public JSONObject request(String type, JSONObject body) throws IOException, InterruptedException{
         //setting up the requests and responses and the JSON object to be returned
         HttpRequest request;

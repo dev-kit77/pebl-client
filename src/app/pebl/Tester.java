@@ -18,20 +18,21 @@ import org.json.simple.JSONValue;
 
 public class Tester {
     /**
-     * check server
-     * check auth
-     * login (in)valid
-     * create post (in)valid
-     * get post (in)valid
-     * get profile (in)valid
-     * update profile (in)valid
-     * get feed
-     * get leaderboard
-     * logout and login as someone else
-     * follow (in)valid
-     * like (in)valid
-     * close friends
-     * filter feed
+     * check server done
+     * check auth done
+     * register (in)valid done
+     * login (in)valid done
+     * create post (in)valid done
+     * get post (in)valid done
+     * get profile (in)valid done
+     * update profile (in)valid done
+     * get feed done
+     * get leaderboard done
+     * logout and login as someone else done
+     * follow (in)valid done
+     * like (in)valid done
+     * close friends done
+     * filter feed done
      *
      */
     private static final String username1 = "bob1";
