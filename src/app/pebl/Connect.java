@@ -73,26 +73,30 @@ public class Connect {
                 break;
 
             case "checkAuth": //check if auth token is valid
-                body.put("token", auth);
-                body.put("error", "none");
-                body.put("success", "true");
-                request = HttpRequest.newBuilder()
-                        .uri(URI.create(api))
-                        .PUT(HttpRequest.BodyPublishers.ofString(body.toJSONString())) // json -> {"error":"none", "success":"true", "token": {the auth token}}
-                        .header("Content-Type", "application/json")
-                        .header("Authorization", auth)
-                        .build();
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                System.out.println("sending to: "+response.uri().toString());
-                if (response.statusCode() == 200) {
-                    System.out.println("Token is valid "+response.body());
-                    System.out.println("Status code"+ response.statusCode());
-                    responseJSON = new JSONObject();
-                    return responseJSON;
+                try {
+                    body.put("token", auth);
+                    body.put("error", "none");
+                    body.put("success", "true");
+                    request = HttpRequest.newBuilder()
+                            .uri(URI.create(api))
+                            .PUT(HttpRequest.BodyPublishers.ofString(body.toJSONString())) // json -> {"error":"none", "success":"true", "token": {the auth token}}
+                            .header("Content-Type", "application/json")
+                            .header("Authorization", auth)
+                            .build();
+                    response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    System.out.println("sending to: " + response.uri().toString());
+                    if (response.statusCode() == 200) {
+                        System.out.println("Token is valid " + response.body());
+                        System.out.println("Status code" + response.statusCode());
+                        responseJSON = new JSONObject();
+                        return responseJSON;
+                    } else {
+                        System.out.println("Token is invalid or there is a server problem");
+                        System.out.println("Status code: " + response.statusCode());
+                    }
                 }
-                else {
-                    System.out.println("Token is invalid or there is a server problem");
-                    System.out.println("Status code: "+response.statusCode());
+                catch (NullPointerException e) {
+                    System.out.println("No auth token");
                 }
                 break;
 
