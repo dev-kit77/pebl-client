@@ -16,14 +16,17 @@ public class CardCtrl extends HBox {
 	private User displayUser;
 
 	public void setUser(User newUser) {
-		lblUsername.setText(displayUser.getUsername());
-		lblSkips.setText("(" + displayUser.getSkips() + " Skips)");
-		lblStatus.setText(displayUser.getStatus());
+		//update fields
+		lblUsername.setText(newUser.getUsername());
+		lblSkips.setText("(" + newUser.getSkips() + " Skips)");
+		lblStatus.setText(newUser.getStatus());
 
+		//update display user
 		displayUser = newUser;
 	}
 
 	public void setUser(String username, String displayName,int skips, String status) {
+		//update fields
 		lblUsername.setText(username);
 		lblSkips.setText("(" + skips + " Skips)");
 		lblStatus.setText(status);
