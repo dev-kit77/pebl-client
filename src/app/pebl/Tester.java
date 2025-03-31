@@ -29,7 +29,7 @@ public class Tester {
      * get leaderboard
      * logout and login as someone else
      * follow (in)valid
-     * like (in)valid TODO this is the only text that failed do this after api ednpoint is known
+     * like (in)valid
      * close friends
      * filter feed
      *
@@ -430,7 +430,7 @@ public class Tester {
 //        register("bob1", "bob", 30, false);
 
         //testing login success
-        login("bob2", "bob");
+//        login("bob2", "bob");
 
         //testing if auth token is still valid success
 //        checkAuth();
@@ -457,8 +457,8 @@ public class Tester {
 //        toggleFollow("bob1");
 //        toggleFollow("bob3");
 
-        //testing like (bob4 will like post id: 2)
-        like(3);
+        //testing like (bob2 will like post id: 3) success
+//        like(3);
 
         //testing leaderboard success
 //        leaderboard();

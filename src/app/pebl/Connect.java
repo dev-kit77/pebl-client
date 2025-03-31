@@ -375,8 +375,8 @@ public class Connect {
                 // 1 new post = 1 skip added to user skip bank
                 //build
                 request = HttpRequest.newBuilder()
-                        .uri(URI.create(api+"post/skip")) //TODO edit the uri because its been changed
-                        .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                        .uri(URI.create(api+"post/skip"))
+                        .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
                         .header("Content-Type", "application/json")
                         .header("Authorization", auth)
                         .build();

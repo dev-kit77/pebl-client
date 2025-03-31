@@ -823,7 +823,7 @@ public class Main extends Application {
 	public static boolean like(int id) throws IOException, InterruptedException {
 
 		//create json body to pass into request and populate it
-		JSONObject obj = new JSONObject(); //TODO keep away from like until api endpoint is known
+		JSONObject obj = new JSONObject();
 		obj.put("id", id);
 
 		//send request and save response
