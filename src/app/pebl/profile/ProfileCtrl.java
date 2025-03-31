@@ -105,7 +105,7 @@ public class ProfileCtrl extends Controller {
 						}
 
 						//update follow button
-						if (displayUser.getFollowers().contains(Config.getInstance().getCurrentUser().getUsername())) {
+						if (Config.getInstance().getCurrentUser().getFollowers().contains(displayUser.getUsername())) {
 							//update buttons
 							btnFollow.setText("Unfollow");
 							follow.setText("Unfollow");
@@ -181,20 +181,39 @@ public class ProfileCtrl extends Controller {
 	}
 
 	public void toggleFollow(ActionEvent event) {
-		if (followed) {
-			btnFollow.setText("Follow");
-			follow.setText("Follow");
-			followed = false;
-		}
-		else {
-			btnFollow.setText("Unfollow");
-			follow.setText("Unfollow");
-			followed = true;
-		}
+		//get user data
+		Task<Void> userRefresh = new Task<>() {
+			@Override
+			public Void call() {
+				boolean success = false;
 
-		//set user follow status
+				try {
+					//send follow to server
+					success = Main.follow(displayUser.getUsername());
+				} catch (Exception e) {
+					//print stack to console
+					e.printStackTrace();
 
-		refresh();
+					//show error message
+					showError("Exception in pebl client", e.getMessage());
+				}
+
+				//if follow was succesful
+				if (success) {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							refresh();
+						}
+					});
+				}
+
+				//return to end task
+				return null;
+			}
+		};
+
+		Main.getExecutor().execute(userRefresh);
 	}
 
 
