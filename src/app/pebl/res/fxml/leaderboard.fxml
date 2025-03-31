@@ -16,6 +16,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
+                <MenuItem fx:id="btnRefresh" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+                <MenuItem fx:id="logout" mnemonicParsing="false" onAction="#logout" text="Log Out" />
               <MenuItem mnemonicParsing="false" onAction="#closeWindow" text="Close" />
             </items>
           </Menu>
@@ -68,7 +70,7 @@
       </HBox>
       <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="280.0" minWidth="200.0" stylesheets="@../css/Format.css">
          <content>
-            <VBox fx:id="fedBoard" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #c9e6f0;" />
+            <VBox fx:id="feedBoard" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #c9e6f0;" />
          </content>
       </ScrollPane>
    </children>

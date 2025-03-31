@@ -1,55 +1,132 @@
 package app.pebl.prompts;
 
+import app.pebl.Config;
 import app.pebl.Controller;
 import app.pebl.Main;
 import app.pebl.connections.CardCtrl;
 import app.pebl.profile.User;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class LeaderboardCtrl extends Controller {
 	@FXML Label lblCurrUsername;
 	@FXML Label lblCurrSkips;
 	@FXML Label lblCurrStatus;
+	@FXML VBox feedBoard;
+	@FXML MenuItem logout;
+
 	private User currUser;
 
 	public void refresh() {
-		Task<Void> getUser = new Task<>() {
+		//get user data
+		Task<Void> leaderboardRefresh = new Task<>() {
 			@Override public Void call() {
-				//code goes here
+				try {
+					currUser = Main.getProfile(currUser.getUsername());
+				} catch (Exception e) {
+					//print stack trace to console
+					e.printStackTrace();
 
-				//empty return
+					//update GUI
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
+
+							//exit program
+							Platform.exit();
+						}
+					});
+				}
+
+				//update gui
+				Platform.runLater(new Runnable() {
+					@Override public void run() {
+						//update fields
+						lblCurrUsername.setText(currUser.getUsername());
+						lblCurrSkips.setText("(" + currUser.getSkips() + " Skips)");
+
+						//check if user has status
+						if (currUser.getStatus() != null && !currUser.getStatus().isEmpty()) {
+							//show label
+							lblCurrStatus.setVisible(true);
+
+							//set status
+							lblCurrStatus.setText("\"" + currUser.getStatus() + "\"");
+						}
+						else {
+							//hide label
+							lblCurrStatus.setVisible(false);
+						}
+					}
+				});
+
+				//init leaderboard
+				ArrayList<User> topUsers = null;
+
+				try {
+					//get leaderboard
+					topUsers = Main.leaderboard();
+				} catch (Exception e) {
+					//print stack trace to console
+					e.printStackTrace();
+
+					//update GUI
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
+
+							//exit program
+							Platform.exit();
+						}
+					});
+				}
+
+				//loop for all users on board
+				for (User addUsr : topUsers) {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								//attempt to add card
+								addCard(feedBoard, addUsr);
+							} catch (Exception e) {
+								//print stack to console
+								e.printStackTrace();
+
+								//show error message
+								showError("Exception in pebl client", e.getMessage());
+							}
+						}
+					});
+				}
+
+				//end thread
 				return null;
 			}
 		};
 
-		Task<Void> getLeaderboard = new Task<>() {
-			@Override public Void call() {
-				//code goes here
-
-				//empty return
-				return null;
-			};
-		};
-
-		Main.getExecutor().execute(getUser);
-		Main.getExecutor().execute(getLeaderboard);
-
-		lblCurrUsername.setText(currUser.getUsername());
-		lblCurrSkips.setText("(" + currUser.getSkips() + " Skips)");
-		lblCurrStatus.setText(currUser.getStatus());
-
-		//code to add to leaderboard vbox goes here
+		//run task
+		Main.getExecutor().execute(leaderboardRefresh);
 	}
 
 	public void addCard(VBox list, User addUser) throws IOException {
 		//get fxml loader
 		FXMLLoader loader = Main.getFXML("miniProfile");
+
+		loader.setRoot(new HBox());
 
 		//load into vbox
 		list.getChildren().add(loader.load());
@@ -60,7 +137,20 @@ public class LeaderboardCtrl extends Controller {
 	}
 
 	public void setUser(User newUser) {
+		//set user
 		currUser = newUser;
+
+		//hide/show logout
+		if (currUser.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
+			//current user
+			logout.setVisible(true);
+		}
+		else {
+			//other user
+			logout.setVisible(false);
+		}
+
+		//refresh
 		this.refresh();
 	}
 

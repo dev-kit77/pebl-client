@@ -1,5 +1,6 @@
 package app.pebl;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,6 +16,7 @@ public class Controller {
 	protected Node layoutParent;
 
 	public void closeWindow() {
+		//close window
 		layoutParent.getScene().getWindow().hide();
 	}
 
@@ -33,6 +35,40 @@ public class Controller {
 
 		//show about
 		stage.showAndWait();
+	}
+
+	public void logout() {
+		//close window
+		closeWindow();
+
+		//empty config
+		Config.getInstance().setAuthToken(null);
+		Config.getInstance().setCurrentUser(null);
+		Config.getInstance().setUserCache(false);
+		Config.getInstance().setUsername(null);
+
+		try {
+			//show login screen
+			Main.showLogin(Main.getPrimaryStage());
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			//show error message
+			showError("Exception in pebl client", e.getMessage());
+
+			//stop platform
+			Platform.exit();
+		}
+	}
+
+	public void showAlert(String header, String content)  {
+		//create alert
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Alert");
+		alert.setHeaderText(header);
+		alert.setContentText(content);
+		alert.showAndWait();
 	}
 
 	public void showError(String header, String content) {

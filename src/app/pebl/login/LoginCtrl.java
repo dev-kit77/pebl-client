@@ -147,6 +147,28 @@ public class LoginCtrl extends Controller {
 		signup.initOwner(layoutParent.getScene().getWindow());
 		signup.initModality(Modality.APPLICATION_MODAL);
 		signup.showAndWait();
+
+		if (Config.getInstance().getAuthToken() != null) {
+			//hide login window
+			closeWindow();
+
+			//show alert for account creation
+			showAlert("Registration Successful", "Logging in to your new Account");
+
+			//show main window set
+			try {
+				Main.showMainWindows(Main.getPrimaryStage());
+			} catch (IOException e) {
+				//print stack
+				e.printStackTrace();
+
+				//show general error
+				showError("Exception in pebl client", e.getMessage());
+
+				//exit program
+				Platform.exit();
+			}
+		}
 	}
 
 	public void serverPrompt() {

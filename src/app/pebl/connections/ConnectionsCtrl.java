@@ -1,5 +1,6 @@
 package app.pebl.connections;
 
+import app.pebl.Config;
 import app.pebl.Controller;
 import app.pebl.Main;
 import app.pebl.profile.User;
@@ -8,6 +9,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
@@ -22,6 +24,8 @@ public class ConnectionsCtrl extends Controller {
 	@FXML Label lblCurrUsername;
 	@FXML Label lblCurrSkips;
 	@FXML Label lblCurrStatus;
+	@FXML
+	MenuItem logout;
 
 	public void refresh() {
 		//get user data
@@ -40,16 +44,16 @@ public class ConnectionsCtrl extends Controller {
 							lblCurrSkips.setText("(" + displayUser.getSkips() + " Skips)");
 
 							//check if user has status
-							if (displayUser.getStatus() != null) {
+							if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
 								//show label
-								lblCurrStatus.setVisible(false);
+								lblCurrStatus.setVisible(true);
 
 								//set status
 								lblCurrStatus.setText("\"" + displayUser.getStatus() + "\"");
 							}
 							else {
 								//hide label
-								lblCurrStatus.setVisible(true);
+								lblCurrStatus.setVisible(false);
 							}
 
 							//clear feeds
@@ -194,6 +198,16 @@ public class ConnectionsCtrl extends Controller {
 	public void setUser(User newUser) {
 		//set user
 		displayUser = newUser;
+
+		//hide/show logout
+		if (displayUser.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
+			//current user
+			logout.setVisible(true);
+		}
+		else {
+			//other user
+			logout.setVisible(false);
+		}
 
 		//refresh data
 		this.refresh();

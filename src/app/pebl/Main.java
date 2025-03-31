@@ -47,17 +47,45 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage stage) throws IOException {
-		if (Config.getInstance().getAuthToken() == null) {
-			showLogin(stage);
-		}
-		else {
-			Task<Void> startupTask = new Task<>() {
-				@Override
-				public Void call() {
-					try {
-						//get username from config file and load in user to config object
-						Config.getInstance().setCurrentUser(getProfile(Config.getInstance().getUsername()));
-					} catch (Exception e) {
+		Task<Void> startupTask = new Task<>() {
+			@Override
+			public Void call() {
+			//init bypassLogin
+			boolean bypassLogin = false;
+
+			try {
+				//check auth token
+				bypassLogin = checkAuth();
+			} catch (Exception e) {
+				//print stack to log
+				e.printStackTrace();
+
+				//update GUI
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						//show general error
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText("Exception in pebl client");
+						alert.setContentText(e.getMessage());
+						alert.showAndWait();
+
+						//exit program
+						Platform.exit();
+					}
+				});
+			}
+
+			//update gui depending on login
+			if (bypassLogin) {
+				try {
+					//get username from config file and load in user to config object
+					Config.getInstance().setCurrentUser(getProfile(Config.getInstance().getUsername()));
+				} catch (Exception e) {
+						//print stack to log
+						e.printStackTrace();
+
 						//update GUI
 						Platform.runLater(new Runnable() {
 							@Override
@@ -83,7 +111,9 @@ public class Main extends Application {
 								//show main windows
 								showMainWindows(primaryStage);
 							} catch (Exception e) {
-								//update GUI
+								//print stack to log
+								e.printStackTrace();
+
 								//show general error
 								Alert alert = new Alert(Alert.AlertType.ERROR);
 								alert.setTitle("Error");
@@ -96,15 +126,42 @@ public class Main extends Application {
 							}
 						}
 					});
-
-					//empty return
-					return null;
 				}
-			};
+			else {
+				//update gui
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						try	{
+							//show main windows
+							showLogin(primaryStage);
+						} catch (Exception e) {
+							//print stack to log
+							e.printStackTrace();
 
-			//execute task
-			executor.execute(startupTask);
-		}
+							//show general error
+							Alert alert = new Alert(Alert.AlertType.ERROR);
+							alert.setTitle("Error");
+							alert.setHeaderText("Exception in pebl client");
+							alert.setContentText(e.getMessage());
+							alert.showAndWait();
+
+							//exit program
+							Platform.exit();
+						}
+					}
+				});
+			}
+
+
+			//empty return
+			return null;
+			}
+		};
+
+		//execute task
+		executor.execute(startupTask);
+
 	}
 
 	@Override
@@ -353,8 +410,8 @@ public class Main extends Application {
 		JSONObject obj = new JSONObject();
 		obj.put("username", username.toLowerCase());
 		obj.put("password", password);
-		obj.put("age", age);
-		obj.put("gender", gender);
+		obj.put("age", String.valueOf(age));
+		obj.put("gender", String.valueOf(gender));
 		JSONObject response = connect.request("register", obj);
 		if (response != null) {
 			User temp = getProfile(username.toLowerCase());
@@ -427,10 +484,21 @@ public class Main extends Application {
 
 	public static User getProfile(String username) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
-		obj.put("username", username.toLowerCase());
+		obj.put("target", username.toLowerCase());
 		JSONObject response = connect.request("profileGet", obj);
 		if (response != null) {
-		User profile = parseUser(response);
+			User profile = parseUser(response);
+
+			try {
+				//check if profile is current user
+				if (profile.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
+					//update current user
+					Config.getInstance().setCurrentUser(profile);
+				}
+			} catch (NullPointerException e) {
+				System.err.println("WARNING: Could not get current user, ignore if first get");
+			}
+
 		return profile;
 		}
 		else {
@@ -466,7 +534,7 @@ public class Main extends Application {
 		else {
 			obj.put("status", status);
 		}
-		JSONObject response = connect.request("updateProfile", obj);
+		JSONObject response = connect.request("profileUpdate", obj);
 		if (response != null) {
 			System.out.println("updateProfile response: " + response.toJSONString());
 			User temp;
