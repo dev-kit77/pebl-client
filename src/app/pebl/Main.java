@@ -353,8 +353,8 @@ public class Main extends Application {
 		JSONObject obj = new JSONObject();
 		obj.put("username", username.toLowerCase());
 		obj.put("password", password);
-		obj.put("age", age);
-		obj.put("gender", gender);
+		obj.put("age", String.valueOf(age));
+		obj.put("gender", String.valueOf(gender));
 		JSONObject response = connect.request("register", obj);
 		if (response != null) {
 			User temp = getProfile(username.toLowerCase());
