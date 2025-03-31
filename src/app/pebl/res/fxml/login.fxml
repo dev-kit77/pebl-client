@@ -83,7 +83,7 @@
                   <Font name="Roboto Condensed Italic" size="30.0" />
                </font>
             </Label>
-            <TextField fx:id="username" layoutX="10.0" layoutY="132.0" opacity="0.9" prefHeight="20.0" prefWidth="235.0" promptText="Username" style="-fx-border-color: #92999c; -fx-border-radius: 30; -fx-background-radius: 30; -fx-background-color: #f2fcff;">
+            <TextField fx:id="username" layoutX="10.0" layoutY="132.0" opacity="0.9" prefHeight="30.0" prefWidth="235.0" promptText="Username" style="-fx-border-color: #92999c; -fx-border-radius: 30; -fx-background-radius: 30; -fx-background-color: #f2fcff;">
                <font>
                   <Font size="14.0" />
                </font>

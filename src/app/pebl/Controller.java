@@ -36,7 +36,7 @@ public class Controller {
 	}
 
 	public void showError(String header, String content) {
-		//show login error
+		//create alert
 		Alert alert = new Alert(Alert.AlertType.ERROR);
 		alert.setTitle("Error");
 		alert.setHeaderText(header);

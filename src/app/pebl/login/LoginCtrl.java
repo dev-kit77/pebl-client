@@ -65,6 +65,51 @@ public class LoginCtrl extends Controller {
 					if (online) {
 						success = Main.login(username.getText(), password.getText());
 					}
+					else {
+						//update GUI
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								//show server error
+								showError("Connection to pebl server: " + srvAddress + " failed", "Please check your server address and try again.");
+							}
+						});
+					}
+
+					if (!success) {
+						//update GUI
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								//show login error
+								showError("Login failed", "Please check your Username and Password and try again.");
+							}
+						});
+					}
+					else {
+						//update GUI
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								//show main window set
+								try {
+									Main.showMainWindows(Main.getPrimaryStage());
+								} catch (IOException e) {
+									//print stack
+									e.printStackTrace();
+
+									//show general error
+									showError("Exception in pebl client", e.getMessage());
+
+									//exit program
+									Platform.exit();
+								}
+
+								//hide login window
+								closeWindow();
+							}
+						});
+					}
 				} catch (Exception e) {
 					//print stack trace to console
 					e.printStackTrace();
@@ -82,56 +127,7 @@ public class LoginCtrl extends Controller {
 					});
 				}
 
-				if (!online) {
-					//update GUI
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show server error
-							showError("Connection to pebl server: " + srvAddress + " failed", "Please check your server address and try again.");
-						}
-					});
-				} else if (!success) {
-					//update GUI
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show login error
-							showError("Login failed", "Please check your Username and Password and try again.");
-						}
-					});
-				}
-				else {
-					//update GUI
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show main window set
-							try {
-								Main.showMainWindows(Main.getPrimaryStage());
-							} catch (IOException e) {
-								//print stack
-								e.printStackTrace();
-
-								//update GUI
-								Platform.runLater(new Runnable() {
-									@Override
-									public void run() {
-										//show general error
-										showError("Exception in pebl client", e.getMessage());
-
-										//exit program
-										Platform.exit();
-									}
-								});
-							}
-
-							//hide login window
-							closeWindow();
-						}
-					});
-				}
-
+				//end thread
 				return null;
 			};
 		};
@@ -158,6 +154,7 @@ public class LoginCtrl extends Controller {
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("Server Address");
 		dialog.setHeaderText("Please Enter Server Address");
+		dialog.getEditor().setText("https://pebl-api.fly.dev/");
 		dialog.showAndWait();
 
 		//get address from dialog
