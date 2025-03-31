@@ -141,7 +141,7 @@ public class ProfileCtrl extends Controller {
 		displayUser = newUser;
 
 		//hide/show edit profile button
-		if (displayUser.getUsername().equals(Config.getInstance().getUsername())) {
+		if (displayUser.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
 			//current user
 			edit.setVisible(true);
 			follow.setVisible(false);
