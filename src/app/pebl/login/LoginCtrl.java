@@ -39,7 +39,7 @@ public class LoginCtrl extends Controller {
 		}
 
 		//set config
-		Config.getInstance().setSaveUserInformation(chkLogin.isSelected());
+		Config.getInstance().setUserCache(chkLogin.isSelected());
 
 		//set server address in config
 		Config.getInstance().setServerAddr(this.srvAddress);

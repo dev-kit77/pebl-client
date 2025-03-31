@@ -22,10 +22,12 @@ public final class Config {
         }
     }
 
-    private String authToken;
+
 	private User currentUser;
+	private String authToken;
 	private String serverAddr;
 	private boolean cacheUser;
+	private String username;
 
 	public final String defaultAddress = "https://pebl-api.fly.dev/";
 
@@ -130,7 +132,7 @@ public final class Config {
 				authToken = prop.getProperty("auth-token");
 
 				//get current user from server
-				currentUser = Main.getProfile(prop.getProperty("user"));
+				username = prop.getProperty("user");
 			}
 
 			reader.close();
@@ -271,7 +273,11 @@ public final class Config {
 		this.cacheUser = save;
 	}
 
-	public boolean getUserCache(){
-		return cacheUser;
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }

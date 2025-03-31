@@ -8,10 +8,11 @@ import app.pebl.profile.User;
 import app.pebl.posts.Post;
 import app.pebl.prompts.LeaderboardCtrl;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -46,7 +47,64 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage stage) throws IOException {
-		showLogin(stage);
+		if (Config.getInstance().getAuthToken() == null) {
+			showLogin(stage);
+		}
+		else {
+			Task<Void> startupTask = new Task<>() {
+				@Override
+				public Void call() {
+					try {
+						//get username from config file and load in user to config object
+						Config.getInstance().setCurrentUser(getProfile(Config.getInstance().getUsername()));
+					} catch (Exception e) {
+						//update GUI
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								//show general error
+								Alert alert = new Alert(Alert.AlertType.ERROR);
+								alert.setTitle("Error");
+								alert.setHeaderText("Exception in pebl client");
+								alert.setContentText(e.getMessage());
+								alert.showAndWait();
+
+								//exit program
+								Platform.exit();
+							}
+						});
+					}
+
+					//update gui
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							try	{
+								//show main windows
+								showMainWindows(primaryStage);
+							} catch (Exception e) {
+								//update GUI
+								//show general error
+								Alert alert = new Alert(Alert.AlertType.ERROR);
+								alert.setTitle("Error");
+								alert.setHeaderText("Exception in pebl client");
+								alert.setContentText(e.getMessage());
+								alert.showAndWait();
+
+								//exit program
+								Platform.exit();
+							}
+						}
+					});
+
+					//empty return
+					return null;
+				}
+			};
+
+			//execute task
+			executor.execute(startupTask);
+		}
 	}
 
 	@Override
