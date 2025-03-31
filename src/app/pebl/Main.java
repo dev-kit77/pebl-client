@@ -844,7 +844,7 @@ public class Main extends Application {
 
 		//create json body to pass into request and populate it
 		JSONObject obj = new JSONObject();
-		obj.put("username", username.toLowerCase());
+		obj.put("target", username.toLowerCase());
 
 		//send request and save response
 		JSONObject response = connect.request("follow", obj);
