@@ -1,6 +1,7 @@
 package app.pebl;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -60,6 +61,30 @@ public class Controller {
 			//stop platform
 			Platform.exit();
 		}
+	}
+
+	public void refresh() {
+		//get user data
+		Task<Void> userRefresh = new Task<>() {
+			@Override
+			public Void call() {
+				try {
+					//refresh current user from server
+					Config.getInstance().setCurrentUser(Main.getProfile(Config.getInstance().getCurrentUser().getUsername()));
+				} catch (Exception e) {
+					//print stack to console
+					e.printStackTrace();
+
+					//show error message
+					showError("Exception in pebl client", e.getMessage());
+				}
+
+				//return to end task
+				return null;
+			}
+		};
+
+		Main.getExecutor().execute(userRefresh);
 	}
 
 	public void showAlert(String header, String content)  {

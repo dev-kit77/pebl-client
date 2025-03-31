@@ -31,7 +31,11 @@ public class PostsCtrl extends Controller {
 		refresh();
 	}
 
+	@Override
 	public void refresh() {
+		//refresh current user
+		super.refresh();
+
 		//clear posts
 		feedPosts.getChildren().clear();
 

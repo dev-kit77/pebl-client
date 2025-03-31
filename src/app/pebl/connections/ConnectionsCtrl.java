@@ -27,7 +27,11 @@ public class ConnectionsCtrl extends Controller {
 	@FXML
 	MenuItem logout;
 
+	@Override
 	public void refresh() {
+		//refresh current user
+		super.refresh();
+
 		//get user data
 		Task<Void> userRefresh = new Task<>() {
 			@Override public Void call() {

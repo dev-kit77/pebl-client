@@ -45,7 +45,11 @@ public class ProfileCtrl extends Controller {
 
 	private boolean followed;
 
+	@Override
 	public void refresh() {
+		//refresh current user
+		super.refresh();
+
 		//get user data
 		Task<Void> profileRefresh = new Task<>() {
 			@Override public Void call() {
@@ -100,7 +104,8 @@ public class ProfileCtrl extends Controller {
 							lblGender.setText("No Gender");
 						}
 
-						if (displayUser.getFollowers().contains(displayUser.getUsername())) {
+						//update follow button
+						if (displayUser.getFollowers().contains(Config.getInstance().getCurrentUser().getUsername())) {
 							//update buttons
 							btnFollow.setText("Unfollow");
 							follow.setText("Unfollow");

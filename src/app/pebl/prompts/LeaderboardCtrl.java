@@ -26,7 +26,11 @@ public class LeaderboardCtrl extends Controller {
 
 	private User currUser;
 
+	@Override
 	public void refresh() {
+		//refresh current user
+		super.refresh();
+
 		//get user data
 		Task<Void> leaderboardRefresh = new Task<>() {
 			@Override public Void call() {
