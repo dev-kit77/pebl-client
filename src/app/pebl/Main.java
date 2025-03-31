@@ -377,6 +377,7 @@ public class Main extends Application {
 	 * @throws IOException in case of IOException
 	 * @throws InterruptedException if the http request was interrupted
 	 */
+	//TODO i think its trying to log in twice
 	public static boolean login(String username, String password) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
 		obj.put("username", username.toLowerCase());
@@ -639,7 +640,7 @@ public class Main extends Application {
 	 * @return True if there is user data stored, False if it is not stored.
 	 */
 	public static boolean checkCurrentUser(){
-		if (Config.getInstance().getCurrentUser() != null || !Config.getInstance().getCurrentUser().getUsername().equals("null")) {
+		if (Config.getInstance().getCurrentUser() != null) {
 			return true;
 		}
 		else {
@@ -703,6 +704,8 @@ public class Main extends Application {
 		}
 	}
 
+					System.out.println(checkAuth());
+					choice = null;
 
 	/**
 	 * Method to display the feed
@@ -737,140 +740,148 @@ public class Main extends Application {
 		String id;
 		String status;
 
-		//if completely new user
-		if (!checkCurrentUser() && (Config.getInstance().getAuthToken() == null)) {
-			System.out.println("You are not yet register, lets get that started");
+		do {
+			System.out.println("Type 1 to log in, Type 2 to register, Type 3 to exit");
+			choice = input.nextLine();
+			switch (choice) {
+				case "1":
+					System.out.println("Username: ");
+					username = input.nextLine();
+					System.out.println("Password: ");
+					password = input.nextLine();
 
-			System.out.println("Please enter your new username or type /exit to exit: ");
-			username = input.next();
-			System.out.println("Please enter your new password or type /exit to exit: ");
+					if (!login(username, password)) {
+						System.err.println("Invalid username or password");
+						continue;
+					};
 
-			password = input.nextLine();
-			System.out.println("Please enter your new age (integers only) or type /exit to exit: ");
-			age = input.nextInt();
-			input.nextLine();
-			System.out.println("Please enter your gender (true or false) or type /exit to exit: ");
-			gender = input.nextBoolean();
-			input.nextLine();
-			if (username.equals("/exit") || password.equals("/exit")) {
-				return;
-			}
-			else {
-				if (!register(username, password, age, gender)) {
-					System.err.println("Error registering user");
+					System.out.println(checkAuth());
+					choice = null;
+					break;
+				case "2":
+					System.out.println("Username: ");
+					username = input.nextLine();
+					System.out.println("Password: ");
+					password = input.nextLine();
+					System.out.println("Age: ");
+					try {
+						age = Integer.parseInt(input.nextLine());
+					}catch (InputMismatchException e) {
+						System.err.println("Please enter only integers");
+						continue;
+					}
+					System.out.println("Gender: ");
+
+					try {
+						gender = Boolean.parseBoolean(input.nextLine());
+					}catch (InputMismatchException e) {
+						System.err.println("Please enter only true or false");
+						continue;
+					}
+					if(!register(username, password, age, gender)) {
+						System.err.println("Registration failed");
+						continue;
+					};
+
+
+					break;
+				case "3":
+					System.out.println("See you later!");
 					return;
-				}
+				default:
+					System.err.println("Invalid choice");
+					break;
 			}
+		} while (choice != null);
 
 
+		do {
+			System.out.println("What would you like to do? Reminder: Leaderboards can only be viewed and refreshed after you create a post\nType a number to select of the following\n1: create post, 2: view specific post, 3: view profile of a user (including yourself), 4: view leaderboard, 5: Like a specific post, 6: Follow a specific user, 7: change your profile (age, gender and status), 8: View the latest 50 posts in the feed, 9: exit");
+			choice = input.next();
+			switch (choice) {
+				case "1":
+					System.out.println("Enter content for post or type /exit to cancel: ");
+					content = input.next();
+					if (!content.equals("/exit")) {
+						createPost(content);
+					}
+					break;
+				case "2":
+					System.out.println("Enter id of post or type /exit to cancel: ");
+					id = input.nextLine();
+					if (!id.equals("/exit")) {
+						displayPost(getPost(Integer.parseInt(id)));
+					}
+					break;
+				case "3":
+					System.out.println("Enter username or type /exit to cancel: ");
+					username = input.nextLine();
+					if (!username.equals("/exit")) {
+						getProfile(username);
+						displayUser();
+					}
+					break;
+				case "4":
+					displayLeaderboard();
+					break;
+				case "5":
+					System.out.println("Enter id of post you want to offer a skip (like) or type /exit to cancel: ");
+					id = input.nextLine();
+					if (!id.equals("/exit")) {
+						like(Integer.parseInt(id));
+					}
+					break;
+				case "6":
+					System.out.println("Enter username you want ot follow or type /exit to cancel: ");
+					username = input.nextLine();
+					if (!username.equals("/exit")) {
+						follow(username);
+					}
+					break;
+				case "7":
+					System.out.println("Enter your new age (integers only) or type /exit to cancel: ");
+					try {
+						age = input.nextInt();
+						input.nextLine();
+						System.out.println("Enter your new gender (true or false only) or type /exit to cancel: ");
+						gender = input.nextBoolean();
+						input.nextLine();
+						System.out.println("Enter your new status or type /exit to cancel: ");
+						status = input.nextLine();
+						updateProfile(age, gender, status);
+					} catch (InputMismatchException e) {
+						System.err.println("You have entered an invalid value for age or gender, please try again later.");
 
-		}
-		// if was logged in before
-		else if (Config.getInstance().getAuthToken() != null || !(Config.getInstance().getCurrentUser() == null)) {
-			if (!checkAuth()){
-				System.err.println("You have been logged out.");
-				System.out.println("Please enter your new username or type /exit to exit: ");
-				username = input.next();
-				System.out.println("Please enter your new password or type /exit to exit: ");
+					}
+					break;
+				case "8":
+					if (getFeed() != null) {
+						displayFeed();
+					}
+					break;
+				case "9":
+					System.out.println("See you next time!");
+					Config.getInstance().save(".pebl.cfg"); //TODO ensure currentUser exists before saving
+					break;
+				case "10":
+					System.out.println("enter username");
+					username = input.nextLine();
+					System.out.println("enter password");
+					password = input.nextLine();
+					if (username.equals("/exit") || password.equals("/exit")) {
+						login(username, password);
 
-				password = input.nextLine();
-				if (username.equals("/exit") || password.equals("/exit")) {
-					return;
-				}
 
-				if (!login(username, password)) {
-					System.err.println("Error logging in user");
-					return;
-				}
-				System.out.println("Welcome back!");
+					}
+
+
+					break;
+				default:
+					System.err.println("Invalid choice");
+					break;
 
 			}
-		}
-		System.out.println("What would you like to do? Reminder: Leaderboards can only be viewed and refreshed after you create a post\nType a number to select of the following\n1: create post, 2: view specific post, 3: view profile of a user (including yourself), 4: view leaderboard, 5: Like a specific post, 6: Follow a specific user, 7: change your profile (age, gender and status), 8: View the latest 50 posts in the feed, 9: exit");
-		choice = input.next();
-		switch (choice) {
-			case "1":
-				System.out.println("Enter content for post or type /exit to cancel: ");
-				content = input.next();
-				if (!content.equals("/exit")) {
-					createPost(content);
-				}
-				break;
-			case "2":
-				System.out.println("Enter id of post or type /exit to cancel: ");
-				id = input.nextLine();
-				if (!id.equals("/exit")) {
-					displayPost(getPost(Integer.parseInt(id)));
-				}
-				break;
-			case "3":
-				System.out.println("Enter username or type /exit to cancel: ");
-				username = input.nextLine();
-				if (!username.equals("/exit")) {
-					getProfile(username);
-					displayUser();
-				}
-				break;
-			case "4":
-				displayLeaderboard();
-				break;
-			case "5":
-				System.out.println("Enter id of post you want to offer a skip (like) or type /exit to cancel: ");
-				id = input.nextLine();
-				if (!id.equals("/exit")) {
-					like(Integer.parseInt(id));
-				}
-				break;
-			case "6":
-				System.out.println("Enter username you want ot follow or type /exit to cancel: ");
-				username = input.nextLine();
-				if (!username.equals("/exit")) {
-					follow(username);
-				}
-				break;
-			case "7":
-				System.out.println("Enter your new age (integers only) or type /exit to cancel: ");
-				try {
-					age = input.nextInt();
-					input.nextLine();
-				System.out.println("Enter your new gender (true or false only) or type /exit to cancel: ");
-				gender = input.nextBoolean();
-				input.nextLine();
-				System.out.println("Enter your new status or type /exit to cancel: ");
-				status = input.nextLine();
-				updateProfile(age, gender, status);
-				} catch (InputMismatchException e) {
-					System.err.println("You have entered an invalid value for age or gender, please try again later.");
-
-				}
-				break;
-			case "8":
-				if (getFeed() != null) {
-					displayFeed();
-				}
-				break;
-			case "9":
-				System.out.println("See you next time!");
-				Config.getInstance().save(".pebl.cfg");
-				break;
-			case "10":
-				System.out.println("enter username");
-				username = input.nextLine();
-				System.out.println("enter password");
-				password = input.nextLine();
-				if (username.equals("/exit") || password.equals("/exit")) {
-					login(username, password);
-
-
-				}
-
-
-				break;
-			default:
-				System.err.println("Invalid choice");
-				break;
-
-		}
+		} while (!choice.equals("9"));
 	}
 
 	public static void main(String[] args) {

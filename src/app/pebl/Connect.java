@@ -47,6 +47,7 @@ public class Connect {
      * @param body the body
      */
     @SuppressWarnings("unused")
+    //TODO rework this method to respond with exception messages
     public JSONObject request(String type, JSONObject body) throws IOException, InterruptedException{
         HttpRequest request;
         HttpResponse<String> response;
@@ -116,7 +117,7 @@ public class Connect {
                     return responseJSON;
                 }
                 else {
-                    System.out.println("register failed, Username unavailable");
+                    System.out.println("register failed or Username unavailable");
                     authUpdate("");
                     System.out.println("Status code: "+response.statusCode());
                 }
@@ -156,8 +157,9 @@ public class Connect {
                         .header("target", body.get("username").toString())
                         .build();
 
+                System.out.println("Sending to: "+request.uri().toString());
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                System.out.println("Sending to: "+request.uri().toString()+"\nresponse: "+response.body());
+                System.out.println("response: "+response.body());
 
                 if (response.statusCode() == 200) {
                     System.out.println("profile obtained "+ response.body().toString());
@@ -272,9 +274,9 @@ public class Connect {
                 }
                 break;
 
-            case "follow": //following a user
+            case "follow": //following a user TODO rework follow, json obbject must include target
                 request = HttpRequest.newBuilder()
-                        .uri(URI.create(api+"user/follow"))
+                        .uri(URI.create(api+"user/toggleFollow"))
                         .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
                         .header("Content-Type", "application/json")
                         .header("Authorization", auth)
