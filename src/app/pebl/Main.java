@@ -483,12 +483,19 @@ public class Main extends Application {
 
 	public static User getProfile(String username) throws IOException, InterruptedException {
 		JSONObject obj = new JSONObject();
-		obj.put("username", username.toLowerCase());
+		obj.put("target", username.toLowerCase());
 		JSONObject response = connect.request("profileGet", obj);
 		if (response != null) {
 			User profile = parseUser(response);
-			if (profile.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
-				Config.getInstance().setCurrentUser(profile);
+
+			try {
+				//check if profile is current user
+				if (profile.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
+					//update current user
+					Config.getInstance().setCurrentUser(profile);
+				}
+			} catch (NullPointerException e) {
+				System.err.println("WARNING: Could not get current user, ignore if first get");
 			}
 
 		return profile;

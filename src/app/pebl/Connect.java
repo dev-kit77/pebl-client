@@ -151,9 +151,8 @@ public class Connect {
             case "profileGet": // get user profile json body must have {username: String username of user}
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api+"user/profile"))
-                        .GET()
+                        .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
                         .header("Content-Type", "application/json")
-                        .header("target", body.get("username").toString())
                         .build();
 
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
