@@ -19,9 +19,9 @@ public class PostsCtrl extends Controller {
 	@FXML
 	VBox feedPosts;
 	@FXML
-	VBox fedFollowing;
+	VBox feedFollowing;
 	@FXML
-	VBox fedFollowers;
+	VBox feedFollowers;
 
 	public void initialize() {
 		//get current user

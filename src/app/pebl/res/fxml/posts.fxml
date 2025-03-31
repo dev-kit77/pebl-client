@@ -28,7 +28,7 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
                <items>
-                  <MenuItem mnemonicParsing="false" text="About" onAction="#showAbout"/>
+                  <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
                </items>
             </Menu>
          </menus>
@@ -39,7 +39,7 @@
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
-                        <VBox fx:id="feedPosts" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #c9e6f0;" />
+                        <VBox fx:id="feedPosts" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #c9e6f0;" stylesheets="@../css/Format.css" />
                      </content>
                   </ScrollPane>
                </content>
@@ -48,7 +48,7 @@
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
-                        <VBox fx:id="fedFollowing" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
+                        <VBox fx:id="feedFollowing" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" stylesheets="@../css/Format.css" />
                      </content>
                   </ScrollPane>
                </content>
@@ -57,7 +57,7 @@
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
-                        <VBox fx:id="fedFollowers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
+                        <VBox fx:id="feedFollowers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" stylesheets="@../css/Format.css" />
                      </content>
                   </ScrollPane>
                </content>
