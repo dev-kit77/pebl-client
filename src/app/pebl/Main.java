@@ -57,6 +57,8 @@ public class Main extends Application {
 			//init bypassLogin
 			boolean bypassLogin = false;
 
+			/**
+			 * this code was the auto login but unfortunately it doesnt work
 			try {
 				//check auth token
 				bypassLogin = checkAuth();
@@ -79,7 +81,7 @@ public class Main extends Application {
 						Platform.exit();
 					}
 				});
-			}
+			}*/
 
 			//update gui depending on login
 			if (bypassLogin) {
