@@ -19,7 +19,19 @@ public class CardCtrl extends HBox {
 		//update fields
 		lblUsername.setText(newUser.getUsername());
 		lblSkips.setText("(" + newUser.getSkips() + " Skips)");
-		lblStatus.setText(newUser.getStatus());
+
+		//check if user has status
+		if (newUser.getStatus() !=null) {
+			//show label
+			lblStatus.setVisible(false);
+
+			//set status
+			lblStatus.setText("\"" + newUser.getStatus() + "\"");
+		}
+		else {
+			//hide label
+			lblStatus.setVisible(true);
+		}
 
 		//update display user
 		displayUser = newUser;

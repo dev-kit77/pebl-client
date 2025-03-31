@@ -35,9 +35,27 @@ public class ConnectionsCtrl extends Controller {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
+							//update labels
 							lblCurrUsername.setText(displayUser.getUsername());
 							lblCurrSkips.setText("(" + displayUser.getSkips() + " Skips)");
-							lblCurrStatus.setText("\"" + displayUser.getStatus() + "\"");
+
+							//check if user has status
+							if (displayUser.getStatus() != null) {
+								//show label
+								lblCurrStatus.setVisible(false);
+
+								//set status
+								lblCurrStatus.setText("\"" + displayUser.getStatus() + "\"");
+							}
+							else {
+								//hide label
+								lblCurrStatus.setVisible(true);
+							}
+
+							//clear feeds
+							feedMutuals.getChildren().clear();
+							feedFollowers.getChildren().clear();
+							feedFollowing.getChildren().clear();
 						}
 					});
 				} catch (Exception e) {
@@ -52,11 +70,6 @@ public class ConnectionsCtrl extends Controller {
 				ArrayList<String> mutuals = displayUser.getMutuals();
 				ArrayList<String> following = displayUser.getFollowing();
 				ArrayList<String> followers = displayUser.getFollowers();
-
-				//clear feeds
-				feedMutuals.getChildren().clear();
-				feedFollowers.getChildren().clear();
-				feedFollowing.getChildren().clear();
 
 				//loop for all followers
 				for (String follower : followers) {

@@ -70,7 +70,20 @@ public class ProfileCtrl extends Controller {
 					@Override public void run() {
 						//update fields
 						lblUsername.setText(displayUser.getUsername());
-						lblStatus.setText("\"" + displayUser.getStatus() + "\"");
+
+						//check if user has status
+						if (displayUser.getStatus() != null) {
+							//show label
+							lblStatus.setVisible(false);
+
+							//set status
+							lblStatus.setText("\"" + displayUser.getStatus() + "\"");
+						}
+						else {
+							//hide label
+							lblStatus.setVisible(true);
+						}
+
 						lblFollowers.setText(displayUser.getFollowers().size() + " Followers");
 						lblFollowing.setText(displayUser.getFollowing().size() + " Following");
 						lblSkips.setText(displayUser.getSkips() + " Skips");
@@ -84,13 +97,21 @@ public class ProfileCtrl extends Controller {
 							lblGender.setText("No Gender");
 						}
 
-						if (followed) {
+						if (displayUser.getFollowers().contains(displayUser.getUsername())) {
+							//update buttons
 							btnFollow.setText("Unfollow");
 							follow.setText("Unfollow");
+
+							//update variable
+							followed = true;
 						}
 						else {
+							//update buttons
 							btnFollow.setText("Follow");
 							follow.setText("Follow");
+
+							//update variable
+							followed = false;
 						}
 					}
 				});
@@ -124,11 +145,13 @@ public class ProfileCtrl extends Controller {
 			//current user
 			edit.setVisible(true);
 			follow.setVisible(false);
+			btnFollow.setVisible(false);
 		}
 		else {
 			//other user
 			edit.setVisible(false);
 			follow.setVisible(true);
+			btnFollow.setVisible(true);
 		}
 
 		//refresh data
