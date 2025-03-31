@@ -37,16 +37,16 @@
         <tabs>
           <Tab text="All Posts">
                <content>
-                  <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
-                        <VBox fx:id="fedPosts" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
+                        <VBox fx:id="feedPosts" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #c9e6f0;" />
                      </content>
                   </ScrollPane>
                </content>
           </Tab>
             <Tab text="Following">
                <content>
-                  <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
                         <VBox fx:id="fedFollowing" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
                      </content>
@@ -55,7 +55,7 @@
             </Tab>
           <Tab text="From Followers">
                <content>
-                  <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
                         <VBox fx:id="fedFollowers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
                      </content>
