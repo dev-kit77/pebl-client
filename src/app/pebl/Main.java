@@ -346,13 +346,8 @@ public class Main extends Application {
 		JSONObject response = connect.request("profileGet", obj);
 		if (response != null) {
 		User profile = parseUser(response);
-			if (!response.get("username").equals(Config.getInstance().getCurrentUser().getUsername())) {
-				Config.getInstance().getCurrentUser().setMutuals(profile);
-				viewedUser = profile;
-			}
 		return profile;
 		}
-
 		else {
 			return null;
 		}
