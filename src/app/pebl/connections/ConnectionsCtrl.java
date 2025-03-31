@@ -42,14 +42,14 @@ public class ConnectionsCtrl extends Controller {
 							//check if user has status
 							if (displayUser.getStatus() != null) {
 								//show label
-								lblCurrStatus.setVisible(false);
+								lblCurrStatus.setVisible(true);
 
 								//set status
 								lblCurrStatus.setText("\"" + displayUser.getStatus() + "\"");
 							}
 							else {
 								//hide label
-								lblCurrStatus.setVisible(true);
+								lblCurrStatus.setVisible(false);
 							}
 
 							//clear feeds

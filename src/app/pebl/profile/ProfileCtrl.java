@@ -74,14 +74,14 @@ public class ProfileCtrl extends Controller {
 						//check if user has status
 						if (displayUser.getStatus() != null) {
 							//show label
-							lblStatus.setVisible(false);
+							lblStatus.setVisible(true);
 
 							//set status
 							lblStatus.setText("\"" + displayUser.getStatus() + "\"");
 						}
 						else {
 							//hide label
-							lblStatus.setVisible(true);
+							lblStatus.setVisible(false);
 						}
 
 						lblFollowers.setText(displayUser.getFollowers().size() + " Followers");
