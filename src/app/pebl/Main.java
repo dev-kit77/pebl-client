@@ -465,7 +465,7 @@ public class Main extends Application {
 		else {
 			obj.put("status", status);
 		}
-		JSONObject response = connect.request("updateProfile", obj);
+		JSONObject response = connect.request("profileUpdate", obj);
 		if (response != null) {
 			System.out.println("updateProfile response: " + response.toJSONString());
 			User temp;
