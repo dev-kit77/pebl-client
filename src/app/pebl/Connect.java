@@ -63,6 +63,7 @@ public class Connect {
      * @param body the body
      */
     @SuppressWarnings("unused")
+    //TODO add GETS to /user/profile for close friends
     public JSONObject request(String type, JSONObject body) throws IOException, InterruptedException{
         //setting up the requests and responses and the JSON object to be returned
         HttpRequest request;
@@ -199,13 +200,12 @@ public class Connect {
                 //build
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api+"user/profile"))
-                        .GET()
+                        .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
                         .header("Content-Type", "application/json")
-                        .header("target", body.get("username").toString())
                         .build();
 
                 //what is it doing
-                System.out.println("Getting user profile of: "+body.get("username").toString());
+                System.out.println("Getting user profile of: "+body.get("target").toString());
 
                 //send it
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -368,13 +368,15 @@ public class Connect {
                 checkCode(request, response);
                 break;
 
+
+
             case "like": //liking post Body must include the post ID {"id": id of post as integer}. Responds with the remaining skips a user has
                 //IMPORTANT: liking (skipping) is only possible if user has more than one skip to spare. earn skips by creating posts
                 // 1 new post = 1 skip added to user skip bank
                 //build
                 request = HttpRequest.newBuilder()
-                        .uri(URI.create(api+"post/skip"))
-                        .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
+                        .uri(URI.create(api+"post/skip")) //TODO edit the uri because its been changed
+                        .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
                         .header("Content-Type", "application/json")
                         .header("Authorization", auth)
                         .build();
