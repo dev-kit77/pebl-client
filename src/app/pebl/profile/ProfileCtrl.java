@@ -3,6 +3,7 @@ package app.pebl.profile;
 import app.pebl.Config;
 import app.pebl.Controller;
 import app.pebl.Main;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,19 +44,56 @@ public class ProfileCtrl extends Controller {
 
 	public void refresh() {
 		//get user data
-		Task<Void> userRefresh = new Task<>() {
-			@Override public Void call() {
-				//code goes here
-
-				//empty return
-				return null;
-			}
-		};
-
-		//get user posts from server
 		Task<Void> profileRefresh = new Task<>() {
 			@Override public Void call() {
-				//code goes here
+				try {
+					displayUser = Main.getProfile(displayUser.getUsername());
+				} catch (Exception e) {
+					//print stack trace to console
+					e.printStackTrace();
+
+					//update GUI
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
+
+							//exit program
+							Platform.exit();
+						}
+					});
+				}
+
+				//update gui
+				Platform.runLater(new Runnable() {
+					@Override public void run() {
+						//update fields
+						lblUsername.setText(displayUser.getUsername());
+						lblStatus.setText("\"" + displayUser.getStatus() + "\"");
+						lblFollowers.setText(displayUser.getFollowers().size() + " Followers");
+						lblFollowing.setText(displayUser.getFollowing().size() + " Following");
+						lblSkips.setText(displayUser.getSkips() + " Skips");
+						lblAge.setText("Age " + displayUser.getAge());
+
+						//set swedish gender (dont ask)
+						if (displayUser.getGender()) {
+							lblGender.setText("Gendered");
+						}
+						else {
+							lblGender.setText("No Gender");
+						}
+
+						if (followed) {
+							btnFollow.setText("Unfollow");
+							follow.setText("Unfollow");
+						}
+						else {
+							btnFollow.setText("Follow");
+							follow.setText("Follow");
+						}
+					}
+				});
 
 				//empty return
 				return null;
@@ -63,45 +101,18 @@ public class ProfileCtrl extends Controller {
 		};
 
 		//run tasks
-		Main.getExecutor().execute(userRefresh);
 		Main.getExecutor().execute(profileRefresh);
-
-		//update fields
-		lblUsername.setText(displayUser.getUsername());
-		lblStatus.setText("\"" + displayUser.getStatus() + "\"");
-		lblFollowers.setText(displayUser.getFollowers().size() + " Followers");
-		lblFollowing.setText(displayUser.getFollowing().size() + " Following");
-		lblSkips.setText(displayUser.getSkips() + " Skips");
-		lblAge.setText("Age " + displayUser.getAge());
-
-		//set swedish gender (dont ask)
-		if (displayUser.getGender()) {
-			lblGender.setText("Gendered");
-		}
-		else {
-			lblGender.setText("No Gender");
-		}
-
-		if (followed) {
-			btnFollow.setText("Unfollow");
-			follow.setText("Unfollow");
-		}
-		else {
-			btnFollow.setText("Follow");
-			follow.setText("Follow");
-		}
-
-		//add posts to Vbox here
 	}
 
 	public void handleEdit() throws IOException {
 		Stage signup = new Stage();
-		signup.setTitle("Sign Up");
+		signup.setTitle("Edit Profile");
 		signup.setScene(new Scene(Main.getFXML("edit").load()));
 		signup.initOwner(layoutParent.getScene().getWindow());
 		signup.initModality(Modality.APPLICATION_MODAL);
 		signup.showAndWait();
 
+		//refresh profile
 		this.refresh();
 	}
 
@@ -110,10 +121,14 @@ public class ProfileCtrl extends Controller {
 
 		//hide/show edit profile button
 		if (displayUser.equals(Config.getInstance().getCurrentUser())) {
+			//current user
 			edit.setVisible(true);
+			follow.setVisible(false);
 		}
 		else {
+			//other user
 			edit.setVisible(false);
+			follow.setVisible(true);
 		}
 
 		//refresh data
@@ -137,16 +152,14 @@ public class ProfileCtrl extends Controller {
 			btnFollow.setText("Follow");
 			follow.setText("Follow");
 			followed = false;
-
-			//set user as not followed
 		}
 		else {
 			btnFollow.setText("Unfollow");
 			follow.setText("Unfollow");
 			followed = true;
-
-			//set user as followed
 		}
+
+		//set user follow status
 
 		refresh();
 	}
