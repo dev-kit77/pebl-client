@@ -144,28 +144,54 @@ public class Main extends Application {
 		stage.setTitle("Profile");
 
 		//get loader and load scene
-		FXMLLoader loader = getFXML("profile");
+		final FXMLLoader loader = getFXML("profile");
 		stage.setScene(new Scene(loader.load()));
-
-		//init user
-		User displayUser;
 
 		//get user from server
 		Task<Void> getUser = new Task<>() {
 			@Override public Void call() {
-				//code goes here
+				try {
+					//get user from username
+					User viewUser = Main.getProfile(username);
+
+					//update GUI
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//get controller
+							ProfileCtrl ctrl = (ProfileCtrl) loader.getController();
+							//init controller user
+							ctrl.setUser(viewUser);
+						}
+					});
+				} catch (Exception e) {
+					//print stack trace to console
+					e.printStackTrace();
+
+					//update GUI
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							Alert alert = new Alert(Alert.AlertType.ERROR);
+							alert.setTitle("Error");
+							alert.setHeaderText("Exception in pebl client");
+							alert.setContentText(e.getMessage());
+							alert.showAndWait();
+
+							//exit program
+							Platform.exit();
+						}
+					});
+				}
 
 				//empty return
 				return null;
 			}
 		};
 
+		//execute task
 		executor.execute(getUser);
-
-		//get controller
-		ProfileCtrl ctrl = (ProfileCtrl) loader.getController();
-		//init controller user
-		//ctrl.setUser(displayUser);
 
 		//return window to show
 		return stage;
