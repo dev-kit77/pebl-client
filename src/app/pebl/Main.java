@@ -429,7 +429,11 @@ public class Main extends Application {
 		obj.put("username", username.toLowerCase());
 		JSONObject response = connect.request("profileGet", obj);
 		if (response != null) {
-		User profile = parseUser(response);
+			User profile = parseUser(response);
+			if (profile.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
+				Config.getInstance().setCurrentUser(profile);
+			}
+
 		return profile;
 		}
 		else {
