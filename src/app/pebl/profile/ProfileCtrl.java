@@ -40,6 +40,9 @@ public class ProfileCtrl extends Controller {
 	MenuItem follow;
 	@FXML
 	Button btnFollow;
+	@FXML
+	MenuItem logout;
+
 	private boolean followed;
 
 	public void refresh() {
@@ -72,7 +75,7 @@ public class ProfileCtrl extends Controller {
 						lblUsername.setText(displayUser.getUsername());
 
 						//check if user has status
-						if (displayUser.getStatus() != null) {
+						if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
 							//show label
 							lblStatus.setVisible(true);
 
@@ -145,12 +148,14 @@ public class ProfileCtrl extends Controller {
 			//current user
 			edit.setVisible(true);
 			follow.setVisible(false);
+			logout.setVisible(true);
 			btnFollow.setVisible(false);
 		}
 		else {
 			//other user
 			edit.setVisible(false);
 			follow.setVisible(true);
+			logout.setVisible(false);
 			btnFollow.setVisible(true);
 		}
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
@@ -15,15 +15,17 @@
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
-                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" text="Refresh" onAction="#refresh"/>
-                  <MenuItem mnemonicParsing="false" text="Close" onAction="#closeWindow"/>
+                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+                   <MenuItem fx:id="logout" mnemonicParsing="false" onAction="#logout" text="Log Out" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#closeWindow" text="Close" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="View">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Connections" onAction="#showConnections"/>
-                  <MenuItem mnemonicParsing="false" text="Profile" onAction="#showProfile"/>
-                  <MenuItem mnemonicParsing="false" text="Leaderboard" onAction="#showLeaderboard"/>
+                  <MenuItem mnemonicParsing="false" onAction="#showConnections" text="Connections" />
+                  <MenuItem mnemonicParsing="false" onAction="#showProfile" text="Profile" />
+                  <MenuItem mnemonicParsing="false" onAction="#showLeaderboard" text="Leaderboard" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">

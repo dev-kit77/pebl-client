@@ -1,5 +1,6 @@
 package app.pebl.prompts;
 
+import app.pebl.Config;
 import app.pebl.Controller;
 import app.pebl.Main;
 import app.pebl.connections.CardCtrl;
@@ -9,6 +10,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -20,6 +22,7 @@ public class LeaderboardCtrl extends Controller {
 	@FXML Label lblCurrSkips;
 	@FXML Label lblCurrStatus;
 	@FXML VBox feedBoard;
+	@FXML MenuItem logout;
 
 	private User currUser;
 
@@ -54,7 +57,7 @@ public class LeaderboardCtrl extends Controller {
 						lblCurrSkips.setText("(" + currUser.getSkips() + " Skips)");
 
 						//check if user has status
-						if (currUser.getStatus() != null) {
+						if (currUser.getStatus() != null && !currUser.getStatus().isEmpty()) {
 							//show label
 							lblCurrStatus.setVisible(true);
 
@@ -134,7 +137,20 @@ public class LeaderboardCtrl extends Controller {
 	}
 
 	public void setUser(User newUser) {
+		//set user
 		currUser = newUser;
+
+		//hide/show logout
+		if (currUser.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
+			//current user
+			logout.setVisible(true);
+		}
+		else {
+			//other user
+			logout.setVisible(false);
+		}
+
+		//refresh
 		this.refresh();
 	}
 
