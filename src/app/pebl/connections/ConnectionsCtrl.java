@@ -1,6 +1,5 @@
 package app.pebl.connections;
 
-import app.pebl.Config;
 import app.pebl.Controller;
 import app.pebl.Main;
 import app.pebl.profile.User;
@@ -17,9 +16,9 @@ import java.util.ArrayList;
 public class ConnectionsCtrl extends Controller {
 	private User displayUser;
 
-	@FXML VBox fedMutuals;
-	@FXML VBox fedFollowers;
-	@FXML VBox fedFollowing;
+	@FXML VBox feedMutuals;
+	@FXML VBox feedFollowers;
+	@FXML VBox feedFollowing;
 	@FXML Label lblCurrUsername;
 	@FXML Label lblCurrSkips;
 	@FXML Label lblCurrStatus;
@@ -54,6 +53,11 @@ public class ConnectionsCtrl extends Controller {
 				ArrayList<String> following = displayUser.getFollowing();
 				ArrayList<String> followers = displayUser.getFollowers();
 
+				//clear feeds
+				feedMutuals.getChildren().clear();
+				feedFollowers.getChildren().clear();
+				feedFollowing.getChildren().clear();
+
 				//loop for all followers
 				for (String follower : followers) {
 					//print to log
@@ -71,7 +75,7 @@ public class ConnectionsCtrl extends Controller {
 								public void run() {
 									try {
 										//attempt to add card
-										addCard(fedFollowers, addUsr);
+										addCard(feedFollowers, addUsr);
 									} catch (Exception e) {
 										//print stack to console
 										e.printStackTrace();
@@ -108,7 +112,7 @@ public class ConnectionsCtrl extends Controller {
 								public void run() {
 									try {
 										//attempt to add card
-										addCard(fedFollowing, addUsr);
+										addCard(feedFollowing, addUsr);
 									} catch (Exception e) {
 										//print stack to console
 										e.printStackTrace();
@@ -145,7 +149,7 @@ public class ConnectionsCtrl extends Controller {
 								public void run() {
 									try {
 										//attempt to add card
-										addCard(fedMutuals, addUsr);
+										addCard(feedMutuals, addUsr);
 									} catch (Exception e) {
 										//print stack to console
 										e.printStackTrace();
@@ -200,9 +204,6 @@ public class ConnectionsCtrl extends Controller {
 
 		//create new hbox
 		loader.setRoot(new HBox());
-
-		//reset vbox
-		list.getChildren().removeAll();
 
 		//add to vbox
 		list.getChildren().add(loader.load());

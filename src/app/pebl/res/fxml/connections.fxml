@@ -78,7 +78,7 @@
                <content>
                   <ScrollPane hbarPolicy="NEVER">
                      <content>
-                        <VBox fx:id="fedMutuals" />
+                        <VBox fx:id="feedMutuals" />
                      </content>
                   </ScrollPane>
                </content>
@@ -90,7 +90,7 @@
                <content>
                   <ScrollPane hbarPolicy="NEVER">
                      <content>
-                        <VBox fx:id="fedFollowing" />
+                        <VBox fx:id="feedFollowing" />
                      </content>
                   </ScrollPane>
                </content>
@@ -102,7 +102,7 @@
                <content>
                   <ScrollPane hbarPolicy="NEVER">
                      <content>
-                        <VBox fx:id="fedFollowers" />
+                        <VBox fx:id="feedFollowers" />
                      </content>
                   </ScrollPane>
                </content>
