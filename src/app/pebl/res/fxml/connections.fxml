@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -19,15 +18,15 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" text="Refresh" onAction="#refresh" />
+                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
                   <MenuItem fx:id="btnClose" mnemonicParsing="false" onAction="#closeWindow" text="Close" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="View">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Connections" onAction="#showConnections"/>
-                  <MenuItem mnemonicParsing="false" text="Profile" onAction="#showProfile" />
-                  <MenuItem mnemonicParsing="false" text="Leaderboard" onAction="#showLeaderboard" />
+                  <MenuItem mnemonicParsing="false" onAction="#showConnections" text="Connections" />
+                  <MenuItem mnemonicParsing="false" onAction="#showProfile" text="Profile" />
+                  <MenuItem mnemonicParsing="false" onAction="#showLeaderboard" text="Leaderboard" />
                </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -41,7 +40,7 @@
           <children>
               <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
                   <children>
-                      <Label id="lblDispName" fx:id="lblCurrUsername" focusTraversable="false" text="Display name" onMouseClicked="#showProfile" textFill="#2a3e45">
+                      <Label id="lblDispName" fx:id="lblCurrUsername" focusTraversable="false" onMouseClicked="#showProfile" text="Display name" textFill="#2a3e45">
                           <font>
                               <Font name="Bold" size="14.0" />
                           </font>
@@ -77,7 +76,7 @@
                   <Font name="Roboto Condensed Regular" size="13.0" />
                </font>
                <content>
-                  <ScrollPane>
+                  <ScrollPane hbarPolicy="NEVER">
                      <content>
                         <VBox fx:id="fedMutuals" />
                      </content>
@@ -89,7 +88,7 @@
                   <Font name="Roboto Condensed Regular" size="13.0" />
                </font>
                <content>
-                  <ScrollPane>
+                  <ScrollPane hbarPolicy="NEVER">
                      <content>
                         <VBox fx:id="fedFollowing" />
                      </content>
@@ -101,7 +100,7 @@
                   <Font name="Roboto Condensed Regular" size="13.0" />
                </font>
                <content>
-                  <ScrollPane>
+                  <ScrollPane hbarPolicy="NEVER">
                      <content>
                         <VBox fx:id="fedFollowers" />
                      </content>
