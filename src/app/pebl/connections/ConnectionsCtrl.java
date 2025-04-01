@@ -9,12 +9,13 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -23,9 +24,9 @@ public class ConnectionsCtrl extends Controller {
 	@FXML private VBox feedMutuals;
 	@FXML private VBox feedFollowers;
 	@FXML private VBox feedFollowing;
-	@FXML private Label lblCurrUsername;
-	@FXML private Label lblCurrSkips;
-	@FXML private Label lblCurrStatus;
+	@FXML private Text lblCurrUsername;
+	@FXML private Text lblCurrSkips;
+	@FXML private Text lblCurrStatus;
 	@FXML private TitledPane lblMutuals;
 	@FXML private MenuItem logout;
 	@FXML private MenuItem leaderboard;

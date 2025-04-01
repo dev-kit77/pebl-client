@@ -5,13 +5,15 @@ import app.pebl.data.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
+
 import java.io.IOException;
 
 public class CardCtrl extends HBox {
 	//fxml elements
-	@FXML private Label lblUsername;
-	@FXML private Label lblSkips;
-	@FXML private Label lblStatus;
+	@FXML private Text lblUsername;
+	@FXML private Text lblSkips;
+	@FXML private Text lblStatus;
 
 	//class fields
 	private User displayUser;

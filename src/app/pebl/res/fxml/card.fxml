@@ -5,30 +5,31 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <fx:root alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="200.0" spacing="5.0" type="HBox" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.connections.CardCtrl">
    <children>
       <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
          <children>
-            <Label fx:id="lblUsername" focusTraversable="true" onMouseClicked="#showProfile" text="username" textFill="#2a3e45">
+            <Text fx:id="lblUsername" styleClass="username" focusTraversable="true" onMouseClicked="#showProfile" text="username">
                <font>
                   <Font name="Bold" size="14.0" />
                </font>
-            </Label>
+            </Text>
             <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                <children>
-                  <Label fx:id="lblSkips" text="(0 Skips)">
+                  <Text fx:id="lblSkips" text="(0 Skips)">
                      <font>
                         <Font size="10.0" />
                      </font>
-                  </Label>
+                  </Text>
                </children>
             </HBox>
-            <Label id="lblStatus" fx:id="lblStatus" text="Lorem Ipsum" textFill="#2a3e45" wrapText="true">
+            <Text id="lblStatus" fx:id="lblStatus" text="Lorem Ipsum">
                <font>
                   <Font size="12.0" />
                </font>
-            </Label>
+            </Text>
          </children>
          <padding>
             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />

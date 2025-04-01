@@ -42,7 +42,7 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
                <children>
-                  <Text fx:id="lblCurrUsername" focusTraversable="true" onMouseClicked="#showProfile" text="username">
+                  <Text fx:id="lblCurrUsername" styleClass="username" focusTraversable="true" onMouseClicked="#showProfile" text="username">
                      <font>
                         <Font name="Bold" size="14.0" />
                      </font>

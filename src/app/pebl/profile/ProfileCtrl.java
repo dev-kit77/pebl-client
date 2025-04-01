@@ -16,6 +16,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 
 public class ProfileCtrl extends Controller {
 	//fxml imports
-	@FXML private Label lblUsername;
+	@FXML private Text lblUsername;
 	@FXML private Label lblStatus;
 	@FXML private Label lblFollowers;
 	@FXML private Label lblFollowing;

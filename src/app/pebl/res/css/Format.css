@@ -7,11 +7,19 @@
 }
 
 .root {
-	-color: #c9e6f0;
-	-background-color: #c9e6f0;
 	-fx-background-color: #c9e6f0;
-	-fx-text-fill: #2a3e45;
 	-fx-font-family: "Roboto Condensed", sans-serif;
+}
+
+.username {
+	-fx-fill: #2a3e45;
+}
+.username:hover {
+	-fx-fill: #31b1de;
+}
+
+.text {
+	-fx-fill: #2a3e45;
 }
 
 .label {
