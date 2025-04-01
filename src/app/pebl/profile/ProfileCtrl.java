@@ -73,57 +73,67 @@ public class ProfileCtrl extends Controller {
 					});
 				}
 
-				//update gui
-				Platform.runLater(new Runnable() {
-					@Override public void run() {
-						//update fields
-						lblUsername.setText(displayUser.getUsername());
+				if (displayUser != null) {
+					//update gui
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//update fields
+							lblUsername.setText(displayUser.getUsername());
 
-						//check if user has status
-						if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
-							//show label
-							lblStatus.setVisible(true);
+							//check if user has status
+							if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
+								//show label
+								lblStatus.setVisible(true);
 
-							//set status
-							lblStatus.setText("\"" + displayUser.getStatus() + "\"");
+								//set status
+								lblStatus.setText("\"" + displayUser.getStatus() + "\"");
+							} else {
+								//hide label
+								lblStatus.setVisible(false);
+							}
+
+							lblFollowers.setText(displayUser.getFollowers().size() + " Followers");
+							lblFollowing.setText(displayUser.getFollowing().size() + " Following");
+							lblSkips.setText(displayUser.getSkips() + " Skips");
+							lblAge.setText("Age " + displayUser.getAge());
+
+							//set swedish gender (dont ask)
+							if (displayUser.getGender()) {
+								lblGender.setText("Gendered");
+							} else {
+								lblGender.setText("No Gender");
+							}
+
+							//update follow button
+							if (Config.getInstance().getCurrentUser().getFollowers().contains(displayUser.getUsername())) {
+								//update buttons
+								btnFollow.setText("Unfollow");
+								follow.setText("Unfollow");
+
+								//update variable
+								followed = true;
+							} else {
+								//update buttons
+								btnFollow.setText("Follow");
+								follow.setText("Follow");
+
+								//update variable
+								followed = false;
+							}
 						}
-						else {
-							//hide label
-							lblStatus.setVisible(false);
+					});
+				}
+				//null return from server
+				else {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show error as no profile retrieved
+							showError("Profile Error", "Error fetching Profile from Server. Please try again later.");
 						}
-
-						lblFollowers.setText(displayUser.getFollowers().size() + " Followers");
-						lblFollowing.setText(displayUser.getFollowing().size() + " Following");
-						lblSkips.setText(displayUser.getSkips() + " Skips");
-						lblAge.setText("Age " + displayUser.getAge());
-
-						//set swedish gender (dont ask)
-						if (displayUser.getGender()) {
-							lblGender.setText("Gendered");
-						}
-						else {
-							lblGender.setText("No Gender");
-						}
-
-						//update follow button
-						if (Config.getInstance().getCurrentUser().getFollowers().contains(displayUser.getUsername())) {
-							//update buttons
-							btnFollow.setText("Unfollow");
-							follow.setText("Unfollow");
-
-							//update variable
-							followed = true;
-						}
-						else {
-							//update buttons
-							btnFollow.setText("Follow");
-							follow.setText("Follow");
-
-							//update variable
-							followed = false;
-						}
-					}
-				});
+					});
+				}
 
 				//empty return
 				return null;
@@ -195,11 +205,16 @@ public class ProfileCtrl extends Controller {
 					//print stack to console
 					e.printStackTrace();
 
-					//show error message
-					showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
 
-					//exit app
-					Platform.exit();
+							//exit program
+							Platform.exit();
+						}
+					});
 				}
 
 				//if follow was succesful

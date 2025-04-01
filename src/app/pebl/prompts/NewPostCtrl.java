@@ -23,11 +23,16 @@ public class NewPostCtrl extends Controller {
 					//print stack to console
 					e.printStackTrace();
 
-					//show error message
-					showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
 
-					//exit app
-					Platform.exit();
+							//exit program
+							Platform.exit();
+						}
+					});
 				}
 
 				//show error if not successful

@@ -57,11 +57,16 @@ public class PostsCtrl extends Controller {
 					//print stack to console
 					e.printStackTrace();
 
-					//show error message
-					showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
 
-					//exit app
-					Platform.exit();
+							//exit program
+							Platform.exit();
+						}
+					});
 				}
 
 				//check that get succeeded
@@ -90,11 +95,16 @@ public class PostsCtrl extends Controller {
 											//print stack to console
 											e.printStackTrace();
 
-											//show error message
-											showError("Exception in pebl client", e.getMessage());
+											Platform.runLater(new Runnable() {
+												@Override
+												public void run() {
+													//show general error
+													showError("Exception in pebl client", e.getMessage());
 
-											//exit app
-											Platform.exit();
+													//exit program
+													Platform.exit();
+												}
+											});
 										}
 									}
 								});
@@ -103,13 +113,28 @@ public class PostsCtrl extends Controller {
 							//print stack to console
 							e.printStackTrace();
 
-							//show error message
-							showError("Exception in pebl client", e.getMessage());
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									//show general error
+									showError("Exception in pebl client", e.getMessage());
 
-							//exit app
-							Platform.exit();
+									//exit program
+									Platform.exit();
+								}
+							});
 						}
 					}
+				}
+				//null return from get
+				else {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show error as no posts retrieved
+							showError("Posts Error", "Error fetching Posts from Server. Please try again later.");
+						}
+					});
 				}
 
 				//end task with null return

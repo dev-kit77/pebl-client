@@ -93,7 +93,7 @@ public class EditCtrl extends Controller {
 						Platform.runLater(new Runnable() {
 							@Override public void run() {
 								//show unspecific error (I have no access to what the error actually is because all I get is a boolean even though the error is given in the response)
-								showError("Sign-up Error", "There was an issue with your edit. Please try other details.");
+								showError("Edit Error", "There was an issue with your edit. Please try other details.");
 							}
 						});
 					}

@@ -125,6 +125,16 @@ public class LeaderboardCtrl extends Controller {
 						});
 					}
 				}
+				//null return from server
+				else {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show error as no leaderboard retrieved
+							showError("Leaderboard Error", "Error fetching Leaderboard from Server. Please try again later.");
+						}
+					});
+				}
 
 				//end thread
 				return null;

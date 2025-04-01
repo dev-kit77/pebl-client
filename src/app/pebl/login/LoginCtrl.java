@@ -83,6 +83,9 @@ public class LoginCtrl extends Controller {
 							public void run() {
 								//show login error
 								showError("Login failed", "Please check your Username and Password and try again.");
+
+								//clear password
+								password.setText("");
 							}
 						});
 					}

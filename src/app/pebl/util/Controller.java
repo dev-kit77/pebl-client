@@ -1,6 +1,7 @@
 package app.pebl.util;
 
 import app.pebl.Main;
+import app.pebl.data.User;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -70,16 +71,37 @@ public class Controller {
 			public Void call() {
 				try {
 					//refresh current user from server
-					Config.getInstance().setCurrentUser(Main.getProfile(Config.getInstance().getCurrentUser().getUsername()));
+					User updated = Main.getProfile(Config.getInstance().getCurrentUser().getUsername());
+
+					//check if updated user has value
+					if (updated != null) {
+						Config.getInstance().setCurrentUser(updated);
+					}
+					//null return from server
+					else {
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								//display user update error
+								showError("User Update Error", "Error fetching current user from server. Please try again later.");
+							}
+						});
+					}
+
 				} catch (Exception e) {
 					//print stack to console
 					e.printStackTrace();
 
-					//show error message
-					showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
 
-					//exit app
-					Platform.exit();
+							//exit program
+							Platform.exit();
+						}
+					});
 				}
 
 				//return to end task

@@ -32,11 +32,16 @@ public class PostCtrl extends VBox {
 					//print stack to console
 					e.printStackTrace();
 
-					//show error message
-					showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
 
-					//exit app
-					Platform.exit();
+							//exit program
+							Platform.exit();
+						}
+					});
 				}
 
 				//check that get succeeded
@@ -70,6 +75,16 @@ public class PostCtrl extends VBox {
 						}
 					});
 				}
+				//failed to get post
+				else {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//display post error
+							showError("Post Error", "Error fetching Post from Server. Please try again later.");
+						}
+					});
+				}
 
 				//end task with null return
 				return null;
@@ -91,11 +106,16 @@ public class PostCtrl extends VBox {
 					//print stack to console
 					e.printStackTrace();
 
-					//show error message
-					showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
 
-					//exit app
-					Platform.exit();
+							//exit program
+							Platform.exit();
+						}
+					});
 				}
 
 				Platform.runLater(new Runnable() {

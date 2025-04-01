@@ -71,11 +71,17 @@ public class ConnectionsCtrl extends Controller {
 					//print stack to console
 					e.printStackTrace();
 
-					//show error message
-					showError("Exception in pebl client", e.getMessage());
+					//update GUI
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
 
-					//exit app
-					Platform.exit();
+							//exit program
+							Platform.exit();
+						}
+					});
 				}
 
 				//get connections lists
@@ -115,11 +121,17 @@ public class ConnectionsCtrl extends Controller {
 											//print stack to console
 											e.printStackTrace();
 
-											//show error message
-											showError("Exception in pebl client", e.getMessage());
+											//update GUI
+											Platform.runLater(new Runnable() {
+												@Override
+												public void run() {
+													//show general error
+													showError("Exception in pebl client", e.getMessage());
 
-											//exit app
-											Platform.exit();
+													//exit program
+													Platform.exit();
+												}
+											});
 										}
 									}
 								});
@@ -128,11 +140,17 @@ public class ConnectionsCtrl extends Controller {
 							//print stack to console
 							e.printStackTrace();
 
-							//show error message
-							showError("Exception in pebl client", e.getMessage());
+							//update GUI
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									//show general error
+									showError("Exception in pebl client", e.getMessage());
 
-							//exit app
-							Platform.exit();
+									//exit program
+									Platform.exit();
+								}
+							});
 						}
 					}
 				}
@@ -169,11 +187,17 @@ public class ConnectionsCtrl extends Controller {
 											//print stack to console
 											e.printStackTrace();
 
-											//show error message
-											showError("Exception in pebl client", e.getMessage());
+											//update GUI
+											Platform.runLater(new Runnable() {
+												@Override
+												public void run() {
+													//show general error
+													showError("Exception in pebl client", e.getMessage());
 
-											//exit app
-											Platform.exit();
+													//exit program
+													Platform.exit();
+												}
+											});
 										}
 									}
 								});
@@ -182,11 +206,17 @@ public class ConnectionsCtrl extends Controller {
 							//print stack to console
 							e.printStackTrace();
 
-							//show error message
-							showError("Exception in pebl client", e.getMessage());
+							//update GUI
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									//show general error
+									showError("Exception in pebl client", e.getMessage());
 
-							//exit app
-							Platform.exit();
+									//exit program
+									Platform.exit();
+								}
+							});
 						}
 					}
 				}
@@ -223,11 +253,17 @@ public class ConnectionsCtrl extends Controller {
 											//print stack to console
 											e.printStackTrace();
 
-											//show error message
-											showError("Exception in pebl client", e.getMessage());
+											//update GUI
+											Platform.runLater(new Runnable() {
+												@Override
+												public void run() {
+													//show general error
+													showError("Exception in pebl client", e.getMessage());
 
-											//exit app
-											Platform.exit();
+													//exit program
+													Platform.exit();
+												}
+											});
 										}
 									}
 								});
@@ -236,11 +272,17 @@ public class ConnectionsCtrl extends Controller {
 							//print stack to console
 							e.printStackTrace();
 
-							//show error message
-							showError("Exception in pebl client", e.getMessage());
+							//update GUI
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									//show general error
+									showError("Exception in pebl client", e.getMessage());
 
-							//exit app
-							Platform.exit();
+									//exit program
+									Platform.exit();
+								}
+							});
 						}
 					}
 				}
