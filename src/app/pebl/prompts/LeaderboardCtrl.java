@@ -131,7 +131,7 @@ public class LeaderboardCtrl extends Controller {
 
 	public void addCard(VBox list, User addUser) throws IOException {
 		//get fxml loader
-		FXMLLoader loader = Main.getFXML("miniProfile");
+		FXMLLoader loader = Main.getFXML("card");
 
 		loader.setRoot(new HBox());
 

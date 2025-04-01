@@ -252,7 +252,7 @@ public class ConnectionsCtrl extends Controller {
 
 	public void addCard(VBox list, User addUser) throws IOException {
 		//get fxml loader
-		FXMLLoader loader = Main.getFXML("miniProfile");
+		FXMLLoader loader = Main.getFXML("card");
 
 		//create new hbox
 		loader.setRoot(new HBox());
