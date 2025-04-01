@@ -183,10 +183,10 @@ public class Main extends Application {
 					System.out.println("Config Saving Failed");
 				}
 
-				//update GUI with wait cursor
+				//update GUI with default cursor
 				Platform.runLater(() -> {
 					//show general error
-					primaryStage.getScene().setCursor(Cursor.WAIT);
+					primaryStage.getScene().setCursor(Cursor.DEFAULT);
 				});
 
 				//empty return
@@ -256,7 +256,7 @@ public class Main extends Application {
 				//update GUI with wait cursor
 				Platform.runLater(() -> {
 					//show general error
-					primaryStage.getScene().setCursor(Cursor.WAIT);
+					primaryStage.getScene().setCursor(Cursor.DEFAULT);
 				});
 
 				//empty return

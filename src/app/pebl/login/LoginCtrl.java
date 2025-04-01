@@ -55,11 +55,6 @@ public class LoginCtrl extends Controller {
 				boolean online = false;
 				boolean success = false;
 
-				Platform.runLater(() -> {
-					//set wait cursor
-					layoutParent.getScene().setCursor(Cursor.WAIT);
-				});
-
 				//authenticate user with server
 				try {
 					//check server connection
