@@ -27,6 +27,7 @@ public class ConnectionsCtrl extends Controller {
 	@FXML private Label lblCurrStatus;
 	@FXML private TitledPane lblMutuals;
 	@FXML private MenuItem logout;
+	@FXML private MenuItem leaderboard;
 
 	//class fields
 	private User displayUser;
@@ -172,8 +173,15 @@ public class ConnectionsCtrl extends Controller {
 		//set user
 		displayUser = newUser;
 
-		//hide/show logout
-		logout.setVisible(displayUser.getUsername().equals(Config.getInstance().getCurrentUser().getUsername()));
+		//hide/show items
+		if (displayUser.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
+			logout.setVisible(true);
+			leaderboard.setVisible(true);
+		}
+		else {
+			logout.setVisible(false);
+			leaderboard.setVisible(false);
+		}
 
 		//refresh data
 		this.refresh();

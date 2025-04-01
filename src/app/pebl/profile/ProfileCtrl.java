@@ -35,6 +35,7 @@ public class ProfileCtrl extends Controller {
 	@FXML private MenuItem follow;
 	@FXML private Button btnFollow;
 	@FXML private MenuItem logout;
+	@FXML private MenuItem leaderboard;
 
 	//class fields
 	User displayUser;
@@ -213,12 +214,13 @@ public class ProfileCtrl extends Controller {
 	public void setUser(User newUser) {
 		displayUser = newUser;
 
-		//hide/show edit profile button
+		//hide/show items if current user
 		if (displayUser.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
 			//current user
 			edit.setVisible(true);
 			follow.setVisible(false);
 			logout.setVisible(true);
+			leaderboard.setVisible(true);
 			btnFollow.setVisible(false);
 		}
 		else {
@@ -226,6 +228,7 @@ public class ProfileCtrl extends Controller {
 			edit.setVisible(false);
 			follow.setVisible(true);
 			logout.setVisible(false);
+			leaderboard.setVisible(false);
 			btnFollow.setVisible(true);
 		}
 
