@@ -23,18 +23,11 @@ public class Controller {
 			//refresh current user from server
 			User updated = Main.getProfile(Config.getInstance().getCurrentUser().getUsername());
 
-			//check if updated user has value
-			if (updated != null) {
-				Config.getInstance().setCurrentUser(updated);
+			//check if updated user is null
+			if (updated == null) {
+				//display user update error
+				showError("User Update Error", "Error fetching current user from server. Please try again later.");
 			}
-			//null return from server
-			else {
-				Platform.runLater(() -> {
-					//display user update error
-					showError("User Update Error", "Error fetching current user from server. Please try again later.");
-				});
-			}
-
 		} catch (Exception e) {
 			//print stack to console
 			e.printStackTrace();

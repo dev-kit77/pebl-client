@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
@@ -36,6 +37,12 @@ public class ConnectionsCtrl extends Controller {
 		//get user data
 		Task<Void> userRefresh = new Task<>() {
 			@Override public Void call() {
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.WAIT);
+				});
+
 				//refresh current user
 				refreshUser();
 
@@ -106,6 +113,12 @@ public class ConnectionsCtrl extends Controller {
 
 				//check if loop needs run
 				addCards(followers, feedFollowers);
+
+				//update GUI with default cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.DEFAULT);
+				});
 
 				//end task with null return
 				return null;

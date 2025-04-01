@@ -6,6 +6,7 @@ import app.pebl.util.Config;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
@@ -25,6 +26,12 @@ public class PostCtrl extends VBox {
 		//get post data
 		Task<Void> postRefresh = new Task<>() {
 			@Override public Void call() {
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					lblUsername.getScene().setCursor(Cursor.WAIT);
+				});
+
 				try {
 					//get post from server
 					post = Main.getPost(post.getId());
@@ -72,6 +79,12 @@ public class PostCtrl extends VBox {
 					});
 				}
 
+				//update GUI with default cursor
+				Platform.runLater(() -> {
+					//show general error
+					lblUsername.getScene().setCursor(Cursor.DEFAULT);
+				});
+
 				//end task with null return
 				return null;
 			}
@@ -85,6 +98,12 @@ public class PostCtrl extends VBox {
 		//get user data
 		Task<Void> skip = new Task<>() {
 			@Override public Void call() {
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					lblUsername.getScene().setCursor(Cursor.WAIT);
+				});
+
 				try {
 					//send like to server
 					Main.like(post.getId());
@@ -102,6 +121,12 @@ public class PostCtrl extends VBox {
 				}
 
 				Platform.runLater(() -> refresh());
+
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					lblUsername.getScene().setCursor(Cursor.DEFAULT);
+				});
 
 				//end task
 				return null;

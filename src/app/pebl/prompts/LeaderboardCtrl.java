@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
@@ -32,6 +33,12 @@ public class LeaderboardCtrl extends Controller {
 		//get user data
 		Task<Void> leaderboardRefresh = new Task<>() {
 			@Override public Void call() {
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.WAIT);
+				});
+
 				//refresh current user
 				refreshUser();
 
@@ -131,6 +138,12 @@ public class LeaderboardCtrl extends Controller {
 						showError("Leaderboard Error", "Error fetching Leaderboard from Server. Please try again later.");
 					});
 				}
+
+				//update GUI with default cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.DEFAULT);
+				});
 
 				//end thread
 				return null;

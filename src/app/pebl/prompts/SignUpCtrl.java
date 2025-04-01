@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 
 public class SignUpCtrl extends Controller {
@@ -59,8 +60,13 @@ public class SignUpCtrl extends Controller {
 		else {
 			//submit form
 			Task<Void> createUser = new Task<>() {
-				@Override
-				public Void call() {
+				@Override public Void call() {
+					//update GUI with wait cursor
+					Platform.runLater(() -> {
+						//show general error
+						layoutParent.getScene().setCursor(Cursor.WAIT);
+					});
+
 					//init check variable
 					boolean success = false;
 
@@ -94,6 +100,12 @@ public class SignUpCtrl extends Controller {
 							showError("Sign-up Error", "There was an issue with your account creation. Please try other details.");
 						});
 					}
+
+					//update GUI with default cursor
+					Platform.runLater(() -> {
+						//show general error
+						layoutParent.getScene().setCursor(Cursor.DEFAULT);
+					});
 
 					//null return to end thread
 					return null;

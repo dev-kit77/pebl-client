@@ -12,6 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -54,6 +55,12 @@ public class ProfileCtrl extends Controller {
 		//get user data
 		Task<Void> profileRefresh = new Task<>() {
 			@Override public Void call() {
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.WAIT);
+				});
+
 				//refresh current user
 				refreshUser();
 
@@ -190,6 +197,12 @@ public class ProfileCtrl extends Controller {
 					}
 				}
 
+				//update GUI with default cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.DEFAULT);
+				});
+
 				//empty return
 				return null;
 			}
@@ -239,8 +252,13 @@ public class ProfileCtrl extends Controller {
 	public void toggleFollow() {
 		//get user data
 		Task<Void> userRefresh = new Task<>() {
-			@Override
-			public Void call() {
+			@Override public Void call() {
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.WAIT);
+				});
+
 				boolean success = false;
 
 				try {

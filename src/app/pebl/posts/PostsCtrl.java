@@ -11,6 +11,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
@@ -72,6 +73,12 @@ public class PostsCtrl extends Controller {
 		//get user data
 		Task<Void> feedRefresh = new Task<>() {
 			@Override public Void call() {
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.WAIT);
+				});
+
 				//refresh current user
 				refreshUser();
 
@@ -265,6 +272,12 @@ public class PostsCtrl extends Controller {
 						showError("Posts Error", "Error fetching Posts from Server. Please try again later.");
 					});
 				}
+
+				//update GUI with default cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.DEFAULT);
+				});
 
 				//end task with null return
 				return null;

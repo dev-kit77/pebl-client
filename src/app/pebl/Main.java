@@ -13,6 +13,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
@@ -166,6 +167,12 @@ public class Main extends Application {
 	public void stop() {
 		Task<Void> shutdownTask = new Task<>() {
 			@Override public Void call() {
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					primaryStage.getScene().setCursor(Cursor.WAIT);
+				});
+
 				//save config file
 				boolean success = Config.getInstance().save(".pebl.cfg");
 
@@ -175,6 +182,12 @@ public class Main extends Application {
 				else {
 					System.out.println("Config Saving Failed");
 				}
+
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					primaryStage.getScene().setCursor(Cursor.WAIT);
+				});
 
 				//empty return
 				return null;
@@ -205,6 +218,12 @@ public class Main extends Application {
 		//get user from server
 		Task<Void> getUser = new Task<>() {
 			@Override public Void call() {
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					primaryStage.getScene().setCursor(Cursor.WAIT);
+				});
+
 				try {
 					//get user from username
 					User viewUser = Main.getProfile(username);
@@ -233,6 +252,12 @@ public class Main extends Application {
 						Platform.exit();
 					});
 				}
+
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					primaryStage.getScene().setCursor(Cursor.WAIT);
+				});
 
 				//empty return
 				return null;

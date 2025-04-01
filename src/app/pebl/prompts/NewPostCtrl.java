@@ -5,6 +5,7 @@ import app.pebl.util.Controller;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.TextArea;
 
 public class NewPostCtrl extends Controller {
@@ -13,8 +14,13 @@ public class NewPostCtrl extends Controller {
 
 	public void handleSubmit() {
 		Task<Void> newPost = new Task<>() {
-			@Override
-			public Void call() {
+			@Override public Void call() {
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.WAIT);
+				});
+
 				//init success
 				boolean success = false;
 
@@ -45,6 +51,9 @@ public class NewPostCtrl extends Controller {
 
 				//update gui
 				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.DEFAULT);
+
 					//close window
 					closeWindow();
 				});

@@ -7,6 +7,7 @@ import app.pebl.data.User;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -49,8 +50,13 @@ public class EditCtrl extends Controller {
 		else {
 			//submit form
 			Task<Void> createUser = new Task<>() {
-				@Override
-				public Void call() {
+				@Override public Void call() {
+					//update GUI with wait cursor
+					Platform.runLater(() -> {
+						//show general error
+						layoutParent.getScene().setCursor(Cursor.WAIT);
+					});
+
 					//init check variable
 					boolean success = false;
 
@@ -84,6 +90,12 @@ public class EditCtrl extends Controller {
 							showError("Edit Error", "There was an issue with your edit. Please try other details.");
 						});
 					}
+
+					//update GUI with default cursor
+					Platform.runLater(() -> {
+						//show general error
+						layoutParent.getScene().setCursor(Cursor.DEFAULT);
+					});
 
 					//null return to end thread
 					return null;

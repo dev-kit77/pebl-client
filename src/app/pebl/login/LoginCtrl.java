@@ -44,8 +44,13 @@ public class LoginCtrl extends Controller {
 		Config.getInstance().setServerAddr(this.srvAddress);
 
 		Task<Void> authUser = new Task<>() {
-			@Override
-			public Void call() {
+			@Override public Void call() {
+				//update GUI with wait cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.WAIT);
+				});
+
 				//init conditions
 				boolean online = false;
 				boolean success = false;
@@ -113,6 +118,12 @@ public class LoginCtrl extends Controller {
 						Platform.exit();
 					});
 				}
+
+				//update GUI with default cursor
+				Platform.runLater(() -> {
+					//show general error
+					layoutParent.getScene().setCursor(Cursor.DEFAULT);
+				});
 
 				//end thread
 				return null;
