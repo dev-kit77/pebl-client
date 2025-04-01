@@ -275,6 +275,7 @@ public class Main extends Application {
 		//init stage
 		Stage stage = new Stage();
 		stage.setTitle("Profile");
+		stage.initOwner(primaryStage);
 
 		//get loader and load scene
 		FXMLLoader loader = getFXML("profile");
@@ -290,8 +291,10 @@ public class Main extends Application {
 	}
 
 	public static Stage initConnections(User displayUser) throws IOException {
+		//init stage
 		Stage stage = new Stage();
 		stage.setTitle("Connections");
+		stage.initOwner(primaryStage);
 
 		//get loader and load scene
 		FXMLLoader loader = getFXML("connections");
@@ -306,8 +309,10 @@ public class Main extends Application {
 	}
 
 	public static Stage initLeaderboard(User displayUser) throws IOException {
+		//init stage
 		Stage stage = new Stage();
 		stage.setTitle("Leaderboard");
+		stage.initOwner(primaryStage);
 
 		//get loader and load scene
 		FXMLLoader loader = getFXML("leaderboard");
@@ -325,6 +330,7 @@ public class Main extends Application {
 		//init stage
 		Stage stage = new Stage();
 		stage.setTitle("Latest Posts");
+
 		//load fxml
 		stage.setScene(new Scene(getFXML("posts").load()));
 
