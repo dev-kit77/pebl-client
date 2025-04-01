@@ -9,6 +9,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -20,15 +21,16 @@
    <top>
       <MenuBar opacity="0.9" prefHeight="16.0" prefWidth="250.0" style="-fx-use-system-menu-bar: true;" BorderPane.alignment="CENTER">
         <menus>
-          <Menu fx:id="config" mnemonicParsing="false" text="Configuration">
+          <Menu mnemonicParsing="false" text="File">
             <items>
-                <MenuItem fx:id="btnServer" mnemonicParsing="false" onAction="#serverPrompt" text="Set Server Address" />
-              <MenuItem fx:id="btnClose" mnemonicParsing="false" onAction="#closeWindow" text="Close" />
+                <MenuItem mnemonicParsing="false" onAction="#serverPrompt" text="Set Server Address" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem mnemonicParsing="false" onAction="#closeWindow" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem fx:id="btnAbout" mnemonicParsing="false" onAction="#showAbout" text="About" />
+              <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
             </items>
           </Menu>
         </menus>
@@ -37,7 +39,7 @@
    <bottom>
       <AnchorPane prefHeight="72.0" prefWidth="250.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnLogin" alignment="CENTER" defaultButton="true" layoutX="97.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleLogin" opacity="0.9" prefHeight="35.0" prefWidth="146.0" text="Login" textFill="#2a3e45">
+            <Button alignment="CENTER" defaultButton="true" layoutX="97.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleLogin" opacity="0.9" prefHeight="35.0" prefWidth="146.0" text="Login" textFill="#2a3e45">
                <font>
                   <Font size="14.0" />
                </font>
@@ -53,7 +55,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </CheckBox>
-            <Button fx:id="btnSignUp" alignment="CENTER" layoutX="9.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleSignUp" opacity="0.9" prefHeight="35.0" prefWidth="79.0" text="Sign Up" textFill="#2a3e45">
+            <Button alignment="CENTER" layoutX="9.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleSignUp" opacity="0.9" prefHeight="35.0" prefWidth="79.0" text="Sign Up" textFill="#2a3e45">
                <font>
                   <Font size="14.0" />
                </font>
@@ -78,7 +80,7 @@
                   <Image url="@../img/pebble.png" />
                </image>
             </ImageView>
-            <Label focusTraversable="false" layoutX="114.0" layoutY="20.0" prefHeight="98.0" prefWidth="126.0" stylesheets="@../css/Format.css" text="Pebl Network" textAlignment="CENTER" textFill="#2a3e45" wrapText="true">
+            <Label layoutX="114.0" layoutY="20.0" prefHeight="98.0" prefWidth="126.0" stylesheets="@../css/Format.css" text="Pebl Network" textAlignment="CENTER" textFill="#2a3e45" wrapText="true">
                <font>
                   <Font name="Roboto Condensed Italic" size="30.0" />
                </font>

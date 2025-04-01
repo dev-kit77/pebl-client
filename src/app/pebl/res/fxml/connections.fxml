@@ -7,6 +7,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -18,9 +19,10 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+                  <MenuItem mnemonicParsing="false" onAction="#refresh" text="Refresh" />
                   <MenuItem fx:id="logout" mnemonicParsing="false" onAction="#logout" text="Log Out" />
-                  <MenuItem fx:id="btnClose" mnemonicParsing="false" onAction="#closeWindow" text="Close" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#closeWindow" text="Close" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="View">
@@ -32,7 +34,7 @@
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-                  <MenuItem fx:id="btnAbout" mnemonicParsing="false" onAction="#showAbout" text="About" />
+                  <MenuItem  mnemonicParsing="false" onAction="#showAbout" text="About" />
             </items>
           </Menu>
         </menus>
@@ -55,7 +57,7 @@
                               </Label>
                           </children>
                       </HBox>
-                      <Label id="lblStatus" fx:id="lblCurrStatus" focusTraversable="false" text="Lorem Ipsum" textFill="#2a3e45" wrapText="true">
+                      <Label id="lblStatus" fx:id="lblCurrStatus" text="Lorem Ipsum" textFill="#2a3e45" wrapText="true">
                           <font>
                               <Font size="12.0" />
                           </font>
@@ -84,7 +86,7 @@
                   </ScrollPane>
                </content>
           </TitledPane>
-          <TitledPane prefWidth="200.0"  text="Following">
+          <TitledPane prefWidth="200.0" text="Following">
                <font>
                   <Font name="Roboto Condensed Regular" size="13.0" />
                </font>

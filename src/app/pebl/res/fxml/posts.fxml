@@ -17,7 +17,7 @@
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
-                  <MenuItem fx:id="btnRefresh" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+                  <MenuItem mnemonicParsing="false" onAction="#refresh" text="Refresh" />
                    <MenuItem fx:id="logout" mnemonicParsing="false" onAction="#logout" text="Log Out" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#closeWindow" text="Close" />
