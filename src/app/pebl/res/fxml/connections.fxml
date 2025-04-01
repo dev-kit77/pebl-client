@@ -74,7 +74,7 @@
       </HBox>
       <Accordion prefHeight="404.0" prefWidth="200.0" stylesheets="@../css/Format.css">
         <panes>
-          <TitledPane prefWidth="200.0" text="Mutuals">
+          <TitledPane fx:id="lblMutuals" prefWidth="200.0" text="Mutuals">
                <font>
                   <Font name="Roboto Condensed Regular" size="13.0" />
                </font>

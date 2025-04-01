@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class ConnectionsCtrl extends Controller {
 	@FXML private Label lblCurrUsername;
 	@FXML private Label lblCurrSkips;
 	@FXML private Label lblCurrStatus;
+	@FXML private TitledPane lblMutuals;
 	@FXML private MenuItem logout;
 
 	//class fields
@@ -59,11 +61,18 @@ public class ConnectionsCtrl extends Controller {
 							lblCurrStatus.setVisible(false);
 						}
 
+						if (!displayUser.equals(Config.getInstance().getCurrentUser())) {
+							lblMutuals.setText("Shared Follows");
+						}
+
 						//clear feeds
 						feedMutuals.getChildren().clear();
 						feedFollowers.getChildren().clear();
 						feedFollowing.getChildren().clear();
 					});
+
+					//set mutuals list
+					displayUser.setMutuals(Config.getInstance().getCurrentUser());
 				} catch (Exception e) {
 					//print stack to console
 					e.printStackTrace();
