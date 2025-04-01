@@ -6,12 +6,12 @@ import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.util.Properties;
-import java.util.Scanner;
 
 /**
  * Singleton Class for holding config information
  */
 public final class Config {
+	//init singleton
 	private final static Config instance;
 
     static {
@@ -22,13 +22,14 @@ public final class Config {
         }
     }
 
-
+	//class fields
 	private User currentUser;
 	private String authToken;
 	private String serverAddr;
 	private boolean cacheUser;
 	private String username;
 
+	//defaults
 	public final String defaultAddress = "https://pebl-api.fly.dev/";
 
 	public Config() throws InterruptedException {
@@ -55,9 +56,6 @@ public final class Config {
 
 			//print error
 			System.err.println("\033[1;91m" + "Err: Config file \".pebl.cfg\" does not exist. Creating..." + "\033[0m");
-
-			//create scanner object
-			Scanner scn = new Scanner(System.in);
 
 			//create file object
 			File cfgFile = new File(".pebl.cfg");
@@ -87,7 +85,7 @@ public final class Config {
 	 * @param filePath the path of the file to save to, as String.
 	 * @return boolean: true if successful, false if otherwise.
 	 */
-	public boolean load(String filePath) throws InterruptedException {
+	public boolean load(String filePath) {
 		//object declarations
 		FileInputStream reader;
 		Properties prop = new Properties();
@@ -142,19 +140,16 @@ public final class Config {
 		}
 		catch(IOException e) {
 			//update GUI
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					//show general error
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText("Exception in pebl client");
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
+			Platform.runLater(() -> {
+				//show general error
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Error");
+				alert.setHeaderText("Exception in pebl client");
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
 
-					//exit program
-					Platform.exit();
-				}
+				//exit program
+				Platform.exit();
 			});
 
 			//return false for failure
@@ -220,19 +215,16 @@ public final class Config {
 		}
 		catch(IOException e) {
 			//update GUI
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					//show general error
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText("Exception in pebl client");
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
+			Platform.runLater(() -> {
+				//show general error
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Error");
+				alert.setHeaderText("Exception in pebl client");
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
 
-					//exit program
-					Platform.exit();
-				}
+				//exit program
+				Platform.exit();
 			});
 
 			//return false for failure
@@ -240,6 +232,7 @@ public final class Config {
 		}
     }
 
+	//instance retrival
 	public static Config getInstance() {
 		return instance;
 	}

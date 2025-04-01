@@ -25,25 +25,24 @@ import java.util.concurrent.Executors;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-
-
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
 /**
  * Main class for GUI init
  */
-@SuppressWarnings("JavadocDeclaration")
 public class Main extends Application {
-	//Fields
+	//class fields
 	private static Stage primaryStage;
-	private final static Connect connect = new Connect();
 	public static ArrayList<Post> feed;
 	public static ArrayList<Post> filteredFeed; //used to temporarily store filtered feed
 	public static User viewedUser = null; //user that is not currentUser data is loaded here
 	public static ArrayList<User> leaderboard = null;
-	private final static ExecutorService executor = Executors.newSingleThreadExecutor();
 	public static ArrayList<String> closeFriends  = null;
+
+	//init static objects
+	private final static Connect connect = new Connect();
+	private final static ExecutorService executor = Executors.newSingleThreadExecutor();
 
     /**
 	 * start() method for the GUI. Initializes the login GUI.
@@ -59,31 +58,31 @@ public class Main extends Application {
 			//init bypassLogin
 			boolean bypassLogin = false;
 
-			/**
-			 * this code was the auto login but unfortunately it doesnt work
-			try {
-				//check auth token
-				bypassLogin = checkAuth();
-			} catch (Exception e) {
-				//print stack to log
-				e.printStackTrace();
 
-				//update GUI
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						//show general error
-						Alert alert = new Alert(Alert.AlertType.ERROR);
-						alert.setTitle("Error");
-						alert.setHeaderText("Exception in pebl client");
-						alert.setContentText(e.getMessage());
-						alert.showAndWait();
-
-						//exit program
-						Platform.exit();
-					}
-				});
-			}*/
+			//this code was the auto login but unfortunately it doesn't work due to the server setup atm
+//			try {
+//				//check auth token
+//				bypassLogin = checkAuth();
+//			} catch (Exception e) {
+//				//print stack to log
+//				e.printStackTrace();
+//
+//				//update GUI
+//				Platform.runLater(new Runnable() {
+//					@Override
+//					public void run() {
+//						//show general error
+//						Alert alert = new Alert(Alert.AlertType.ERROR);
+//						alert.setTitle("Error");
+//						alert.setHeaderText("Exception in pebl client");
+//						alert.setContentText(e.getMessage());
+//						alert.showAndWait();
+//
+//						//exit program
+//						Platform.exit();
+//					}
+//				});
+//			}
 
 			//update gui depending on login
 			if (bypassLogin) {
@@ -95,54 +94,24 @@ public class Main extends Application {
 						e.printStackTrace();
 
 						//update GUI
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								//show general error
-								Alert alert = new Alert(Alert.AlertType.ERROR);
-								alert.setTitle("Error");
-								alert.setHeaderText("Exception in pebl client");
-								alert.setContentText(e.getMessage());
-								alert.showAndWait();
+						Platform.runLater(() -> {
+							//show general error
+							Alert alert = new Alert(Alert.AlertType.ERROR);
+							alert.setTitle("Error");
+							alert.setHeaderText("Exception in pebl client");
+							alert.setContentText(e.getMessage());
+							alert.showAndWait();
 
-								//exit program
-								Platform.exit();
-							}
+							//exit program
+							Platform.exit();
 						});
 					}
 
 					//update gui
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							try	{
-								//show main windows
-								showMainWindows(primaryStage);
-							} catch (Exception e) {
-								//print stack to log
-								e.printStackTrace();
-
-								//show general error
-								Alert alert = new Alert(Alert.AlertType.ERROR);
-								alert.setTitle("Error");
-								alert.setHeaderText("Exception in pebl client");
-								alert.setContentText(e.getMessage());
-								alert.showAndWait();
-
-								//exit program
-								Platform.exit();
-							}
-						}
-					});
-				}
-			else {
-				//update gui
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
+					Platform.runLater(() -> {
 						try	{
 							//show main windows
-							showLogin(primaryStage);
+							showMainWindows(primaryStage);
 						} catch (Exception e) {
 							//print stack to log
 							e.printStackTrace();
@@ -157,6 +126,27 @@ public class Main extends Application {
 							//exit program
 							Platform.exit();
 						}
+					});
+				}
+			else {
+				//update gui
+				Platform.runLater(() -> {
+					try	{
+						//show main windows
+						showLogin(primaryStage);
+					} catch (Exception e) {
+						//print stack to log
+						e.printStackTrace();
+
+						//show general error
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText("Exception in pebl client");
+						alert.setContentText(e.getMessage());
+						alert.showAndWait();
+
+						//exit program
+						Platform.exit();
 					}
 				});
 			}
@@ -220,33 +210,27 @@ public class Main extends Application {
 					User viewUser = Main.getProfile(username);
 
 					//update GUI
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//get controller
-							ProfileCtrl ctrl = (ProfileCtrl) loader.getController();
-							//init controller user
-							ctrl.setUser(viewUser);
-						}
+					Platform.runLater(() -> {
+						//get controller
+						ProfileCtrl ctrl = (ProfileCtrl) loader.getController();
+						//init controller user
+						ctrl.setUser(viewUser);
 					});
 				} catch (Exception e) {
 					//print stack trace to console
 					e.printStackTrace();
 
 					//update GUI
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							Alert alert = new Alert(Alert.AlertType.ERROR);
-							alert.setTitle("Error");
-							alert.setHeaderText("Exception in pebl client");
-							alert.setContentText(e.getMessage());
-							alert.showAndWait();
+					Platform.runLater(() -> {
+						//show general error
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText("Exception in pebl client");
+						alert.setContentText(e.getMessage());
+						alert.showAndWait();
 
-							//exit program
-							Platform.exit();
-						}
+						//exit program
+						Platform.exit();
 					});
 				}
 
@@ -365,9 +349,8 @@ public class Main extends Application {
 	 *
 	 * @param fxml filename of the file e.g. xyz (.fxml is added in method)
 	 * @return javafx node contained within the fxml file
-	 * @throws IOException file error, usually means the file does not exist
 	 */
-	public static FXMLLoader getFXML(String fxml) throws IOException {
+	public static FXMLLoader getFXML(String fxml) {
 		//get fxml file from the fxml folder with filename in the parameter
 		return new FXMLLoader(Main.class.getResource("res/fxml/" + fxml + ".fxml"));
 	}

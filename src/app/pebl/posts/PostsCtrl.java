@@ -19,14 +19,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class PostsCtrl extends Controller {
-	private User currUser;
+	//fxml elements
+	@FXML private VBox feedPosts;
+	@FXML private VBox feedFollowing;
+	@FXML private VBox feedFollowers;
 
-	@FXML
-	VBox feedPosts;
-	@FXML
-	VBox feedFollowing;
-	@FXML
-	VBox feedFollowers;
+	//class fields
+	private User currUser;
 
 	public void initialize() {
 		//get current user
@@ -36,17 +35,16 @@ public class PostsCtrl extends Controller {
 		refresh();
 	}
 
-	@Override
 	public void refresh() {
-		//refresh current user
-		super.refresh();
-
 		//clear posts
 		feedPosts.getChildren().clear();
 
 		//get user data
 		Task<Void> feedRefresh = new Task<>() {
 			@Override public Void call() {
+				//refresh current user
+				refreshUser();
+
 				//init post list
 				ArrayList<Post> posts = null;
 
@@ -57,15 +55,12 @@ public class PostsCtrl extends Controller {
 					//print stack to console
 					e.printStackTrace();
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
 
-							//exit program
-							Platform.exit();
-						}
+						//exit program
+						Platform.exit();
 					});
 				}
 
@@ -80,32 +75,26 @@ public class PostsCtrl extends Controller {
 							//check if response succeeded
 							if (post != null) {
 								//update gui
-								Platform.runLater(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											//attempt to add post
-											addPost(feedPosts, post);
+								Platform.runLater(() -> {
+									try {
+										//attempt to add post
+										addPost(feedPosts, post);
 
-											//add separator if not last post
-											if (!post.equals(mostRecentPost)) {
-												feedPosts.getChildren().add(new Separator());
-											}
-										} catch (Exception e) {
-											//print stack to console
-											e.printStackTrace();
-
-											Platform.runLater(new Runnable() {
-												@Override
-												public void run() {
-													//show general error
-													showError("Exception in pebl client", e.getMessage());
-
-													//exit program
-													Platform.exit();
-												}
-											});
+										//add separator if not last post
+										if (!post.equals(mostRecentPost)) {
+											feedPosts.getChildren().add(new Separator());
 										}
+									} catch (Exception e) {
+										//print stack to console
+										e.printStackTrace();
+
+										Platform.runLater(() -> {
+											//show general error
+											showError("Exception in pebl client", e.getMessage());
+
+											//exit program
+											Platform.exit();
+										});
 									}
 								});
 							}
@@ -113,27 +102,21 @@ public class PostsCtrl extends Controller {
 							//print stack to console
 							e.printStackTrace();
 
-							Platform.runLater(new Runnable() {
-								@Override
-								public void run() {
-									//show general error
-									showError("Exception in pebl client", e.getMessage());
+							Platform.runLater(() -> {
+								//show general error
+								showError("Exception in pebl client", e.getMessage());
 
-									//exit program
-									Platform.exit();
-								}
+								//exit program
+								Platform.exit();
 							});
 						}
 					}
 				}
 				//null return from get
 				else {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show error as no posts retrieved
-							showError("Posts Error", "Error fetching Posts from Server. Please try again later.");
-						}
+					Platform.runLater(() -> {
+						//show error as no posts retrieved
+						showError("Posts Error", "Error fetching Posts from Server. Please try again later.");
 					});
 				}
 
@@ -146,16 +129,49 @@ public class PostsCtrl extends Controller {
 		Main.getExecutor().execute(feedRefresh);
 	}
 
-	public void showProfile() throws IOException {
-		Main.initProfile(currUser).show();
+	public void showProfile() {
+		try {
+			Main.initProfile(currUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
 	}
 
-	public void showConnections() throws IOException {
-		Main.initConnections(currUser).show();
+	public void showConnections() {
+		try {
+			Main.initConnections(currUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
 	}
 
-	public void showLeaderboard() throws IOException {
-		Main.initLeaderboard(currUser).show();
+	public void showLeaderboard() {
+		try {
+			Main.initLeaderboard(currUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
 	}
 
 	public void newPost() throws IOException {

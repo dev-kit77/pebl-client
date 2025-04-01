@@ -15,28 +15,49 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Controller {
+	//fxml elements
 	@FXML protected Node layoutParent;
 
-	public void closeWindow() {
-		//close window
-		layoutParent.getScene().getWindow().hide();
-	}
+	public void refreshUser() {
+		//get user data
+		Task<Void> userRefresh = new Task<>() {
+			@Override
+			public Void call() {
+				try {
+					//refresh current user from server
+					User updated = Main.getProfile(Config.getInstance().getCurrentUser().getUsername());
 
-	public void showAbout() throws IOException {
-		//init stage
-		Stage stage = new Stage();
-		stage.setTitle("About");
-		stage.initOwner(layoutParent.getScene().getWindow());
-		stage.initModality(Modality.APPLICATION_MODAL);
+					//check if updated user has value
+					if (updated != null) {
+						Config.getInstance().setCurrentUser(updated);
+					}
+					//null return from server
+					else {
+						Platform.runLater(() -> {
+							//display user update error
+							showError("User Update Error", "Error fetching current user from server. Please try again later.");
+						});
+					}
 
-		//get fxml
-		FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("res/fxml/about.fxml"));
+				} catch (Exception e) {
+					//print stack to console
+					e.printStackTrace();
 
-		//load scene
-		stage.setScene(new Scene(fxmlLoader.load()));
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
 
-		//show about
-		stage.showAndWait();
+						//exit program
+						Platform.exit();
+					});
+				}
+
+				//return to end task
+				return null;
+			}
+		};
+
+		Main.getExecutor().execute(userRefresh);
 	}
 
 	public void logout() {
@@ -64,52 +85,26 @@ public class Controller {
 		}
 	}
 
-	public void refresh() {
-		//get user data
-		Task<Void> userRefresh = new Task<>() {
-			@Override
-			public Void call() {
-				try {
-					//refresh current user from server
-					User updated = Main.getProfile(Config.getInstance().getCurrentUser().getUsername());
+	public void closeWindow() {
+		//close window
+		layoutParent.getScene().getWindow().hide();
+	}
 
-					//check if updated user has value
-					if (updated != null) {
-						Config.getInstance().setCurrentUser(updated);
-					}
-					//null return from server
-					else {
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								//display user update error
-								showError("User Update Error", "Error fetching current user from server. Please try again later.");
-							}
-						});
-					}
+	public void showAbout() throws IOException {
+		//init stage
+		Stage stage = new Stage();
+		stage.setTitle("About");
+		stage.initOwner(layoutParent.getScene().getWindow());
+		stage.initModality(Modality.APPLICATION_MODAL);
 
-				} catch (Exception e) {
-					//print stack to console
-					e.printStackTrace();
+		//get fxml
+		FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("res/fxml/about.fxml"));
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							showError("Exception in pebl client", e.getMessage());
+		//load scene
+		stage.setScene(new Scene(fxmlLoader.load()));
 
-							//exit program
-							Platform.exit();
-						}
-					});
-				}
-
-				//return to end task
-				return null;
-			}
-		};
-
-		Main.getExecutor().execute(userRefresh);
+		//show about
+		stage.showAndWait();
 	}
 
 	public void showAlert(String header, String content)  {

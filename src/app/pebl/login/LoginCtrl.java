@@ -14,20 +14,19 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class LoginCtrl extends Controller {
-	@FXML
-	private TextField username;
-	@FXML
-	private PasswordField password;
-	@FXML
-	private CheckBox chkLogin;
+	//fxml elements
+	@FXML private TextField username;
+	@FXML private PasswordField password;
+	@FXML private CheckBox chkLogin;
 
+	//class fields
 	private String srvAddress;
 
 	public LoginCtrl() {
 		this.srvAddress = Config.getInstance().getServerAddr();
 	}
 
-	public void handleLogin() throws Exception {
+	public void handleLogin() {
 		//check checkbox state
 		if (chkLogin.isSelected()) {
 			//send to log
@@ -44,17 +43,16 @@ public class LoginCtrl extends Controller {
 		//set server address in config
 		Config.getInstance().setServerAddr(this.srvAddress);
 
-		Task<Void> authUser = new Task<Void>() {
-			@Override public Void call() {
-				//init conditons
+		Task<Void> authUser = new Task<>() {
+			@Override
+			public Void call() {
+				//init conditions
 				boolean online = false;
 				boolean success = false;
 
-				Platform.runLater(new Runnable() {
-					@Override public void run() {
-						//set wait cursor
-						layoutParent.getScene().setCursor(Cursor.WAIT);
-					}
+				Platform.runLater(() -> {
+					//set wait cursor
+					layoutParent.getScene().setCursor(Cursor.WAIT);
 				});
 
 				//authenticate user with server
@@ -64,53 +62,42 @@ public class LoginCtrl extends Controller {
 
 					if (online) {
 						success = Main.login(username.getText(), password.getText());
-					}
-					else {
+					} else {
 						//update GUI
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								//show server error
-								showError("Connection to pebl server: " + srvAddress + " failed", "Please check your server address and try again.");
-							}
+						Platform.runLater(() -> {
+							//show server error
+							showError("Connection to pebl server: " + srvAddress + " failed", "Please check your server address and try again.");
 						});
 					}
 
 					if (!success) {
 						//update GUI
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								//show login error
-								showError("Login failed", "Please check your Username and Password and try again.");
+						Platform.runLater(() -> {
+							//show login error
+							showError("Login failed", "Please check your Username and Password and try again.");
 
-								//clear password
-								password.setText("");
-							}
+							//clear password
+							password.setText("");
 						});
-					}
-					else {
+					} else {
 						//update GUI
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								//show main window set
-								try {
-									Main.showMainWindows(Main.getPrimaryStage());
-								} catch (IOException e) {
-									//print stack
-									e.printStackTrace();
+						Platform.runLater(() -> {
+							//show main window set
+							try {
+								Main.showMainWindows(Main.getPrimaryStage());
+							} catch (IOException e) {
+								//print stack
+								e.printStackTrace();
 
-									//show general error
-									showError("Exception in pebl client", e.getMessage());
+								//show general error
+								showError("Exception in pebl client", e.getMessage());
 
-									//exit program
-									Platform.exit();
-								}
-
-								//hide login window
-								closeWindow();
+								//exit program
+								Platform.exit();
 							}
+
+							//hide login window
+							closeWindow();
 						});
 					}
 				} catch (Exception e) {
@@ -118,21 +105,19 @@ public class LoginCtrl extends Controller {
 					e.printStackTrace();
 
 					//update GUI
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
 
-							//exit program
-							Platform.exit();
-						}
+						//exit program
+						Platform.exit();
 					});
 				}
 
 				//end thread
 				return null;
-			};
+			}
+
 		};
 
 		//run thread

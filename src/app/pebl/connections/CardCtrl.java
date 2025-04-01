@@ -5,14 +5,15 @@ import app.pebl.data.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-
 import java.io.IOException;
 
 public class CardCtrl extends HBox {
-	@FXML Label lblUsername;
-	@FXML Label lblSkips;
-	@FXML Label lblStatus;
+	//fxml elements
+	@FXML private Label lblUsername;
+	@FXML private Label lblSkips;
+	@FXML private Label lblStatus;
 
+	//class fields
 	private User displayUser;
 
 	public void setUser(User newUser) {
@@ -37,7 +38,7 @@ public class CardCtrl extends HBox {
 		displayUser = newUser;
 	}
 
-	public void setUser(String username, String displayName,int skips, String status) {
+	public void setUser(String username, int skips, String status) {
 		//update fields
 		lblUsername.setText(username);
 		lblSkips.setText("(" + skips + " Skips)");

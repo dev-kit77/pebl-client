@@ -8,11 +8,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
 public class NewPostCtrl extends Controller {
+	//fxml elements
 	@FXML TextArea body;
 
 	public void handleSubmit() {
-		Task<Void> newPost = new Task<Void>() {
-			@Override public Void call() {
+		Task<Void> newPost = new Task<>() {
+			@Override
+			public Void call() {
 				//init success
 				boolean success = false;
 
@@ -23,37 +25,28 @@ public class NewPostCtrl extends Controller {
 					//print stack to console
 					e.printStackTrace();
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
 
-							//exit program
-							Platform.exit();
-						}
+						//exit program
+						Platform.exit();
 					});
 				}
 
 				//show error if not successful
 				if (!success) {
 					//update gui
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show error to user
-							showError("Error Creating Post", "Post creation failed. Please try again later.");
-						}
+					Platform.runLater(() -> {
+						//show error to user
+						showError("Error Creating Post", "Post creation failed. Please try again later.");
 					});
 				}
 
 				//update gui
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						//close window
-						closeWindow();
-					}
+				Platform.runLater(() -> {
+					//close window
+					closeWindow();
 				});
 
 				//return to end task

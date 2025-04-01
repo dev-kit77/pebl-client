@@ -10,68 +10,64 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class LeaderboardCtrl extends Controller {
-	@FXML Text lblCurrUsername;
-	@FXML Text lblCurrSkips;
-	@FXML Text lblCurrStatus;
-	@FXML VBox feedBoard;
-	@FXML MenuItem logout;
+	//fxml elements
+	@FXML private Text lblCurrUsername;
+	@FXML private Text lblCurrSkips;
+	@FXML private Text lblCurrStatus;
+	@FXML private VBox feedBoard;
+	@FXML private MenuItem logout;
 
-	private User currUser;
+	//class fields
+	private User displayUser;
 
-	@Override
 	public void refresh() {
-		//refresh current user
-		super.refresh();
-
 		//get user data
 		Task<Void> leaderboardRefresh = new Task<>() {
 			@Override public Void call() {
+				//refresh current user
+				refreshUser();
+
 				try {
-					currUser = Main.getProfile(currUser.getUsername());
+					displayUser = Main.getProfile(displayUser.getUsername());
 				} catch (Exception e) {
 					//print stack trace to console
 					e.printStackTrace();
 
 					//update GUI
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
 
-							//exit program
-							Platform.exit();
-						}
+						//exit program
+						Platform.exit();
 					});
 				}
 
 				//update gui
-				Platform.runLater(new Runnable() {
-					@Override public void run() {
-						//update fields
-						lblCurrUsername.setText(currUser.getUsername());
-						lblCurrSkips.setText("(" + currUser.getSkips() + " Skips)");
+				Platform.runLater(() -> {
+					//update fields
+					lblCurrUsername.setText(displayUser.getUsername());
+					lblCurrSkips.setText("(" + displayUser.getSkips() + " Skips)");
 
-						//check if user has status
-						if (currUser.getStatus() != null && !currUser.getStatus().isEmpty()) {
-							//show label
-							lblCurrStatus.setVisible(true);
+					//check if user has status
+					if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
+						//show label
+						lblCurrStatus.setVisible(true);
 
-							//set status
-							lblCurrStatus.setText("\"" + currUser.getStatus() + "\"");
-						}
-						else {
-							//hide label
-							lblCurrStatus.setVisible(false);
-						}
+						//set status
+						lblCurrStatus.setText("\"" + displayUser.getStatus() + "\"");
+					}
+					else {
+						//hide label
+						lblCurrStatus.setVisible(false);
 					}
 				});
 
@@ -86,15 +82,12 @@ public class LeaderboardCtrl extends Controller {
 					e.printStackTrace();
 
 					//update GUI
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
 
-							//exit program
-							Platform.exit();
-						}
+						//exit program
+						Platform.exit();
 					});
 				}
 
@@ -105,34 +98,34 @@ public class LeaderboardCtrl extends Controller {
 
 					//loop for all users on board
 					for (User addUsr : topUsers) {
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									//attempt to add card
-									addCard(feedBoard, addUsr);
-								} catch (Exception e) {
-									//print stack to console
-									e.printStackTrace();
+						Platform.runLater(() -> {
+							try {
+								//attempt to add card
+								addCard(feedBoard, addUsr);
 
-									//show error message
-									showError("Exception in pebl client", e.getMessage());
-
-									//exit app
-									Platform.exit();
+								//check if not last
+								if (!addUsr.equals(last)) {
+									//add separator
+									feedBoard.getChildren().add(new Separator());
 								}
+							} catch (Exception e) {
+								//print stack to console
+								e.printStackTrace();
+
+								//show error message
+								showError("Exception in pebl client", e.getMessage());
+
+								//exit app
+								Platform.exit();
 							}
 						});
 					}
 				}
 				//null return from server
 				else {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show error as no leaderboard retrieved
-							showError("Leaderboard Error", "Error fetching Leaderboard from Server. Please try again later.");
-						}
+					Platform.runLater(() -> {
+						//show error as no leaderboard retrieved
+						showError("Leaderboard Error", "Error fetching Leaderboard from Server. Please try again later.");
 					});
 				}
 
@@ -161,32 +154,57 @@ public class LeaderboardCtrl extends Controller {
 
 	public void setUser(User newUser) {
 		//set user
-		currUser = newUser;
+		displayUser = newUser;
 
 		//hide/show logout
-		if (currUser.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
-			//current user
-			logout.setVisible(true);
-		}
-		else {
-			//other user
-			logout.setVisible(false);
-		}
+		logout.setVisible(displayUser.getUsername().equals(Config.getInstance().getCurrentUser().getUsername()));
 
 		//refresh
 		this.refresh();
 	}
 
-	public void showProfile() throws IOException {
-		Main.initProfile(currUser).show();
+	public void showProfile() {
+		try {
+			Main.initProfile(displayUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
 	}
 
-	public void showConnections() throws IOException {
-		Main.initConnections(currUser).show();
+	public void showConnections() {
+		try {
+			Main.initConnections(displayUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
 	}
 
-	public void showLeaderboard() throws IOException {
-		Main.initLeaderboard(currUser).show();
-	}
+	public void showLeaderboard() {
+		try {
+			Main.initLeaderboard(displayUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
 
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
+	}
 }

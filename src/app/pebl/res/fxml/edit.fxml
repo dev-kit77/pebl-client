@@ -53,8 +53,8 @@
                 <Label text="Age:" />
                 <VBox alignment="CENTER" spacing="2.0">
                     <children>
-                        <Label fx:id="age" text="null" />
-                        <Slider fx:id="ageSlider" max="120.0" />
+                        <Label fx:id="lblAge" text="null" />
+                        <Slider fx:id="iptAge" max="120.0" />
                     </children>
                     <padding>
                         <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
@@ -64,7 +64,7 @@
         </HBox>
         <HBox alignment="CENTER">
             <children>
-                <CheckBox fx:id="chkGender" mnemonicParsing="false" text="Swedish Gender" />
+                <CheckBox fx:id="iptGender" mnemonicParsing="false" text="Swedish Gender" />
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

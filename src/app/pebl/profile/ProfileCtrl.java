@@ -6,7 +6,6 @@ import app.pebl.Main;
 import app.pebl.data.User;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -17,43 +16,30 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ProfileCtrl extends Controller {
+	//fxml imports
+	@FXML private Label lblUsername;
+	@FXML private Label lblStatus;
+	@FXML private Label lblFollowers;
+	@FXML private Label lblFollowing;
+	@FXML private Label lblSkips;
+	@FXML private Label lblAge;
+	@FXML private Label lblGender;
+	@FXML private VBox feedUserPosts;
+	@FXML private MenuItem edit;
+	@FXML private MenuItem follow;
+	@FXML private Button btnFollow;
+	@FXML private MenuItem logout;
+
+	//class fields
 	User displayUser;
 
-	@FXML
-	Label lblUsername;
-	@FXML
-	Label lblStatus;
-	@FXML
-	Label lblFollowers;
-	@FXML
-	Label lblFollowing;
-	@FXML
-	Label lblSkips;
-	@FXML
-	Label lblAge;
-	@FXML
-	Label lblGender;
-	@FXML
-	VBox feedUserPosts;
-	@FXML
-	MenuItem edit;
-	@FXML
-	MenuItem follow;
-	@FXML
-	Button btnFollow;
-	@FXML
-	MenuItem logout;
-
-	private boolean followed;
-
-	@Override
 	public void refresh() {
-		//refresh current user
-		super.refresh();
-
 		//get user data
 		Task<Void> profileRefresh = new Task<>() {
 			@Override public Void call() {
+				//refresh current user
+				refreshUser();
+
 				try {
 					displayUser = Main.getProfile(displayUser.getUsername());
 				} catch (Exception e) {
@@ -61,77 +47,62 @@ public class ProfileCtrl extends Controller {
 					e.printStackTrace();
 
 					//update GUI
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
 
-							//exit program
-							Platform.exit();
-						}
+						//exit program
+						Platform.exit();
 					});
 				}
 
 				if (displayUser != null) {
 					//update gui
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//update fields
-							lblUsername.setText(displayUser.getUsername());
+					Platform.runLater(() -> {
+						//update fields
+						lblUsername.setText(displayUser.getUsername());
 
-							//check if user has status
-							if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
-								//show label
-								lblStatus.setVisible(true);
+						//check if user has status
+						if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
+							//show label
+							lblStatus.setVisible(true);
 
-								//set status
-								lblStatus.setText("\"" + displayUser.getStatus() + "\"");
-							} else {
-								//hide label
-								lblStatus.setVisible(false);
-							}
+							//set status
+							lblStatus.setText("\"" + displayUser.getStatus() + "\"");
+						} else {
+							//hide label
+							lblStatus.setVisible(false);
+						}
 
-							lblFollowers.setText(displayUser.getFollowers().size() + " Followers");
-							lblFollowing.setText(displayUser.getFollowing().size() + " Following");
-							lblSkips.setText(displayUser.getSkips() + " Skips");
-							lblAge.setText("Age " + displayUser.getAge());
+						lblFollowers.setText(displayUser.getFollowers().size() + " Followers");
+						lblFollowing.setText(displayUser.getFollowing().size() + " Following");
+						lblSkips.setText(displayUser.getSkips() + " Skips");
+						lblAge.setText("Age " + displayUser.getAge());
 
-							//set swedish gender (dont ask)
-							if (displayUser.getGender()) {
-								lblGender.setText("Gendered");
-							} else {
-								lblGender.setText("No Gender");
-							}
+						//set swedish gender (dont ask)
+						if (displayUser.getGender()) {
+							lblGender.setText("Gendered");
+						} else {
+							lblGender.setText("No Gender");
+						}
 
-							//update follow button
-							if (Config.getInstance().getCurrentUser().getFollowers().contains(displayUser.getUsername())) {
-								//update buttons
-								btnFollow.setText("Unfollow");
-								follow.setText("Unfollow");
-
-								//update variable
-								followed = true;
-							} else {
-								//update buttons
-								btnFollow.setText("Follow");
-								follow.setText("Follow");
-
-								//update variable
-								followed = false;
-							}
+						//update follow button
+						if (Config.getInstance().getCurrentUser().getFollowers().contains(displayUser.getUsername())) {
+							//update buttons
+							btnFollow.setText("Unfollow");
+							follow.setText("Unfollow");
+						} else {
+							//update buttons
+							btnFollow.setText("Follow");
+							follow.setText("Follow");
 						}
 					});
 				}
 				//null return from server
 				else {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show error as no profile retrieved
-							showError("Profile Error", "Error fetching Profile from Server. Please try again later.");
-						}
+					Platform.runLater(() -> {
+						//show error as no profile retrieved
+						showError("Profile Error", "Error fetching Profile from Server. Please try again later.");
 					});
 				}
 
@@ -179,19 +150,7 @@ public class ProfileCtrl extends Controller {
 		this.refresh();
 	}
 
-	public void showProfile() throws IOException {
-		Main.initProfile(displayUser).show();
-	}
-
-	public void showConnections() throws IOException {
-		Main.initConnections(displayUser).show();
-	}
-
-	public void showLeaderboard() throws IOException {
-		Main.initLeaderboard(displayUser).show();
-	}
-
-	public void toggleFollow(ActionEvent event) {
+	public void toggleFollow() {
 		//get user data
 		Task<Void> userRefresh = new Task<>() {
 			@Override
@@ -205,26 +164,18 @@ public class ProfileCtrl extends Controller {
 					//print stack to console
 					e.printStackTrace();
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
 
-							//exit program
-							Platform.exit();
-						}
+						//exit program
+						Platform.exit();
 					});
 				}
 
 				//if follow was succesful
 				if (success) {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							refresh();
-						}
-					});
+					Platform.runLater(() -> refresh());
 				}
 
 				//return to end task
@@ -235,5 +186,48 @@ public class ProfileCtrl extends Controller {
 		Main.getExecutor().execute(userRefresh);
 	}
 
+	public void showProfile() {
+		try {
+			Main.initProfile(displayUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
 
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
+	}
+
+	public void showConnections() {
+		try {
+			Main.initConnections(displayUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
+	}
+
+	public void showLeaderboard() {
+		try {
+			Main.initLeaderboard(displayUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
+	}
 }

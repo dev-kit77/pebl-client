@@ -17,70 +17,64 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ConnectionsCtrl extends Controller {
+	//fxml elements
+	@FXML private VBox feedMutuals;
+	@FXML private VBox feedFollowers;
+	@FXML private VBox feedFollowing;
+	@FXML private Label lblCurrUsername;
+	@FXML private Label lblCurrSkips;
+	@FXML private Label lblCurrStatus;
+	@FXML private MenuItem logout;
+
+	//class fields
 	private User displayUser;
 
-	@FXML VBox feedMutuals;
-	@FXML VBox feedFollowers;
-	@FXML VBox feedFollowing;
-	@FXML Label lblCurrUsername;
-	@FXML Label lblCurrSkips;
-	@FXML Label lblCurrStatus;
-	@FXML
-	MenuItem logout;
-
-	@Override
 	public void refresh() {
-		//refresh current user
-		super.refresh();
-
 		//get user data
-		Task<Void> userRefresh = new Task<Void>() {
+		Task<Void> userRefresh = new Task<>() {
 			@Override public Void call() {
+				//refresh current user
+				refreshUser();
+
 				try {
 					//refresh display user from server
 					displayUser = Main.getProfile(displayUser.getUsername());
 
 					//update gui
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//update labels
-							lblCurrUsername.setText(displayUser.getUsername());
-							lblCurrSkips.setText("(" + displayUser.getSkips() + " Skips)");
+					Platform.runLater(() -> {
+						//update labels
+						lblCurrUsername.setText(displayUser.getUsername());
+						lblCurrSkips.setText("(" + displayUser.getSkips() + " Skips)");
 
-							//check if user has status
-							if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
-								//show label
-								lblCurrStatus.setVisible(true);
+						//check if user has status
+						if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
+							//show label
+							lblCurrStatus.setVisible(true);
 
-								//set status
-								lblCurrStatus.setText("\"" + displayUser.getStatus() + "\"");
-							}
-							else {
-								//hide label
-								lblCurrStatus.setVisible(false);
-							}
-
-							//clear feeds
-							feedMutuals.getChildren().clear();
-							feedFollowers.getChildren().clear();
-							feedFollowing.getChildren().clear();
+							//set status
+							lblCurrStatus.setText("\"" + displayUser.getStatus() + "\"");
 						}
+						else {
+							//hide label
+							lblCurrStatus.setVisible(false);
+						}
+
+						//clear feeds
+						feedMutuals.getChildren().clear();
+						feedFollowers.getChildren().clear();
+						feedFollowing.getChildren().clear();
 					});
 				} catch (Exception e) {
 					//print stack to console
 					e.printStackTrace();
 
 					//update GUI
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
 
-							//exit program
-							Platform.exit();
-						}
+						//exit program
+						Platform.exit();
 					});
 				}
 
@@ -90,210 +84,79 @@ public class ConnectionsCtrl extends Controller {
 				ArrayList<String> followers = displayUser.getFollowers();
 
 				//check if loop needs run
-				if (mutuals != null) {
-					//get last user
-					final String lastMutual = mutuals.getLast();
-
-					//loop for all mutuals
-					for (String moot : mutuals) {
-						//print to log
-						System.out.println("Getting: " + moot);
-
-						try {
-							//get follower data
-							User addUsr = Main.getProfile(moot);
-
-							//check if response succeeded
-							if (addUsr != null) {
-								//update gui
-								Platform.runLater(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											//attempt to add card
-											addCard(feedMutuals, addUsr);
-
-											//add separator if not last post
-											if (!addUsr.getUsername().equals(lastMutual)) {
-												feedMutuals.getChildren().add(new Separator());
-											}
-										} catch (Exception e) {
-											//print stack to console
-											e.printStackTrace();
-
-											//update GUI
-											Platform.runLater(new Runnable() {
-												@Override
-												public void run() {
-													//show general error
-													showError("Exception in pebl client", e.getMessage());
-
-													//exit program
-													Platform.exit();
-												}
-											});
-										}
-									}
-								});
-							}
-						} catch (Exception e) {
-							//print stack to console
-							e.printStackTrace();
-
-							//update GUI
-							Platform.runLater(new Runnable() {
-								@Override
-								public void run() {
-									//show general error
-									showError("Exception in pebl client", e.getMessage());
-
-									//exit program
-									Platform.exit();
-								}
-							});
-						}
-					}
-				}
+				addCards(mutuals, feedMutuals);
 
 				//check if loop needs run
-				if (following != null) {
-					//get last follow
-					final String lastFollow = following.getLast();
-
-					//loop for all following
-					for (String followed : following) {
-						//print to log
-						System.out.println("Getting: " + followed);
-
-						try {
-							//get follower data
-							User addUsr = Main.getProfile(followed);
-
-							//check if response succeeded
-							if (addUsr != null) {
-								//update gui
-								Platform.runLater(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											//attempt to add card
-											addCard(feedFollowing, addUsr);
-
-											//add separator if not last post
-											if (!addUsr.getUsername().equals(lastFollow)) {
-												feedFollowing.getChildren().add(new Separator());
-											}
-										} catch (Exception e) {
-											//print stack to console
-											e.printStackTrace();
-
-											//update GUI
-											Platform.runLater(new Runnable() {
-												@Override
-												public void run() {
-													//show general error
-													showError("Exception in pebl client", e.getMessage());
-
-													//exit program
-													Platform.exit();
-												}
-											});
-										}
-									}
-								});
-							}
-						} catch (Exception e) {
-							//print stack to console
-							e.printStackTrace();
-
-							//update GUI
-							Platform.runLater(new Runnable() {
-								@Override
-								public void run() {
-									//show general error
-									showError("Exception in pebl client", e.getMessage());
-
-									//exit program
-									Platform.exit();
-								}
-							});
-						}
-					}
-				}
+				addCards(following, feedFollowing);
 
 				//check if loop needs run
-				if (followers != null) {
-					//get last follower
-					final String lastFollower = followers.getLast();
-
-					//loop for all followers
-					for (String follower : followers) {
-						//print to log
-						System.out.println("Getting: " + follower);
-
-						try {
-							//get follower data
-							User addUsr = Main.getProfile(follower);
-
-							//check if response succeeded
-							if (addUsr != null) {
-								//update gui
-								Platform.runLater(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											//attempt to add card
-											addCard(feedFollowers, addUsr);
-
-											//add separator if not last post
-											if (!addUsr.getUsername().equals(lastFollower)) {
-												feedFollowers.getChildren().add(new Separator());
-											}
-										} catch (Exception e) {
-											//print stack to console
-											e.printStackTrace();
-
-											//update GUI
-											Platform.runLater(new Runnable() {
-												@Override
-												public void run() {
-													//show general error
-													showError("Exception in pebl client", e.getMessage());
-
-													//exit program
-													Platform.exit();
-												}
-											});
-										}
-									}
-								});
-							}
-						} catch (Exception e) {
-							//print stack to console
-							e.printStackTrace();
-
-							//update GUI
-							Platform.runLater(new Runnable() {
-								@Override
-								public void run() {
-									//show general error
-									showError("Exception in pebl client", e.getMessage());
-
-									//exit program
-									Platform.exit();
-								}
-							});
-						}
-					}
-				}
+				addCards(followers, feedFollowers);
 
 				//end task with null return
 				return null;
-			};
+			}
 		};
 
 		//run thread
 		Main.getExecutor().execute(userRefresh);
+	}
+
+	private void addCards(ArrayList<String> usernames, VBox feed) {
+		if (usernames != null) {
+			//get last user
+			final String last = usernames.getLast();
+
+			//loop for all mutuals
+			for (String username : usernames) {
+				//print to log
+				System.out.println("Getting: " + username);
+
+				try {
+					//get follower data
+					User addUsr = Main.getProfile(username);
+
+					//check if response succeeded
+					if (addUsr != null) {
+						//update gui
+						Platform.runLater(() -> {
+							try {
+								//attempt to add card
+								addCard(feed, addUsr);
+
+								//add separator if not last post
+								if (!addUsr.getUsername().equals(last)) {
+									feed.getChildren().add(new Separator());
+								}
+							} catch (Exception e) {
+								//print stack to console
+								e.printStackTrace();
+
+								//update GUI
+								Platform.runLater(() -> {
+									//show general error
+									showError("Exception in pebl client", e.getMessage());
+
+									//exit program
+									Platform.exit();
+								});
+							}
+						});
+					}
+				} catch (Exception e) {
+					//print stack to console
+					e.printStackTrace();
+
+					//update GUI
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
+
+						//exit program
+						Platform.exit();
+					});
+				}
+			}
+		}
 	}
 
 	public void setUser(User newUser) {
@@ -301,29 +164,55 @@ public class ConnectionsCtrl extends Controller {
 		displayUser = newUser;
 
 		//hide/show logout
-		if (displayUser.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
-			//current user
-			logout.setVisible(true);
-		}
-		else {
-			//other user
-			logout.setVisible(false);
-		}
+		logout.setVisible(displayUser.getUsername().equals(Config.getInstance().getCurrentUser().getUsername()));
 
 		//refresh data
 		this.refresh();
 	}
 
-	public void showProfile() throws IOException {
-		Main.initProfile(displayUser).show();
+	public void showProfile() {
+		try {
+			Main.initProfile(displayUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
 	}
 
-	public void showConnections() throws IOException {
-		Main.initConnections(displayUser).show();
+	public void showConnections() {
+		try {
+			Main.initConnections(displayUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
 	}
 
-	public void showLeaderboard() throws IOException {
-		Main.initLeaderboard(displayUser).show();
+	public void showLeaderboard() {
+		try {
+			Main.initLeaderboard(displayUser).show();
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			//show general error
+			showError("Exception in pebl client", e.getMessage());
+
+			//exit program
+			Platform.exit();
+		}
 	}
 
 	public void addCard(VBox list, User addUser) throws IOException {

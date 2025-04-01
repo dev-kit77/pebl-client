@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class SignUpCtrl extends Controller {
+	//fxml elements
 	@FXML TextField iptEmail;
 	@FXML TextField iptUsername;
 	@FXML PasswordField iptPassword;
@@ -27,9 +28,7 @@ public class SignUpCtrl extends Controller {
 		lblAge.setText(Long.toString(Math.round((Double) iptAge.getValue())));
 
 		//set update label with slider
-		iptAge.valueProperty().addListener((observable, oldValue, newValue) -> {
-			lblAge.setText(Long.toString(Math.round((Double) newValue)));
-		});
+		iptAge.valueProperty().addListener((observable, oldValue, newValue) -> lblAge.setText(Long.toString(Math.round((Double) newValue))));
 	}
 
 	public void handleSubmit() {
@@ -59,8 +58,9 @@ public class SignUpCtrl extends Controller {
 		}
 		else {
 			//submit form
-			Task<Void> createUser = new Task<Void>() {
-				@Override public Void call() {
+			Task<Void> createUser = new Task<>() {
+				@Override
+				public Void call() {
 					//init check variable
 					boolean success = false;
 
@@ -72,40 +72,33 @@ public class SignUpCtrl extends Controller {
 						e.printStackTrace();
 
 						//update GUI
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								//show general error
-								showError("Exception in pebl client", e.getMessage());
+						Platform.runLater(() -> {
+							//show general error
+							showError("Exception in pebl client", e.getMessage());
 
-								//exit program
-								Platform.exit();
-							}
+							//exit program
+							Platform.exit();
 						});
 					}
 
 					//update gui depending on success
 					if (success) {
-						Platform.runLater(new Runnable() {
-							@Override public void run() {
-								//close window
-								closeWindow();
-							}
+						Platform.runLater(() -> {
+							//close window
+							closeWindow();
 						});
-					}
-					else {
+					} else {
 						//TODO get rid of this horrible unspecific error
-						Platform.runLater(new Runnable() {
-							@Override public void run() {
-								//show unspecific error (I have no access to what the error actually is because all I get is a boolean even though the error is given in the response)
-								showError("Sign-up Error", "There was an issue with your account creation. Please try other details.");
-							}
+						Platform.runLater(() -> {
+							//show unspecific error (I have no access to what the error actually is because all I get is a boolean even though the error is given in the response)
+							showError("Sign-up Error", "There was an issue with your account creation. Please try other details.");
 						});
 					}
 
 					//null return to end thread
 					return null;
-				};
+				}
+
 			};
 
 			//run thread

@@ -8,17 +8,17 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class PostCtrl extends VBox {
-	@FXML Text lblUsername;
-	@FXML Text txtBody;
-	@FXML Button btnSkip;
+	//fxml elements
+	@FXML private Text lblUsername;
+	@FXML private Text txtBody;
+	@FXML private Button btnSkip;
+
+	//class fields
 	private Post post;
 
 	public void refresh() {
@@ -32,57 +32,43 @@ public class PostCtrl extends VBox {
 					//print stack to console
 					e.printStackTrace();
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
 
-							//exit program
-							Platform.exit();
-						}
+						//exit program
+						Platform.exit();
 					});
 				}
 
 				//check that get succeeded
 				if (post != null) {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								//update fields
-								lblUsername.setText(post.getSender());
-								txtBody.setText(post.getContent());
-								btnSkip.setText(post.getSkips() + " Skips");
+					Platform.runLater(() -> {
+						try {
+							//update fields
+							lblUsername.setText(post.getSender());
+							txtBody.setText(post.getContent());
+							btnSkip.setText(post.getSkips() + " Skips");
 
-								//disable button if post is from current user
-								if (post.getSender().equals(Config.getInstance().getCurrentUser().getUsername())) {
-									btnSkip.setDisable(true);
-								}
-								else{
-									btnSkip.setDisable(false);
-								}
-							} catch (Exception e) {
-								//print stack to console
-								e.printStackTrace();
+							//disable button if post is from current user
+							btnSkip.setDisable(post.getSender().equals(Config.getInstance().getCurrentUser().getUsername()));
+						} catch (Exception e) {
+							//print stack to console
+							e.printStackTrace();
 
-								//show error message
-								showError("Exception in pebl client", e.getMessage());
+							//show error message
+							showError("Exception in pebl client", e.getMessage());
 
-								//exit app
-								Platform.exit();
-							}
+							//exit app
+							Platform.exit();
 						}
 					});
 				}
 				//failed to get post
 				else {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//display post error
-							showError("Post Error", "Error fetching Post from Server. Please try again later.");
-						}
+					Platform.runLater(() -> {
+						//display post error
+						showError("Post Error", "Error fetching Post from Server. Please try again later.");
 					});
 				}
 
@@ -106,24 +92,16 @@ public class PostCtrl extends VBox {
 					//print stack to console
 					e.printStackTrace();
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							//show general error
-							showError("Exception in pebl client", e.getMessage());
+					Platform.runLater(() -> {
+						//show general error
+						showError("Exception in pebl client", e.getMessage());
 
-							//exit program
-							Platform.exit();
-						}
+						//exit program
+						Platform.exit();
 					});
 				}
 
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						refresh();
-					}
-				});
+				Platform.runLater(() -> refresh());
 
 				//end task
 				return null;
@@ -141,12 +119,7 @@ public class PostCtrl extends VBox {
 		btnSkip.setText(newPost.getSkips() + " Skips");
 
 		//disable button if post is from current user
-		if (newPost.getSender().equals(Config.getInstance().getCurrentUser().getUsername())) {
-			btnSkip.setDisable(true);
-		}
-		else{
-			btnSkip.setDisable(false);
-		}
+		btnSkip.setDisable(newPost.getSender().equals(Config.getInstance().getCurrentUser().getUsername()));
 
 		//link post object
 		this.post = newPost;
