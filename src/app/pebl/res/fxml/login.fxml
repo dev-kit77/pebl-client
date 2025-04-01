@@ -23,12 +23,12 @@
           <Menu fx:id="config" mnemonicParsing="false" text="Configuration">
             <items>
                 <MenuItem fx:id="btnServer" mnemonicParsing="false" onAction="#serverPrompt" text="Set Server Address" />
-              <MenuItem fx:id="btnClose" mnemonicParsing="false" text="Close" onAction="#closeWindow" />
+              <MenuItem fx:id="btnClose" mnemonicParsing="false" onAction="#closeWindow" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem fx:id="btnAbout" mnemonicParsing="false" text="About" onAction="#showAbout"/>
+              <MenuItem fx:id="btnAbout" mnemonicParsing="false" onAction="#showAbout" text="About" />
             </items>
           </Menu>
         </menus>
@@ -37,7 +37,7 @@
    <bottom>
       <AnchorPane prefHeight="72.0" prefWidth="250.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnLogin" alignment="CENTER" defaultButton="true" layoutX="97.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleLogin" opacity="0.9" prefHeight="35.0" prefWidth="146.0" style="-fx-background-color: #f2fcff; -fx-border-color: #92999c; -fx-background-radius: 30; -fx-border-radius: 30;" text="Login" textFill="#2a3e45">
+            <Button fx:id="btnLogin" alignment="CENTER" defaultButton="true" layoutX="97.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleLogin" opacity="0.9" prefHeight="35.0" prefWidth="146.0" text="Login" textFill="#2a3e45">
                <font>
                   <Font size="14.0" />
                </font>
@@ -53,7 +53,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </CheckBox>
-            <Button fx:id="btnSignUp" alignment="CENTER" layoutX="9.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleSignUp" opacity="0.9" prefHeight="35.0" prefWidth="79.0" style="-fx-background-color: #f2fcff; -fx-border-color: #92999c; -fx-background-radius: 30; -fx-border-radius: 30;" text="Sign Up" textFill="#2a3e45">
+            <Button fx:id="btnSignUp" alignment="CENTER" layoutX="9.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleSignUp" opacity="0.9" prefHeight="35.0" prefWidth="79.0" text="Sign Up" textFill="#2a3e45">
                <font>
                   <Font size="14.0" />
                </font>
@@ -78,17 +78,17 @@
                   <Image url="@../img/pebble.png" />
                </image>
             </ImageView>
-            <Label layoutX="114.0" layoutY="20.0" prefHeight="98.0" prefWidth="126.0" stylesheets="@../css/Format.css" text="Pebl Network" textAlignment="CENTER" textFill="#2a3e45" wrapText="true">
+            <Label focusTraversable="false" layoutX="114.0" layoutY="20.0" prefHeight="98.0" prefWidth="126.0" stylesheets="@../css/Format.css" text="Pebl Network" textAlignment="CENTER" textFill="#2a3e45" wrapText="true">
                <font>
                   <Font name="Roboto Condensed Italic" size="30.0" />
                </font>
             </Label>
-            <TextField fx:id="username" layoutX="10.0" layoutY="132.0" opacity="0.9" prefHeight="30.0" prefWidth="235.0" promptText="Username" style="-fx-border-color: #92999c; -fx-border-radius: 30; -fx-background-radius: 30; -fx-background-color: #f2fcff;">
+            <TextField fx:id="username" layoutX="10.0" layoutY="132.0" opacity="0.9" prefHeight="30.0" prefWidth="235.0" promptText="Username">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <PasswordField fx:id="password" layoutX="10.0" layoutY="169.0" opacity="0.9" prefHeight="30.0" prefWidth="235.0" promptText="Password" style="-fx-border-color: #92999c; -fx-background-radius: 30; -fx-border-radius: 30; -fx-background-color: #f2fcff;">
+            <PasswordField fx:id="password" layoutX="10.0" layoutY="169.0" opacity="0.9" prefHeight="30.0" prefWidth="235.0" promptText="Password">
                <font>
                   <Font name="Italic" size="14.0" />
                </font>

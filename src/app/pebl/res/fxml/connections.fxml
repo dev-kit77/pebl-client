@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="layoutParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="200.0" style="-fx-background-color: #c9e6f0;" stylesheets="@../css/Format.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.connections.ConnectionsCtrl">
+<VBox fx:id="layoutParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="200.0" stylesheets="@../css/Format.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.connections.ConnectionsCtrl">
    <children>
       <MenuBar>
         <menus>
@@ -41,7 +41,7 @@
           <children>
               <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
                   <children>
-                      <Label id="lblDispName" fx:id="lblCurrUsername" focusTraversable="false" onMouseClicked="#showProfile" text="Display name" textFill="#2a3e45">
+                      <Label id="lblDispName" fx:id="lblCurrUsername" focusTraversable="true" onMouseClicked="#showProfile" text="Display name" textFill="#2a3e45">
                           <font>
                               <Font name="Bold" size="14.0" />
                           </font>
@@ -70,7 +70,7 @@
               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
           </padding>
       </HBox>
-      <Accordion prefHeight="404.0" prefWidth="200.0" style="-fx-background-color: #c9e6f0;" stylesheets="@../css/Format.css">
+      <Accordion prefHeight="404.0" prefWidth="200.0" stylesheets="@../css/Format.css">
         <panes>
           <TitledPane prefWidth="200.0" text="Mutuals">
                <font>
@@ -79,31 +79,31 @@
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
-                        <VBox fx:id="feedMutuals" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
+                        <VBox fx:id="feedMutuals" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #f2fcff;" />
                      </content>
                   </ScrollPane>
                </content>
           </TitledPane>
-          <TitledPane prefWidth="200.0" style="-fx-background-color: #c9e6f0;" text="Following">
+          <TitledPane prefWidth="200.0"  text="Following">
                <font>
                   <Font name="Roboto Condensed Regular" size="13.0" />
                </font>
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
-                        <VBox fx:id="feedFollowing" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
+                        <VBox fx:id="feedFollowing" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #f2fcff;" />
                      </content>
                   </ScrollPane>
                </content>
           </TitledPane>
-          <TitledPane prefWidth="200.0" style="-fx-background-color: #c9e6f0;" text="Followers">
+          <TitledPane prefWidth="200.0" text="Followers">
                <font>
                   <Font name="Roboto Condensed Regular" size="13.0" />
                </font>
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
-                        <VBox fx:id="feedFollowers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" />
+                        <VBox fx:id="feedFollowers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #f2fcff;" />
                      </content>
                   </ScrollPane>
                </content>

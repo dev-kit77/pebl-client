@@ -42,7 +42,7 @@
             </Menu>
          </menus>
       </MenuBar>
-      <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="540.0" minWidth="450.0" style="-fx-background-color: #c9e6f0;" tabClosingPolicy="UNAVAILABLE">
+      <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="540.0" minWidth="450.0" stylesheets="@../css/Format.css" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="All Posts">
                <content>
@@ -55,7 +55,7 @@
           </Tab>
             <Tab text="Following">
                <content>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../css/Format.css">
                      <content>
                         <VBox fx:id="feedFollowing" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" stylesheets="@../css/Format.css" />
                      </content>
@@ -64,7 +64,7 @@
             </Tab>
           <Tab text="From Followers">
                <content>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../css/Format.css">
                      <content>
                         <VBox fx:id="feedFollowers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #c9e6f0;" stylesheets="@../css/Format.css" />
                      </content>
@@ -75,7 +75,7 @@
       </TabPane>
       <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
         <items>
-          <Button mnemonicParsing="false" stylesheets="@../css/Format.css" text="New Post" onAction="#newPost"/>
+          <Button mnemonicParsing="false" onAction="#newPost" stylesheets="@../css/Format.css" text="New Post" />
         </items>
       </ToolBar>
    </children>
