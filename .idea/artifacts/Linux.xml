@@ -1,0 +1,41 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Linux">
+    <output-path>$PROJECT_DIR$/out/artifacts/Linux</output-path>
+    <root id="archive" name="pebl-client-linux.jar">
+      <element id="module-output" name="pebl-client" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/javafx-swt.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/javafx.base.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/javafx.controls.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/javafx.fxml.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/javafx.graphics.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/javafx.media.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/javafx.swing.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/javafx.web.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-simple-1.1.1.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/javafx.properties" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libavplugin-54.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libavplugin-56.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libavplugin-57.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libavplugin-ffmpeg-56.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libavplugin-ffmpeg-57.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libavplugin-ffmpeg-58.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libavplugin-ffmpeg-59.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libavplugin-ffmpeg-60.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libavplugin-ffmpeg-61.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libdecora_sse.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libfxplugins.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libglass.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libglassgtk3.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libgstreamer-lite.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libjavafx_font.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libjavafx_font_freetype.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libjavafx_font_pango.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libjavafx_iio.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libjfxmedia.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libjfxwebkit.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libprism_common.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libprism_es2.so" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/javafx-sdk-23.0.2-linux/lib/libprism_sw.so" />
+    </root>
+  </artifact>
+</component>
