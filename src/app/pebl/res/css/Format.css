@@ -21,7 +21,6 @@
 
 .button {
 	-fx-background-color: #f2fcff;
-	-fx-border-color: #92999c;
 	-fx-background-radius: 30;
 	-fx-border-radius: 30;
 	-fx-text-fill: #2a3e45;
@@ -31,7 +30,6 @@
 
 .text-field {
 	-fx-background-color: #f2fcff;
-	-fx-border-color: #92999c;
 	-fx-background-radius: 30;
 	-fx-border-radius: 30;
 	-fx-text-fill: #2a3e45;
@@ -40,7 +38,6 @@
 
 .text-area {
 	-fx-background-color: #f2fcff;
-	-fx-border-color: #92999c;
 	-fx-background-radius: 10;
 	-fx-border-radius: 10;
 	-fx-text-fill: #2a3e45;
@@ -58,7 +55,6 @@
 
 .password-field {
 	-fx-background-color: #f2fcff;
-	-fx-border-color: #92999c;
 	-fx-background-radius: 30;
 	-fx-border-radius: 30;
 	-fx-text-fill: #2a3e45;
