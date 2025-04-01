@@ -1,4 +1,4 @@
-package app.pebl;
+package app.pebl.util;
 
 //importing packages
 import org.json.simple.JSONArray;

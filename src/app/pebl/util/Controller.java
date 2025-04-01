@@ -1,5 +1,6 @@
-package app.pebl;
+package app.pebl.util;
 
+import app.pebl.Main;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -77,6 +78,9 @@ public class Controller {
 
 					//show error message
 					showError("Exception in pebl client", e.getMessage());
+
+					//exit app
+					Platform.exit();
 				}
 
 				//return to end task

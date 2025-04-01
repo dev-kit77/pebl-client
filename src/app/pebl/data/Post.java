@@ -1,4 +1,4 @@
-package app.pebl.posts;
+package app.pebl.data;
 
 import java.util.Date;
 

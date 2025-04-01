@@ -1,8 +1,9 @@
 package app.pebl.profile;
 
-import app.pebl.Config;
-import app.pebl.Controller;
+import app.pebl.util.Config;
+import app.pebl.util.Controller;
 import app.pebl.Main;
+import app.pebl.data.User;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -138,7 +139,7 @@ public class ProfileCtrl extends Controller {
 		signup.setTitle("Edit Profile");
 		signup.setScene(new Scene(Main.getFXML("edit").load()));
 		signup.initOwner(layoutParent.getScene().getWindow());
-		signup.initModality(Modality.APPLICATION_MODAL);
+		signup.initModality(Modality.WINDOW_MODAL);
 		signup.showAndWait();
 
 		//refresh profile
@@ -196,6 +197,9 @@ public class ProfileCtrl extends Controller {
 
 					//show error message
 					showError("Exception in pebl client", e.getMessage());
+
+					//exit app
+					Platform.exit();
 				}
 
 				//if follow was succesful

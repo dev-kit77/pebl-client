@@ -1,17 +1,14 @@
-package app.pebl;
+package app.pebl.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Iterator;
-import java.util.Scanner;
 
-import app.pebl.posts.Post;
-import app.pebl.profile.User;
+import app.pebl.Main;
+import app.pebl.data.Post;
+import app.pebl.data.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
 
 
 // api link: https://pebl-api.fly.dev/api/

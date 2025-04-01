@@ -1,7 +1,7 @@
 package app.pebl.connections;
 
 import app.pebl.Main;
-import app.pebl.profile.User;
+import app.pebl.data.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;

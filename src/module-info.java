@@ -14,6 +14,8 @@ module PeblClient {
 	opens app.pebl.login to javafx.fxml;
 	opens app.pebl.posts to javafx.fxml;
 	opens app.pebl.prompts to javafx.fxml;
+	opens app.pebl.data to javafx.fxml;
+	opens app.pebl.util to javafx.fxml, javafx.graphics;
 
 	exports app.pebl;
 	exports app.pebl.connections;
@@ -21,4 +23,6 @@ module PeblClient {
 	exports app.pebl.login;
 	exports app.pebl.posts;
 	exports app.pebl.prompts;
+	exports app.pebl.data;
+	exports app.pebl.util;
 }

@@ -1,7 +1,7 @@
 package app.pebl.login;
 
-import app.pebl.Config;
-import app.pebl.Controller;
+import app.pebl.util.Config;
+import app.pebl.util.Controller;
 import app.pebl.Main;
 import javafx.application.Platform;
 import javafx.concurrent.Task;

@@ -4,9 +4,11 @@ package app.pebl;
 //imports
 import app.pebl.connections.ConnectionsCtrl;
 import app.pebl.profile.ProfileCtrl;
-import app.pebl.profile.User;
-import app.pebl.posts.Post;
+import app.pebl.data.User;
+import app.pebl.data.Post;
 import app.pebl.prompts.LeaderboardCtrl;
+import app.pebl.util.Config;
+import app.pebl.util.Connect;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;

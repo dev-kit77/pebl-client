@@ -1,6 +1,6 @@
-package app.pebl;
+package app.pebl.util;
 
-import app.pebl.profile.User;
+import app.pebl.data.User;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 

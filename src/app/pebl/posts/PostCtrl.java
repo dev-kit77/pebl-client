@@ -1,9 +1,9 @@
 package app.pebl.posts;
 
 import app.pebl.Main;
+import app.pebl.data.Post;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 

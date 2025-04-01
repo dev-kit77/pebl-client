@@ -1,9 +1,9 @@
 package app.pebl.prompts;
 
-import app.pebl.Config;
-import app.pebl.Controller;
+import app.pebl.util.Config;
+import app.pebl.util.Controller;
 import app.pebl.Main;
-import app.pebl.profile.User;
+import app.pebl.data.User;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;

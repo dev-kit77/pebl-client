@@ -1,9 +1,10 @@
 package app.pebl.posts;
 
-import app.pebl.Config;
-import app.pebl.Controller;
+import app.pebl.util.Config;
+import app.pebl.util.Controller;
 import app.pebl.Main;
-import app.pebl.profile.User;
+import app.pebl.data.Post;
+import app.pebl.data.User;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -40,7 +41,7 @@ public class PostsCtrl extends Controller {
 		feedPosts.getChildren().clear();
 
 		//get user data
-		Task<Void> userRefresh = new Task<>() {
+		Task<Void> feedRefresh = new Task<>() {
 			@Override public Void call() {
 				//init post list
 				ArrayList<Post> posts = null;
@@ -54,6 +55,9 @@ public class PostsCtrl extends Controller {
 
 					//show error message
 					showError("Exception in pebl client", e.getMessage());
+
+					//exit app
+					Platform.exit();
 				}
 
 				//check that get succeeded
@@ -76,6 +80,9 @@ public class PostsCtrl extends Controller {
 
 											//show error message
 											showError("Exception in pebl client", e.getMessage());
+
+											//exit app
+											Platform.exit();
 										}
 									}
 								});
@@ -86,6 +93,9 @@ public class PostsCtrl extends Controller {
 
 							//show error message
 							showError("Exception in pebl client", e.getMessage());
+
+							//exit app
+							Platform.exit();
 						}
 					}
 				}
@@ -96,7 +106,7 @@ public class PostsCtrl extends Controller {
 		};
 
 		//run thread
-		Main.getExecutor().execute(userRefresh);
+		Main.getExecutor().execute(feedRefresh);
 	}
 
 	public void showProfile() throws IOException {
