@@ -103,7 +103,7 @@ public class ProfileCtrl extends Controller {
 						}
 
 						//update follow button
-						if (Config.getInstance().getCurrentUser().getFollowers().contains(displayUser.getUsername())) {
+						if (Config.getInstance().getCurrentUser().getFollowing().contains(displayUser.getUsername())) {
 							//update buttons
 							btnFollow.setText("Unfollow");
 							follow.setText("Unfollow");
