@@ -98,7 +98,7 @@
                   <Font name="Bold" size="24.0" />
                </font>
             </Label>
-            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="275.0" minWidth="250.0" style="-fx-border-color: #c9e6f0;">
+            <ScrollPane fx:id="scrUserPosts" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="275.0" prefWidth="250.0" style="-fx-border-color: #c9e6f0;">
                <content>
                   <VBox fx:id="feedUserPosts" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #f2fcff;" />
                </content>

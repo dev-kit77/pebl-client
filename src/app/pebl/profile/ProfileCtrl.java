@@ -1,19 +1,24 @@
 package app.pebl.profile;
 
+import app.pebl.data.Post;
+import app.pebl.posts.PostCtrl;
 import app.pebl.util.Config;
 import app.pebl.util.Controller;
 import app.pebl.Main;
 import app.pebl.data.User;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ProfileCtrl extends Controller {
 	//fxml imports
@@ -24,6 +29,7 @@ public class ProfileCtrl extends Controller {
 	@FXML private Label lblSkips;
 	@FXML private Label lblAge;
 	@FXML private Label lblGender;
+	@FXML private ScrollPane scrUserPosts;
 	@FXML private VBox feedUserPosts;
 	@FXML private MenuItem edit;
 	@FXML private MenuItem follow;
@@ -96,6 +102,9 @@ public class ProfileCtrl extends Controller {
 							btnFollow.setText("Follow");
 							follow.setText("Follow");
 						}
+
+						//clear post feed
+						feedUserPosts.getChildren().clear();
 					});
 				}
 				//null return from server
@@ -104,6 +113,70 @@ public class ProfileCtrl extends Controller {
 						//show error as no profile retrieved
 						showError("Profile Error", "Error fetching Profile from Server. Please try again later.");
 					});
+				}
+
+				//init post list and get posts
+				ArrayList<Integer> postIDs = displayUser.getPosts();
+
+				//trim arraylist to size
+				postIDs.trimToSize();
+
+				//check that get succeeded
+				if (postIDs != null) {
+					//get last post
+					final Integer mostRecentPostID = Integer.valueOf(postIDs.getLast());
+
+					//loop for all followers
+					for (Integer id : postIDs) {
+						try {
+							//attempt to get post
+							Post post = Main.getPost(id);
+
+							//check if post was received
+							if (post != null) {
+								//update gui
+								Platform.runLater(() -> {
+									try {
+										//attempt to add post
+										addPost(feedUserPosts, post);
+
+										//add separator if not last post
+										if (id != mostRecentPostID) {
+											feedUserPosts.getChildren().add(new Separator());
+										}
+									} catch (Exception e) {
+										//print stack to console
+										e.printStackTrace();
+
+										Platform.runLater(() -> {
+											//show general error
+											showError("Exception in pebl client", e.getMessage());
+
+											//exit program
+											Platform.exit();
+										});
+									}
+								});
+							}
+							else {
+								Platform.runLater(() -> {
+									//show post get error
+									showError("Post Error", "Error fetching Post: " + id + " from Server. Please try again later.");
+								});
+							}
+						} catch(Exception e){
+							//print stack to console
+							e.printStackTrace();
+
+							Platform.runLater(() -> {
+								//show general error
+								showError("Exception in pebl client", e.getMessage());
+
+								//exit program
+								Platform.exit();
+							});
+						}
+					}
 				}
 
 				//empty return
@@ -184,6 +257,21 @@ public class ProfileCtrl extends Controller {
 		};
 
 		Main.getExecutor().execute(userRefresh);
+	}
+
+	public void addPost(VBox feed, Post added) throws IOException {
+		//get fxml loader
+		FXMLLoader loader = Main.getFXML("post");
+
+		//create new vbox to add
+		loader.setRoot(new VBox());
+
+		//load into vbox
+		feed.getChildren().add(loader.load());
+
+		//get controller and inject data
+		PostCtrl controller = (PostCtrl) loader.getController();
+		controller.setPost(added);
 	}
 
 	public void showProfile() {
