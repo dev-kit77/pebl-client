@@ -30,7 +30,7 @@ public final class Config {
 	private String username;
 
 	//defaults
-	public final String defaultAddress = "https://pebl-api.fly.dev/";
+	public final String defaultAddress = "https://pebl.fyr.li/";
 
 	public Config() throws InterruptedException {
 		//attempt loading
