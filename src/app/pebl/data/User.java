@@ -147,10 +147,19 @@ public class User {
     }
 
     /**
-     * Sets the list of mutual friends with the current user being viewed
+     * Sets the list of mutuals with the current user being viewed
      * @param user User currently being viewed
      */
     public void setMutuals(User user) {
+        mutuals = new ArrayList<String>(following);
+        mutuals.retainAll(user.getFollowers());
+    }
+
+    /**
+     * Sets the list of sharedfollows with the current user being viewed
+     * @param user User currently being viewed
+     */
+    public void setSharedFollows(User user) {
         mutuals = new ArrayList<String>(following);
         mutuals.retainAll(user.getFollowing());
     }

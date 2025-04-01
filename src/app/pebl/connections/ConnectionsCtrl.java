@@ -72,8 +72,13 @@ public class ConnectionsCtrl extends Controller {
 						feedFollowing.getChildren().clear();
 					});
 
-					//set mutuals list
-					displayUser.setMutuals(Config.getInstance().getCurrentUser());
+					if (!displayUser.equals(Config.getInstance().getCurrentUser())) {
+						//set mutuals list
+						displayUser.setMutuals(Config.getInstance().getCurrentUser());
+					} else {
+						//set sharedFollows list
+						displayUser.setSharedFollows(Config.getInstance().getCurrentUser());
+					}
 				} catch (Exception e) {
 					//print stack to console
 					e.printStackTrace();
