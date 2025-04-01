@@ -1003,33 +1003,35 @@ public class Main extends Application {
 
 
 	/**
-	 * Method that filters the feed to only include your followers posts or followings posts. The Method filters the feed and stores it in filteredFeed which can be accessed at any time being a public variable
+	 * Method that filters the feed to only include your followers posts or followings posts.
 	 * @param query True for "FOLLOWERS ONLY". False for "FOLLOWINGS ONLY"
 	 * @return
 	 */
-	public static void filterFeed(boolean query) {
+	public static ArrayList<Post> filterFeed(boolean query) {
+		//init
+		filteredFeed = null;
+
 		//check if feed is empty before running
-		if (feed == null){
-			System.err.println("feed is empty");
-			return;
+		if (feed != null) {
+			//set filtered to feed
+			filteredFeed = new ArrayList<Post>(feed);
+
+			//if FOLLOWERS ONLY
+			if (query) {
+				//remove elements whose authors are not store in current user's follower's list
+				filteredFeed.removeIf(element -> !Config.getInstance().getCurrentUser().getFollowers().contains(element.getSender()));
+			}
+			//if FOLLOWINGS ONLY
+			else {
+				//remove elements whose authors are not store in current user's following's list
+				filteredFeed.removeIf(element -> !Config.getInstance().getCurrentUser().getFollowing().contains(element.getSender()));
+			}
+		}
+		else {
+			System.err.println("null feed");
 		}
 
-		//copy feed to filter feed
-		filteredFeed = new ArrayList<Post>(feed);
-
-		//if FOLLOWERS ONLY
-		if (query){
-
-			//remove elements whose authors are not store in current user's follower's list
-			filteredFeed.removeIf(element -> !Config.getInstance().getCurrentUser().getFollowers().contains(element.getSender()));
-		}
-
-		//if FOLLOWINGS ONLY
-		else{
-
-			//remove elements whose authors are not store in current user's following's list
-			filteredFeed.removeIf(element -> !Config.getInstance().getCurrentUser().getFollowing().contains(element.getSender()));
-		}
+		return filteredFeed;
 	}
 
 	/**
