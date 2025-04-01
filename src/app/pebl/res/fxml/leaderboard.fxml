@@ -6,9 +6,11 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../css/Format.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.prompts.LeaderboardCtrl">
    <children>
@@ -39,25 +41,25 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="2.0">
                <children>
-                  <Label fx:id="lblCurrUsername" focusTraversable="false" onMouseClicked="#showProfile" text="username" textFill="#2a3e45">
+                  <Text fx:id="lblCurrUsername" focusTraversable="false" onMouseClicked="#showProfile" text="username">
                      <font>
                         <Font name="Bold" size="14.0" />
                      </font>
-                  </Label>
+                  </Text>
                   <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                      <children>
-                        <Label fx:id="lblCurrSkips" text="(0 Skips)">
+                        <Text fx:id="lblCurrSkips" text="(0 Skips)">
                            <font>
                               <Font size="10.0" />
                            </font>
-                        </Label>
+                        </Text>
                      </children>
                   </HBox>
-                  <Label fx:id="lblCurrStatus" focusTraversable="false" text="Lorem Ipsum" textFill="#2a3e45" wrapText="true">
+                  <Text fx:id="lblCurrStatus" focusTraversable="false">
                      <font>
                         <Font size="12.0" />
                      </font>
-                  </Label>
+                  </Text>
                </children>
                <padding>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -68,9 +70,22 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </HBox>
+       <Separator />
+      <HBox alignment="CENTER">
+         <children>
+            <Label text="Skips Leaderboard">
+               <font>
+                  <Font name="Roboto Condensed Italic" size="16.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
       <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="280.0" minWidth="200.0" stylesheets="@../css/Format.css">
          <content>
-            <VBox fx:id="feedBoard" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #c9e6f0;" />
+            <VBox fx:id="feedBoard" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #f2fcff;" />
          </content>
       </ScrollPane>
    </children>
