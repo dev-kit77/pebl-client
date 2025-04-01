@@ -372,7 +372,25 @@ public class Main extends Application {
 			System.err.println("Parameter is null");
 			return null;
 		}
-        return new User(response.get("username").toString(), Integer.parseInt(response.get("skips").toString()), new ArrayList<String>((JSONArray) (response.get("followers"))), new ArrayList<String>((JSONArray) (response.get("following"))), response.get("status").toString(), Integer.parseInt(response.get("age").toString()), Boolean.parseBoolean(response.get("gender").toString()), new ArrayList<Integer>((JSONArray)response.get("posts")), response.get("location").toString());
+
+		//init int post id array
+		ArrayList<Integer> postIDs = null;
+
+		//init json array
+		JSONArray postArr = (JSONArray) response.get("posts");
+
+		//check post ids is not null
+		if (postArr != null) {
+			postIDs = new ArrayList<Integer>();
+
+			//loop for all items in json array
+			for (int i = 0; i < postArr.size(); i++) {
+				//convert json string value to int and add to post id arraylist
+				postIDs.add(Integer.parseInt(postArr.get(i).toString()));
+			}
+		}
+
+        return new User(response.get("username").toString(), Integer.parseInt(response.get("skips").toString()), new ArrayList<String>((JSONArray) (response.get("followers"))), new ArrayList<String>((JSONArray) (response.get("following"))), response.get("status").toString(), Integer.parseInt(response.get("age").toString()), Boolean.parseBoolean(response.get("gender").toString()), postIDs, response.get("location").toString());
 	}
 
 	/**
@@ -563,7 +581,6 @@ public class Main extends Application {
 
 		//send request and store the response
 		JSONObject response = connect.request("profileGet", obj);
-
 
 		//if success
 		if (response != null) {
