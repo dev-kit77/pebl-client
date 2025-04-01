@@ -84,7 +84,7 @@ public class LoginCtrl extends Controller {
 						Platform.runLater(() -> {
 							//show main window set
 							try {
-								Main.showMainWindows(Main.getPrimaryStage());
+								Main.showMainWindows();
 							} catch (IOException e) {
 								//print stack
 								e.printStackTrace();
@@ -145,7 +145,7 @@ public class LoginCtrl extends Controller {
 
 			//show main window set
 			try {
-				Main.showMainWindows(Main.getPrimaryStage());
+				Main.showMainWindows();
 			} catch (IOException e) {
 				//print stack
 				e.printStackTrace();

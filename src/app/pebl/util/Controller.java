@@ -18,51 +18,41 @@ public class Controller {
 	//fxml elements
 	@FXML protected Node layoutParent;
 
-	public void refreshUser() {
-		//get user data
-		Task<Void> userRefresh = new Task<>() {
-			@Override
-			public Void call() {
-				try {
-					//refresh current user from server
-					User updated = Main.getProfile(Config.getInstance().getCurrentUser().getUsername());
+	protected void refreshUser() {
+		try {
+			//refresh current user from server
+			User updated = Main.getProfile(Config.getInstance().getCurrentUser().getUsername());
 
-					//check if updated user has value
-					if (updated != null) {
-						Config.getInstance().setCurrentUser(updated);
-					}
-					//null return from server
-					else {
-						Platform.runLater(() -> {
-							//display user update error
-							showError("User Update Error", "Error fetching current user from server. Please try again later.");
-						});
-					}
-
-				} catch (Exception e) {
-					//print stack to console
-					e.printStackTrace();
-
-					Platform.runLater(() -> {
-						//show general error
-						showError("Exception in pebl client", e.getMessage());
-
-						//exit program
-						Platform.exit();
-					});
-				}
-
-				//return to end task
-				return null;
+			//check if updated user has value
+			if (updated != null) {
+				Config.getInstance().setCurrentUser(updated);
 			}
-		};
+			//null return from server
+			else {
+				Platform.runLater(() -> {
+					//display user update error
+					showError("User Update Error", "Error fetching current user from server. Please try again later.");
+				});
+			}
 
-		Main.getExecutor().execute(userRefresh);
+		} catch (Exception e) {
+			//print stack to console
+			e.printStackTrace();
+
+			Platform.runLater(() -> {
+				//show general error
+				showError("Exception in pebl client", e.getMessage());
+
+				//exit program
+				Platform.exit();
+			});
+		}
 	}
 
 	public void logout() {
 		//close all windows
-		Main.getPrimaryStage().getScene().getWindow().hide();
+		Stage main = (Stage) Main.getPrimaryStage().getScene().getWindow();
+		main.close();
 
 		//empty config
 		Config.getInstance().setAuthToken(null);

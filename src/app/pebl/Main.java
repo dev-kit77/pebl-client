@@ -111,7 +111,7 @@ public class Main extends Application {
 					Platform.runLater(() -> {
 						try	{
 							//show main windows
-							showMainWindows(primaryStage);
+							showMainWindows();
 						} catch (Exception e) {
 							//print stack to log
 							e.printStackTrace();
@@ -307,24 +307,24 @@ public class Main extends Application {
 		return stage;
 	}
 
-	public static void showMainWindows(Stage mainStage) throws IOException {
+	public static void showMainWindows() throws IOException {
 		//init posts window as main window
-		mainStage = initPosts();
-		mainStage.show();
+		primaryStage = initPosts();
+		primaryStage.show();
 
 		//init connections window
 		Stage connectionStage = initConnections(Config.getInstance().getCurrentUser());
-		connectionStage.initOwner(mainStage);
+		connectionStage.initOwner(primaryStage);
 		connectionStage.show();
 
 		//init profile window
 		Stage profileStage = initProfile(Config.getInstance().getCurrentUser());
-		profileStage.initOwner(mainStage);
+		profileStage.initOwner(primaryStage);
 		profileStage.show();
 
 		//init leaderboard window
 		Stage leaderboardStage = initLeaderboard(Config.getInstance().getCurrentUser());
-		leaderboardStage.initOwner(mainStage);
+		leaderboardStage.initOwner(primaryStage);
 		leaderboardStage.show();
 	}
 
