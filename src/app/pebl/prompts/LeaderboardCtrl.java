@@ -69,6 +69,9 @@ public class LeaderboardCtrl extends Controller {
 						//hide label
 						lblCurrStatus.setVisible(false);
 					}
+
+					//clear current board
+					feedBoard.getChildren().clear();
 				});
 
 				//init leaderboard
