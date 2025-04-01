@@ -38,6 +38,24 @@
 	-fx-font-family: "Roboto Condensed Italic", sans-serif;
 }
 
+.text-area {
+	-fx-background-color: #f2fcff;
+	-fx-border-color: #92999c;
+	-fx-background-radius: 10;
+	-fx-border-radius: 10;
+	-fx-text-fill: #2a3e45;
+	-fx-font-family: "Roboto Condensed", sans-serif;
+}
+.text-area .scroll-pane {
+	-fx-background-color: transparent;
+}
+.text-area .scroll-pane .viewport{
+	-fx-background-color: transparent;
+}
+.text-area .scroll-pane .content{
+	-fx-background-color: transparent;
+}
+
 .password-field {
 	-fx-background-color: #f2fcff;
 	-fx-border-color: #92999c;

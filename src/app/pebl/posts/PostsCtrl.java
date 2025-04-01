@@ -9,7 +9,10 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -102,7 +105,7 @@ public class PostsCtrl extends Controller {
 
 				//end task with null return
 				return null;
-			};
+			}
 		};
 
 		//run thread
@@ -119,6 +122,19 @@ public class PostsCtrl extends Controller {
 
 	public void showLeaderboard() throws IOException {
 		Main.initLeaderboard(currUser).show();
+	}
+
+	public void newPost() throws IOException {
+		//create new post window
+		Stage newPost = new Stage();
+		newPost.setTitle("New Post");
+		newPost.setScene(new Scene(Main.getFXML("newPost").load()));
+		newPost.initOwner(layoutParent.getScene().getWindow());
+		newPost.initModality(Modality.WINDOW_MODAL);
+		newPost.showAndWait();
+
+		//refresh posts
+		refresh();
 	}
 
 	public void addPost(VBox feed, Post added) throws IOException {
