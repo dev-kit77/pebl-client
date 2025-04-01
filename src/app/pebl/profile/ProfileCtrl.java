@@ -39,6 +39,16 @@ public class ProfileCtrl extends Controller {
 	//class fields
 	User displayUser;
 
+	 public void initialize() {
+		 //initialise listener for new posts being added to feed and scroll to bottom
+		 feedUserPosts.heightProperty().addListener(new ChangeListener() {
+			 @Override
+			 public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+				 scrUserPosts.setVvalue((Double) newValue);
+			 }
+		 });
+	 }
+
 	public void refresh() {
 		//get user data
 		Task<Void> profileRefresh = new Task<>() {

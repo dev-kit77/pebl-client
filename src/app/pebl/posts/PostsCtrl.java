@@ -6,10 +6,13 @@ import app.pebl.Main;
 import app.pebl.data.Post;
 import app.pebl.data.User;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -21,8 +24,11 @@ import java.util.ArrayList;
 public class PostsCtrl extends Controller {
 	//fxml elements
 	@FXML private VBox feedPosts;
+	@FXML private ScrollPane scrPosts;
 	@FXML private VBox feedFollowing;
+	@FXML private ScrollPane scrFollowing;
 	@FXML private VBox feedFollowers;
+	@FXML private ScrollPane scrFollowers;
 
 	//class fields
 	private User currUser;
@@ -30,6 +36,30 @@ public class PostsCtrl extends Controller {
 	public void initialize() {
 		//get current user
 		currUser = Config.getInstance().getCurrentUser();
+
+		//initialise listener for new posts being added to feed and scroll to bottom
+		feedPosts.heightProperty().addListener(new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+				scrPosts.setVvalue((Double) newValue);
+			}
+		});
+
+		//initialise listener for new posts being added to feed and scroll to bottom
+		feedFollowing.heightProperty().addListener(new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+				scrFollowing.setVvalue((Double) newValue);
+			}
+		});
+
+		//initialise listener for new posts being added to feed and scroll to bottom
+		feedFollowers.heightProperty().addListener(new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+				scrFollowers.setVvalue((Double) newValue);
+			}
+		});
 
 		//get latest posts
 		refresh();
