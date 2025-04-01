@@ -133,24 +133,26 @@ public final class Config {
 				username = prop.getProperty("user");
 			}
 
+			//close reader object
 			reader.close();
 
 			//return true for success
 			return true;
 		}
 		catch(IOException e) {
-			//update GUI
-			Platform.runLater(() -> {
-				//show general error
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Error");
-				alert.setHeaderText("Exception in pebl client");
-				alert.setContentText(e.getMessage());
-				alert.showAndWait();
+			//print stack
+			e.printStackTrace();
 
-				//exit program
-				Platform.exit();
-			});
+			//update GUI
+			//show general error
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("Exception in pebl client");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+
+			//exit program
+			Platform.exit();
 
 			//return false for failure
 			return false;
@@ -208,24 +210,26 @@ public final class Config {
 
 			prop.store(writer, "pebl-config");
 
-			//close reader and buffer
+			//close writer
 			writer.close();
+
 			//return true for success
 			return true;
 		}
 		catch(IOException e) {
-			//update GUI
-			Platform.runLater(() -> {
-				//show general error
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Error");
-				alert.setHeaderText("Exception in pebl client");
-				alert.setContentText(e.getMessage());
-				alert.showAndWait();
+			//print stack
+			e.printStackTrace();
 
-				//exit program
-				Platform.exit();
-			});
+			//update GUI
+			//show general error
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("Exception in pebl client");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+
+			//exit program
+			Platform.exit();
 
 			//return false for failure
 			return false;
