@@ -10,6 +10,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -63,6 +64,9 @@ public class PostsCtrl extends Controller {
 					Platform.exit();
 				}
 
+				Post mostRecentPost;
+				mostRecentPost = posts.getLast();
+
 				//check that get succeeded
 				if (posts != null) {
 					//loop for all followers
@@ -77,6 +81,11 @@ public class PostsCtrl extends Controller {
 										try {
 											//attempt to add post
 											addPost(feedPosts, post);
+
+											//add separator if not last post
+											if (!post.equals(mostRecentPost)) {
+												feedPosts.getChildren().add(new Separator());
+											}
 										} catch (Exception e) {
 											//print stack to console
 											e.printStackTrace();

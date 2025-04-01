@@ -14,8 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Controller {
-	@FXML
-	protected Node layoutParent;
+	@FXML protected Node layoutParent;
 
 	public void closeWindow() {
 		//close window
@@ -40,8 +39,8 @@ public class Controller {
 	}
 
 	public void logout() {
-		//close window
-		closeWindow();
+		//close all windows
+		Main.getPrimaryStage().getScene().getWindow().hide();
 
 		//empty config
 		Config.getInstance().setAuthToken(null);
