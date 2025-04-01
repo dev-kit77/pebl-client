@@ -75,12 +75,16 @@ public class PostsCtrl extends Controller {
 				//refresh current user
 				refreshUser();
 
-				//init post list
+				//init post lists
 				ArrayList<Post> posts = null;
+				ArrayList<Post> postsFollowed = null;
+				ArrayList<Post> postsFollowers = null;
 
 				try {
-					//get feed from
+					//get feeds
 					posts = Main.getFeed();
+					postsFollowed = Main.filterFeed(false);
+					postsFollowers = Main.filterFeed(true);
 				} catch (Exception e) {
 					//print stack to console
 					e.printStackTrace();
@@ -113,6 +117,118 @@ public class PostsCtrl extends Controller {
 										//add separator if not last post
 										if (!post.equals(mostRecentPost)) {
 											feedPosts.getChildren().add(new Separator());
+										}
+									} catch (Exception e) {
+										//print stack to console
+										e.printStackTrace();
+
+										Platform.runLater(() -> {
+											//show general error
+											showError("Exception in pebl client", e.getMessage());
+
+											//exit program
+											Platform.exit();
+										});
+									}
+								});
+							}
+						} catch (Exception e) {
+							//print stack to console
+							e.printStackTrace();
+
+							Platform.runLater(() -> {
+								//show general error
+								showError("Exception in pebl client", e.getMessage());
+
+								//exit program
+								Platform.exit();
+							});
+						}
+					}
+				}
+				//null return from get
+				else {
+					Platform.runLater(() -> {
+						//show error as no posts retrieved
+						showError("Posts Error", "Error fetching Posts from Server. Please try again later.");
+					});
+				}
+
+				//check that get succeeded
+				if (postsFollowed != null) {
+					//get last post
+					final Post mostRecentPost = postsFollowed.getLast();
+
+					//loop for all followers
+					for (Post post : postsFollowed) {
+						try {
+							//check if response succeeded
+							if (post != null) {
+								//update gui
+								Platform.runLater(() -> {
+									try {
+										//attempt to add post
+										addPost(feedFollowing, post);
+
+										//add separator if not last post
+										if (!post.equals(mostRecentPost)) {
+											feedFollowing.getChildren().add(new Separator());
+										}
+									} catch (Exception e) {
+										//print stack to console
+										e.printStackTrace();
+
+										Platform.runLater(() -> {
+											//show general error
+											showError("Exception in pebl client", e.getMessage());
+
+											//exit program
+											Platform.exit();
+										});
+									}
+								});
+							}
+						} catch (Exception e) {
+							//print stack to console
+							e.printStackTrace();
+
+							Platform.runLater(() -> {
+								//show general error
+								showError("Exception in pebl client", e.getMessage());
+
+								//exit program
+								Platform.exit();
+							});
+						}
+					}
+				}
+				//null return from get
+				else {
+					Platform.runLater(() -> {
+						//show error as no posts retrieved
+						showError("Posts Error", "Error fetching Posts from Server. Please try again later.");
+					});
+				}
+
+				//check that get succeeded
+				if (postsFollowers != null) {
+					//get last post
+					final Post mostRecentPost = postsFollowers.getLast();
+
+					//loop for all followers
+					for (Post post : postsFollowers) {
+						try {
+							//check if response succeeded
+							if (post != null) {
+								//update gui
+								Platform.runLater(() -> {
+									try {
+										//attempt to add post
+										addPost(feedFollowers, post);
+
+										//add separator if not last post
+										if (!post.equals(mostRecentPost)) {
+											feedFollowers.getChildren().add(new Separator());
 										}
 									} catch (Exception e) {
 										//print stack to console
