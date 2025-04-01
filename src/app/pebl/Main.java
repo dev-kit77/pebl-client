@@ -687,7 +687,7 @@ public class Main extends Application {
 		obj.put("id", id);
 
 		//send request and save response
-		JSONObject response = connect.request("getPost", obj);
+		JSONObject response = connect.request("postGet", obj);
 
 		//if success
 		if (response != null) {
