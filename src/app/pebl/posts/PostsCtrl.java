@@ -64,11 +64,11 @@ public class PostsCtrl extends Controller {
 					Platform.exit();
 				}
 
-				Post mostRecentPost;
-				mostRecentPost = posts.getLast();
-
 				//check that get succeeded
 				if (posts != null) {
+					//get last post
+					final Post mostRecentPost = posts.getLast();
+
 					//loop for all followers
 					for (Post post : posts) {
 						try {

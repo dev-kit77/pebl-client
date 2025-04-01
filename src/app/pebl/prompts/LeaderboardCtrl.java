@@ -98,26 +98,32 @@ public class LeaderboardCtrl extends Controller {
 					});
 				}
 
-				//loop for all users on board
-				for (User addUsr : topUsers) {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								//attempt to add card
-								addCard(feedBoard, addUsr);
-							} catch (Exception e) {
-								//print stack to console
-								e.printStackTrace();
+				//check if fetch succeeded
+				if (topUsers != null) {
+					//get last user in list
+					final User last = topUsers.getLast();
 
-								//show error message
-								showError("Exception in pebl client", e.getMessage());
+					//loop for all users on board
+					for (User addUsr : topUsers) {
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									//attempt to add card
+									addCard(feedBoard, addUsr);
+								} catch (Exception e) {
+									//print stack to console
+									e.printStackTrace();
 
-								//exit app
-								Platform.exit();
+									//show error message
+									showError("Exception in pebl client", e.getMessage());
+
+									//exit app
+									Platform.exit();
+								}
 							}
-						}
-					});
+						});
+					}
 				}
 
 				//end thread

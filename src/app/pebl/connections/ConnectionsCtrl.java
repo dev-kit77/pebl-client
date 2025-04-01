@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class ConnectionsCtrl extends Controller {
 		super.refresh();
 
 		//get user data
-		Task<Void> userRefresh = new Task<>() {
+		Task<Void> userRefresh = new Task<Void>() {
 			@Override public Void call() {
 				try {
 					//refresh display user from server
@@ -82,132 +83,165 @@ public class ConnectionsCtrl extends Controller {
 				ArrayList<String> following = displayUser.getFollowing();
 				ArrayList<String> followers = displayUser.getFollowers();
 
-				//loop for all followers
-				for (String follower : followers) {
-					//print to log
-					System.out.println("Getting: " + follower);
+				//check if loop needs run
+				if (mutuals != null) {
+					//get last user
+					final String lastMutual = mutuals.getLast();
 
-					try {
-						//get follower data
-						User addUsr = Main.getProfile(follower);
+					//loop for all mutuals
+					for (String moot : mutuals) {
+						//print to log
+						System.out.println("Getting: " + moot);
 
-						//check if response succeeded
-						if (addUsr != null) {
-							//update gui
-							Platform.runLater(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										//attempt to add card
-										addCard(feedFollowers, addUsr);
-									} catch (Exception e) {
-										//print stack to console
-										e.printStackTrace();
+						try {
+							//get follower data
+							User addUsr = Main.getProfile(moot);
 
-										//show error message
-										showError("Exception in pebl client", e.getMessage());
+							//check if response succeeded
+							if (addUsr != null) {
+								//update gui
+								Platform.runLater(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											//attempt to add card
+											addCard(feedMutuals, addUsr);
 
-										//exit app
-										Platform.exit();
+											//add separator if not last post
+											if (!addUsr.getUsername().equals(lastMutual)) {
+												feedMutuals.getChildren().add(new Separator());
+											}
+										} catch (Exception e) {
+											//print stack to console
+											e.printStackTrace();
+
+											//show error message
+											showError("Exception in pebl client", e.getMessage());
+
+											//exit app
+											Platform.exit();
+										}
 									}
-								}
-							});
+								});
+							}
+						} catch (Exception e) {
+							//print stack to console
+							e.printStackTrace();
+
+							//show error message
+							showError("Exception in pebl client", e.getMessage());
+
+							//exit app
+							Platform.exit();
 						}
-					} catch (Exception e) {
-						//print stack to console
-						e.printStackTrace();
-
-						//show error message
-						showError("Exception in pebl client", e.getMessage());
-
-						//exit app
-						Platform.exit();
 					}
 				}
 
-				//loop for all following
-				for (String followed : following) {
-					//print to log
-					System.out.println("Getting: " + followed);
+				//check if loop needs run
+				if (following != null) {
+					//get last follow
+					final String lastFollow = following.getLast();
 
-					try {
-						//get follower data
-						User addUsr = Main.getProfile(followed);
+					//loop for all following
+					for (String followed : following) {
+						//print to log
+						System.out.println("Getting: " + followed);
 
-						//check if response succeeded
-						if (addUsr != null) {
-							//update gui
-							Platform.runLater(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										//attempt to add card
-										addCard(feedFollowing, addUsr);
-									} catch (Exception e) {
-										//print stack to console
-										e.printStackTrace();
+						try {
+							//get follower data
+							User addUsr = Main.getProfile(followed);
 
-										//show error message
-										showError("Exception in pebl client", e.getMessage());
+							//check if response succeeded
+							if (addUsr != null) {
+								//update gui
+								Platform.runLater(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											//attempt to add card
+											addCard(feedFollowing, addUsr);
 
-										//exit app
-										Platform.exit();
+											//add separator if not last post
+											if (!addUsr.getUsername().equals(lastFollow)) {
+												feedFollowing.getChildren().add(new Separator());
+											}
+										} catch (Exception e) {
+											//print stack to console
+											e.printStackTrace();
+
+											//show error message
+											showError("Exception in pebl client", e.getMessage());
+
+											//exit app
+											Platform.exit();
+										}
 									}
-								}
-							});
+								});
+							}
+						} catch (Exception e) {
+							//print stack to console
+							e.printStackTrace();
+
+							//show error message
+							showError("Exception in pebl client", e.getMessage());
+
+							//exit app
+							Platform.exit();
 						}
-					} catch (Exception e) {
-						//print stack to console
-						e.printStackTrace();
-
-						//show error message
-						showError("Exception in pebl client", e.getMessage());
-
-						//exit app
-						Platform.exit();
 					}
 				}
 
-				//loop for all mutuals
-				for (String moot : mutuals) {
-					//print to log
-					System.out.println("Getting: " + moot);
+				//check if loop needs run
+				if (followers != null) {
+					//get last follower
+					final String lastFollower = followers.getLast();
 
-					try {
-						//get follower data
-						User addUsr = Main.getProfile(moot);
+					//loop for all followers
+					for (String follower : followers) {
+						//print to log
+						System.out.println("Getting: " + follower);
 
-						//check if response succeeded
-						if (addUsr != null) {
-							//update gui
-							Platform.runLater(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										//attempt to add card
-										addCard(feedMutuals, addUsr);
-									} catch (Exception e) {
-										//print stack to console
-										e.printStackTrace();
+						try {
+							//get follower data
+							User addUsr = Main.getProfile(follower);
 
-										//show error message
-										showError("Exception in pebl client", e.getMessage());
+							//check if response succeeded
+							if (addUsr != null) {
+								//update gui
+								Platform.runLater(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											//attempt to add card
+											addCard(feedFollowers, addUsr);
 
-										//exit app
-										Platform.exit();
+											//add separator if not last post
+											if (!addUsr.getUsername().equals(lastFollower)) {
+												feedFollowers.getChildren().add(new Separator());
+											}
+										} catch (Exception e) {
+											//print stack to console
+											e.printStackTrace();
+
+											//show error message
+											showError("Exception in pebl client", e.getMessage());
+
+											//exit app
+											Platform.exit();
+										}
 									}
-								}
-							});
+								});
+							}
+						} catch (Exception e) {
+							//print stack to console
+							e.printStackTrace();
+
+							//show error message
+							showError("Exception in pebl client", e.getMessage());
+
+							//exit app
+							Platform.exit();
 						}
-					} catch (Exception e) {
-						//print stack to console
-						e.printStackTrace();
-
-						//show error message
-						showError("Exception in pebl client", e.getMessage());
-
-						//exit app
-						Platform.exit();
 					}
 				}
 
