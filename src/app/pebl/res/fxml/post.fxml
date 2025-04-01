@@ -9,11 +9,16 @@
 
 <fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" stylesheets="@../css/Format.css" type="VBox" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.posts.PostCtrl">
    <children>
-      <HBox spacing="5.0">
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Text fx:id="lblUsername" onMouseClicked="#showProfile" text="Username">
+            <Text fx:id="lblUsername" styleClass="username" onMouseClicked="#showProfile" text="Username">
                <font>
                   <Font size="18.0" />
+               </font>
+            </Text>
+            <Text fx:id="lblDate" opacity="0.8" text="null">
+               <font>
+                  <Font name="Roboto Condensed Italic" size="12.0" />
                </font>
             </Text>
          </children>

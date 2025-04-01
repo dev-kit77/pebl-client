@@ -12,10 +12,12 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class PostCtrl extends VBox {
 	//fxml elements
 	@FXML private Text lblUsername;
+	@FXML private Text lblDate;
 	@FXML private Text txtBody;
 	@FXML private Button btnSkip;
 
@@ -140,6 +142,7 @@ public class PostCtrl extends VBox {
 	public void setPost(Post newPost) {
 		//update fields
 		lblUsername.setText(newPost.getSender());
+		lblDate.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(newPost.getDate()));
 		txtBody.setText(newPost.getContent());
 		btnSkip.setText(newPost.getSkips() + " Skips");
 
