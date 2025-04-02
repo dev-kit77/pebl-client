@@ -254,6 +254,10 @@ public final class Config {
 		return serverAddr;
 	}
 
+	public String getDefaultAddress() {
+		return defaultAddress;
+	}
+
 	public void setServerAddr(String addr) {
 		this.serverAddr = addr;
 	}

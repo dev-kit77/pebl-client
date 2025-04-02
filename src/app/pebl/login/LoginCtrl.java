@@ -170,7 +170,7 @@ public class LoginCtrl extends Controller {
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("Server Address");
 		dialog.setHeaderText("Please Enter Server Address");
-		dialog.getEditor().setText("https://pebl-api.fly.dev/");
+		dialog.getEditor().setText(Config.getInstance().getDefaultAddress());
 		dialog.showAndWait();
 
 		//get address from dialog
