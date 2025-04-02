@@ -264,7 +264,7 @@ public class Connect {
                         .uri(URI.create(api+"post/get"))
                         .GET()
                         .header("Content-Type", "application/json")
-                        .header("id", body.get("id").toString()) //TODO change id to be in body instead of header if fyr has changed it to be so
+                        .header("id", body.get("id").toString())
                         .build();
 
                 //what is it doing
