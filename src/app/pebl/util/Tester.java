@@ -9,6 +9,8 @@ import app.pebl.data.Post;
 import app.pebl.data.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import app.pebl.util.Config;
+import java.util.Properties;
 
 
 // api link: https://pebl-api.fly.dev/api/
@@ -418,6 +420,10 @@ public class Tester {
     }
 
 
+//    public static void testreadconfig(){
+//
+//    }
+
     //main
     public static void main(String[] args) throws Exception {
         //testing if server is online success
@@ -434,7 +440,7 @@ public class Tester {
 //        checkAuth();
 
         //testing get profile success
-//        getProfile(username1);
+//        getProfile("bob2");
 //        getProfile(username2);
 //        getProfile("fýr");
 

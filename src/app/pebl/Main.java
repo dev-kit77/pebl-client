@@ -468,17 +468,16 @@ public class Main extends Application {
 		//add the followers, put in json, clear the JSONArray afterward and repeat with "following"
 		jsonArray.addAll(user.getFollowers());
 		json.put("followers", jsonArray);
-		jsonArray.clear();
 
 		//add the following, put in json, clear the JSONArray afterward and repeat with posts
+		jsonArray = new JSONArray();
 		jsonArray.addAll(user.getFollowing());
 		json.put("following", jsonArray);
-		jsonArray.clear();
 
 		//add the following, put in json, clear the JSONArray afterward
+		jsonArray = new JSONArray();
 		jsonArray.addAll(user.getPosts());
 		json.put("posts", jsonArray);
-		jsonArray.clear();
 
 		//return the json object
 		return json;
@@ -512,15 +511,23 @@ public class Main extends Application {
 
 		//if the process was successful
 		if (response != null) {
-			User temp = getProfile(username.toLowerCase());
-			if (temp != null) {
-				Config.getInstance().setCurrentUser(temp);
-				return true;
-			}
+
+			//update the current user by calling getProfile
+			getProfile(username.toLowerCase());
+
+			System.out.println("Registered user: " + username);
+
+			return true;
+
 
 
 		}
-		return false;
+
+		//if fail
+		else {
+			System.err.println("Failed to register user: " + username);
+			return false;
+		}
 	}
 
 	/**
@@ -544,15 +551,12 @@ public class Main extends Application {
 
 		//if successful
 		if (response != null) {
-			// fetch profile data
-		User temp = getProfile(username.toLowerCase());
+				// fetch profile data
+				//update the currentUser by calling getProfile
+				getProfile(username.toLowerCase());
 
-			//if successful
-			if (temp != null) {
-				//update the currentUser
-				Config.getInstance().setCurrentUser(temp);
+				System.out.println("Logged in");
 				return true;
-			}
 
 		}
 		//fail
@@ -612,14 +616,25 @@ public class Main extends Application {
 
 		//send request and store the response
 		JSONObject response = connect.request("profileGet", obj);
-
+		System.out.println(response);
 		//if success
 		if (response != null) {
+			//parse response to a User object
 			User profile = parseUser(response);
 
+
+//			if (Config.getInstance().getCurrentUser().getUsername() == null) {
+//
+//			}
+
 			try {
-				//check if profile is current user
-				if (profile.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
+				//check if current user is null (that can only happen if user just logged in or registered), in which case, update current user
+				if (Config.getInstance().getCurrentUser() == null) {
+					Config.getInstance().setCurrentUser(profile);
+				}
+
+				//check if profile is current user (current user exists)
+				else if (profile.getUsername().equals(Config.getInstance().getCurrentUser().getUsername())) {
 					//update current user
 					Config.getInstance().setCurrentUser(profile);
 				}
@@ -723,7 +738,7 @@ public class Main extends Application {
 		//if success
 		if (response != null) {
 			//parse json into Post and return it
-			return new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString()));
+			return parsePost(response);
 		}
 
 		// fail
@@ -1292,7 +1307,7 @@ public class Main extends Application {
 					break;
 				case "9":
 					System.out.println("See you next time!");
-					Config.getInstance().save(".pebl.cfg"); //TODO work on saving
+					Config.getInstance().save(".pebl.cfg");
 					break;
 				case "10":
 					System.out.println("enter username");

@@ -11,7 +11,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 
-//api link: // api link: https://pebl-api.fly.dev/api/
+//api link: // api link: "https://pebl.fyr.li/api"
 
 
 @SuppressWarnings("JavadocDeclaration")
@@ -46,8 +46,10 @@ public class Connect {
                System.out.println("OK: " + response.statusCode()+"\n");
            }
 
-           else if (response.statusCode() == 500) {
+           else if (response.statusCode() >= 500 && response.statusCode() < 600) {
                System.err.println("Server error: " + response.statusCode()+"\n");
+               System.out.println("Response header"+response.headers()+"\nResponse body"+response.body()+"\n");
+
            }
 
            else {
@@ -143,13 +145,12 @@ public class Connect {
 
                 //send it
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
                 //return json object of token on success
                     if (response.statusCode() == 200) {
 
                         //parse response into JSONObject
                         responseJSON = (JSONObject) JSONValue.parse(response.body());
-
+                        System.out.println(responseJSON);
                         //update auth
                         auth = (String)responseJSON.get("token"); // update the auth token
                         authUpdate(auth);
@@ -161,6 +162,7 @@ public class Connect {
 
                     //Process status code if it isn't 200
                     checkCode(request, response);
+
 
                 break;
 
@@ -196,7 +198,7 @@ public class Connect {
                 checkCode(request,response);
                 break;
 
-            case "profileGet": // get user profile json body must have {username: String username of user}
+            case "profileGet": // get user profile json body must have {target: String username of user}
                 //build
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api+"user/profile"))
@@ -214,6 +216,7 @@ public class Connect {
 
                     //parse the response to JSONObject
                     responseJSON = (JSONObject)JSONValue.parse(response.body());
+                    System.out.println(responseJSON);
 
                     //check status code
                     checkCode(request, response);
@@ -261,7 +264,7 @@ public class Connect {
                         .uri(URI.create(api+"post/get"))
                         .GET()
                         .header("Content-Type", "application/json")
-                        .header("id", body.get("id").toString())
+                        .header("id", body.get("id").toString()) //TODO change id to be in body instead of header if fyr has changed it to be so
                         .build();
 
                 //what is it doing
@@ -336,6 +339,7 @@ public class Connect {
                 }
                 //fail, check status code
                 checkCode(request, response);
+
                 break;
 
             case "follow": //following a user body structure: {"target": username String}
