@@ -3,12 +3,11 @@ package app.pebl.util;
 import app.pebl.data.User;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-
 import java.io.*;
 import java.util.Properties;
 
 /**
- * Singleton Class for holding config information
+ * Singleton Class for holding and managing config information.
  */
 public final class Config {
 	//init singleton
@@ -23,6 +22,7 @@ public final class Config {
     }
 
 	//class fields
+	private MultiOutputStream logStream;
 	private User currentUser;
 	private String authToken;
 	private String serverAddr;
@@ -33,6 +33,28 @@ public final class Config {
 	public final String defaultAddress = "https://pebl.fyr.li/";
 
 	public Config() throws InterruptedException {
+
+		//init program logging
+		try {
+			//init log file stream
+			FileOutputStream log = new FileOutputStream("pebl.log");
+
+			//inti out and err duplicators
+			MultiOutputStream multiOut = new MultiOutputStream(System.out, log);
+			MultiOutputStream multiErr = new MultiOutputStream(System.err, log);
+
+			//init new print streams for stout and sterr
+			PrintStream stdout = new PrintStream(multiOut);
+			PrintStream stderr = new PrintStream(multiErr);
+
+			//set new printstreams
+			System.setOut(stdout);
+			System.setErr(stderr);
+
+		} catch (Exception e) {
+			System.err.println("Err: Log file implementation failed. Log file will not be written.");
+		}
+
 		//attempt loading
 		boolean success = load(".pebl.cfg");
 
@@ -236,7 +258,7 @@ public final class Config {
 		}
     }
 
-	//instance retrival
+	//instance retrieval
 	public static Config getInstance() {
 		return instance;
 	}
