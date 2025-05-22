@@ -1,4 +1,5 @@
 /out
 /bin
 /.pebl.cfg
+/pebl.log
 /lib/javafx-sdk-23.0.2-linux
