@@ -61,7 +61,7 @@ public final class Config {
 		//loop for reattempts at file loading
 		for (int attempts = 2; !success && attempts > 0; attempts--) {
 			//print error message
-			System.err.println("\033[0;91m" + "Err: Config load failed Reattempting (Attempts remaining: " + attempts + ")" + "\033[0m");
+			System.err.println("Err: Config load failed Reattempting (Attempts remaining: " + attempts + ")");
 
 			//call load method on table object
 			success = load(".pebl.cfg");
@@ -69,7 +69,7 @@ public final class Config {
 
 		//print success message
 		if (success) {
-			System.out.println("\033[1;92m" + "Config loaded successfully!" + "\033[0m");
+			System.out.println("Config loaded successfully!");
 		}
 		//File loading failed completely: exit
 		else {
@@ -77,7 +77,7 @@ public final class Config {
 			serverAddr = defaultAddress;
 
 			//print error
-			System.err.println("\033[1;91m" + "Err: Config file \".pebl.cfg\" does not exist. Creating..." + "\033[0m");
+			System.err.println("Err: Config file \".pebl.cfg\" does not exist. Creating...");
 
 			//create file object
 			File cfgFile = new File(".pebl.cfg");
@@ -91,8 +91,8 @@ public final class Config {
 			}
 			catch(IOException e) {
 				//print error to handle exception
-				System.err.println("\033[0;91m" + "Err: IO error: " + e + "\033[0m");
-				System.err.println("\033[1;91m" + "Default Settings will not be saved." + "\033[0m");
+				System.err.println("Err: IO error: " + e);
+				System.err.println("Default Settings will not be saved.");
 			}
 		}
 	}
@@ -118,7 +118,7 @@ public final class Config {
 		//check file exists
 		if (!file.exists()) {
 			//print error message
-			System.err.println("\033[0;91m" + "Err: File does not exist." + "\033[0m");
+			System.err.println("Err: File does not exist.");
 
 			//return false for failure
 			return false;
@@ -127,7 +127,7 @@ public final class Config {
 		//check file is readable
 		if (!file.canRead()) {
 			//print error message
-			System.err.println("\033[0;91m" + "Err: File unreadable." + "\033[0m");
+			System.err.println("Err: File unreadable.");
 
 			//return false for failure
 			return false;
@@ -210,7 +210,7 @@ public final class Config {
 		//if file does not exist
 		if (!file.exists())  {
 			//print error
-			System.err.println("\033[0;91m" + "Err: File does not exist." + "\033[0m");
+			System.err.println("Err: File does not exist.");
 
 			//return false for failure
 			return false;
@@ -219,7 +219,7 @@ public final class Config {
 		//if file is read-only
 		if (!file.canWrite()) {
 			//print error
-			System.err.println("\033[0;91m" + "Err: File read-only." + "\033[0m");
+			System.err.println("Err: File read-only.");
 
 			//return false for failure
 			return false;
