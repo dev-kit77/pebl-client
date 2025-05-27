@@ -43,18 +43,18 @@ public class Connect {
     private void checkCode(HttpRequest request, HttpResponse<String> response) {
             //success
            if (response.statusCode() == 200) {
-               System.out.println("OK: " + response.statusCode()+"\n");
+               System.out.println("OK: " + response.statusCode());
            }
 
            else if (response.statusCode() >= 500 && response.statusCode() < 600) {
-               System.err.println("Server error: " + response.statusCode()+"\n");
-               System.out.println("Response header"+response.headers()+"\nResponse body"+response.body()+"\n");
+               System.err.println("Server Error: " + response.statusCode());
+               System.out.println("Response Header"+response.headers()+"\nResponse body"+response.body());
 
            }
 
            else {
-               System.err.println("Error: " + response.statusCode());
-               System.out.println("Request headers: \n"+request.headers()+"\nResponse header"+response.headers()+"\nResponse body"+response.body()+"\n");
+               System.err.println("Err: " + response.statusCode());
+               System.out.println("Request headers: \n"+request.headers()+"\nResponse header"+response.headers()+"\nResponse body"+response.body());
            }
 
     }
