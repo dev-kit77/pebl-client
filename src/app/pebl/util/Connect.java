@@ -10,9 +10,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-
 //api link: // api link: "https://pebl.fyr.li/api"
-
 
 @SuppressWarnings("JavadocDeclaration")
 public class Connect {
@@ -28,35 +26,39 @@ public class Connect {
     /**
      * Updates the value of auth in the .pebl.cfg file
      * @param newAuth new authentication token to update the config file. Set this to empty string to get the value from the config file or to set the auth token to empty string.
-     * 
      */
     private void authUpdate(String newAuth) {
         Config.getInstance().setAuthToken(newAuth);
-
     }
 
     /**
      * Method to display information on console based on status code of http request
+     *
      * @param request
      * @return true if code is 200, false if it isn't
      */
-    private void checkCode(HttpRequest request, HttpResponse<String> response) {
-            //success
-           if (response.statusCode() == 200) {
-               System.out.println("OK: " + response.statusCode()+"\n");
-           }
-
-           else if (response.statusCode() >= 500 && response.statusCode() < 600) {
-               System.err.println("Server error: " + response.statusCode()+"\n");
-               System.out.println("Response header"+response.headers()+"\nResponse body"+response.body()+"\n");
-
-           }
-
-           else {
-               System.err.println("Error: " + response.statusCode());
-               System.out.println("Request headers: \n"+request.headers()+"\nResponse header"+response.headers()+"\nResponse body"+response.body()+"\n");
-           }
-
+    private boolean checkCode(HttpRequest request, HttpResponse<String> response) {
+        //success
+        if (response.statusCode() == 200) {
+               System.out.println("OK: " + response.statusCode());
+            System.out.println("Response Header: "+response.headers()+"\nResponse body: "+response.body());
+               
+               //return true
+               return true;
+        }
+        //server error
+        else if (response.statusCode() >= 500 && response.statusCode() < 600) {
+            System.err.println("Internal Server Error: " + response.statusCode());
+            System.err.println("Response Header: "+response.headers()+"\nResponse body: "+response.body());
+        }
+        //other error
+        else {
+            System.err.println("Err: " + response.statusCode());
+            System.err.println("Request headers: \n"+request.headers()+"\nResponse header: "+response.headers()+"\nResponse body: "+response.body());
+        }
+        
+        //return false after logging error
+        return false;
     }
 
     /**
@@ -64,13 +66,12 @@ public class Connect {
      * @param type where you are sending the request to
      * @param body the body
      */
-    @SuppressWarnings("unused")
-
     public JSONObject request(String type, JSONObject body) throws IOException, InterruptedException{
         //setting up the requests and responses and the JSON object to be returned
         HttpRequest request;
         HttpResponse<String> response;
-        JSONObject responseJSON;
+        JSONObject responseJSON = null;
+
         switch (type) {
             case "checkOnline": //check if server is online
                 //build request
@@ -81,19 +82,15 @@ public class Connect {
                         .header("Content-Type", "application/json")
                         .build();
 
-                //say what is it doing
+                //Logging request
                 System.out.println("Pinging Server");
 
-                //send it
+                //Send request to server
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                //Process status code
-                checkCode(request, response);
-
-                //return empty json object signifying success
-                if (response.statusCode() == 200) {
+                //Process status
+                if (checkCode(request, response)) {
                     responseJSON = new JSONObject();
-                    return responseJSON;
                 }
 
                 break;
@@ -120,13 +117,9 @@ public class Connect {
                 //send it
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                //Process status code
-                checkCode(request, response);
-
-                //return empty json object signifying success
-                if (response.statusCode() == 200) {
+                //Process status
+                if (checkCode(request, response)) {
                     responseJSON = new JSONObject();
-                    return responseJSON;
                 }
 
                 break;
@@ -145,24 +138,16 @@ public class Connect {
 
                 //send it
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                //return json object of token on success
-                    if (response.statusCode() == 200) {
 
+                //Process status
+                if (checkCode(request, response)) {
                         //parse response into JSONObject
                         responseJSON = (JSONObject) JSONValue.parse(response.body());
                         System.out.println(responseJSON);
                         //update auth
                         auth = (String)responseJSON.get("token"); // update the auth token
                         authUpdate(auth);
-
-                        //Process status code
-                        checkCode(request, response);
-                        return responseJSON;
                     }
-
-                    //Process status code if it isn't 200
-                    checkCode(request, response);
-
 
                 break;
 
@@ -180,22 +165,16 @@ public class Connect {
                 //send it
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                //success
-                if (response.statusCode() == 200) {
+                //Process status
+                if (checkCode(request, response)) {
                     //parse the response
                     responseJSON = (JSONObject)JSONValue.parse(response.body()); //parse the response as JSON
 
                     //update auth
                     auth = (String)responseJSON.get("token"); // update the auth token
                     authUpdate(auth);
-
-                    //check status code
-                    checkCode(request, response);
-                    return responseJSON;
                 }
-
-                //check status code
-                checkCode(request,response);
+                
                 break;
 
             case "profileGet": // get user profile json body must have {target: String username of user}
@@ -211,20 +190,12 @@ public class Connect {
 
                 //send it
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                if (response.statusCode() == 200) {
-
+//Process status
+                if (checkCode(request, response)) {
                     //parse the response to JSONObject
                     responseJSON = (JSONObject)JSONValue.parse(response.body());
-                    System.out.println(responseJSON);
-
-                    //check status code
-                    checkCode(request, response);
-                    return responseJSON;
                 }
-
-                //check status
-                checkCode(request, response);
+                
                 break;
 
             case "profileUpdate": //update user profile json must include {"age": integer, "gender": boolean, "status": "String"}
@@ -242,18 +213,11 @@ public class Connect {
                 //send it
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                //success
-                if (response.statusCode() == 200) {
+                //Process status
+                if (checkCode(request, response)) {
                     //return empty object to signify success
                     responseJSON = new JSONObject();
-
-                    //check status code
-                    checkCode(request, response);
-                    return responseJSON;
                 }
-
-                //fail, check status
-                checkCode(request, response);
 
                 break;
 
@@ -273,20 +237,15 @@ public class Connect {
                 //send it
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                if (response.statusCode() == 200) {
+                //Process status
+                if (checkCode(request, response)) {
                     //parsing response to JSONObject
                     responseJSON = (JSONObject)JSONValue.parse(response.body());
-
-                    //check status code
-                    checkCode(request, response);
-                    return responseJSON;
                 }
-                //check status code
-                checkCode(request, response);
+
                 break;
 
             case "postCreate": // make post must include {"content": content String} | responds with {"id": id of post}
-
                 //build
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api+"post/create"))
@@ -301,17 +260,12 @@ public class Connect {
                 //send it
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                //success
-                if (response.statusCode() == 200) {
+                //Process status
+                if (checkCode(request, response)) {
                     //parsing response to JSONObject
                     responseJSON = (JSONObject)JSONValue.parse(response.body());
-
-                    //check status code
-                    checkCode(request, response);
-                    return responseJSON;
                 }
-                //fail, check status code
-                checkCode(request, response);
+
                 break;
 
             case "feed": // get feed, returns JSONObject of 50 latest posts, body can be empty
@@ -328,17 +282,11 @@ public class Connect {
                 //send it
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                //success
-                if (response.statusCode() == 200) {
+                //Process status
+                if (checkCode(request, response)) {
                     //parsing response to JSONObject
                     responseJSON = (JSONObject)JSONValue.parse(response.body());
-
-                    //check status code
-                    checkCode(request, response);
-                    return responseJSON;
                 }
-                //fail, check status code
-                checkCode(request, response);
 
                 break;
 
@@ -357,22 +305,14 @@ public class Connect {
                 //what is it doing
                 System.out.println("Toggling follow user "+ body.get("target"));
 
-                //success
-                if (response.statusCode() == 200) {
+                //Process status
+                if (checkCode(request, response)) {
 
                     //return empty JSONObject to signify success
                     responseJSON = new JSONObject();
-
-                    //check status code
-                    checkCode(request, response);
-                    return responseJSON;
                 }
-
-                //fail, check status code
-                checkCode(request, response);
+                
                 break;
-
-
 
             case "like": //liking post Body must include the post ID {"id": id of post as integer}. Responds with the remaining skips a user has
                 //IMPORTANT: liking (skipping) is only possible if user has more than one skip to spare. earn skips by creating posts
@@ -400,8 +340,8 @@ public class Connect {
                 break;
         }
 
-        //return null upon fail
-        return null;
+        //return JSON response, Null if not updated on request completion
+        return responseJSON;
     }
 
     /**
@@ -414,7 +354,7 @@ public class Connect {
         //Declare request, response, JSONArray response
         HttpRequest request;
         HttpResponse<String> response;
-        JSONArray responseJSON;
+        JSONArray responseJSON = null;
 
         //build
         request = HttpRequest.newBuilder()
@@ -429,20 +369,14 @@ public class Connect {
         //send it
         response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        //success
-        if (response.statusCode() == 200) {
+        //Process status
+        if (checkCode(request, response)) {
 
             //parse response into JSONArray and return it upon success
             responseJSON = (JSONArray)JSONValue.parse(response.body());
-
-            //check status code (new object in body parameter because this method does not use body)
-            checkCode(request, response);
-            return responseJSON;
         }
 
-        //fail, check status code (new object in body parameter because this method does not use body)
-        checkCode(request, response);
-        return null;
+        return responseJSON;
 
     }
     

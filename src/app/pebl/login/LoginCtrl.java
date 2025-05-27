@@ -129,8 +129,7 @@ public class LoginCtrl extends Controller {
 		//run thread
 		Main.getExecutor().submit(authUser);
 
-		//print test to console
-		System.out.println("Login");
+		//print username to log
 		System.out.println("Username: " + username.getText());
 	}
 
