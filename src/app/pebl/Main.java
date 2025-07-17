@@ -511,9 +511,6 @@ public class Main extends Application {
 		//send the request
 		JSONObject response = connect.request("register", obj);
 
-		//print response to console
-		System.out.println("Server Response: " + response);
-
 		//if the process was successful
 		if (response != null) {
 			//update the current user by calling getProfile
@@ -545,9 +542,6 @@ public class Main extends Application {
 		//send request nd store response
 		JSONObject response = connect.request("auth", obj);
 
-		//print response to console
-		System.out.println("Server Response: " + response);
-
 		//if successful
 		if (response != null) {
 				// fetch profile data
@@ -576,9 +570,6 @@ public class Main extends Application {
 
 		//send request
 		JSONObject response = connect.request("checkOnline", obj);
-
-		//print response to log
-		System.out.println("Server Response: " + response);
 
 		//returns true if successful, false if failed
 		return  (response != null);
