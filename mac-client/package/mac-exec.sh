@@ -1,1 +1,0 @@
-java -jar ./pebl-client-mac-2.jar
