@@ -58,7 +58,6 @@ public class Main extends Application {
 			//init bypassLogin
 			boolean bypassLogin = false;
 
-
 			//this code was the auto login but unfortunately it doesn't work due to the server setup atm
 //			try {
 //				//check auth token
@@ -437,6 +436,7 @@ public class Main extends Application {
 		if (response == null) {
 			System.err.println("Err: Parameter is null");
 		}
+
 		return new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString()));
 	}
 
@@ -584,6 +584,12 @@ public class Main extends Application {
 	public static boolean checkAuth() throws IOException, InterruptedException {
 		//create body json object to pass to request
 		JSONObject obj = new JSONObject();
+
+		//adds required fields in the JSONObject
+		//body structure: {"error":"none", "success": "true","token": the auth token}
+		obj.put("token", Config.getInstance().getAuthToken());
+		obj.put("error", "none");
+		obj.put("success", "true");
 
 		//send request
 		JSONObject response = connect.request("checkAuth", obj);
@@ -922,10 +928,7 @@ public class Main extends Application {
 		if (response != null) {
 			System.out.println("Liked post!");
 
-			//update current user
-			Config.getInstance().setCurrentUser(getProfile(Config.getInstance().getCurrentUser().getUsername().toLowerCase()));
 			return true;
-
 		}
 
 		//fail
@@ -1088,7 +1091,6 @@ public class Main extends Application {
 			if (((JSONArray)response.get("following")).contains(Config.getInstance().getCurrentUser().getUsername())) {
 				friends.add(username);
 			}
-
 		}
 
 		//return close friends and update
