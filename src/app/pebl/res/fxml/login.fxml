@@ -47,7 +47,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <CheckBox fx:id="chkLogin" contentDisplay="CENTER" layoutX="42.0" layoutY="4.0" mnemonicParsing="false" opacity="0.9" prefHeight="20.0" prefWidth="169.0" stylesheets="@../css/Format.css" text="Save Login Information" textFill="#2a3e45">
+            <CheckBox fx:id="chkLogin" contentDisplay="CENTER" disable="true" layoutX="42.0" layoutY="4.0" mnemonicParsing="false" opacity="0.9" prefHeight="20.0" prefWidth="169.0" stylesheets="@../css/Format.css" text="Save Login Information" textFill="#2a3e45" visible="false">
                <font>
                   <Font name="Roboto Condensed Regular" size="14.0" />
                </font>

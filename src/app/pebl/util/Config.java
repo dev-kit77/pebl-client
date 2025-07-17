@@ -3,12 +3,11 @@ package app.pebl.util;
 import app.pebl.data.User;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-
 import java.io.*;
 import java.util.Properties;
 
 /**
- * Singleton Class for holding config information
+ * Singleton Class for holding and managing config information.
  */
 public final class Config {
 	//init singleton
@@ -23,6 +22,7 @@ public final class Config {
     }
 
 	//class fields
+	private MultiOutputStream logStream;
 	private User currentUser;
 	private String authToken;
 	private String serverAddr;
@@ -33,13 +33,35 @@ public final class Config {
 	public final String defaultAddress = "https://pebl.fyr.li/";
 
 	public Config() throws InterruptedException {
+
+		//init program logging
+		try {
+			//init log file stream
+			FileOutputStream log = new FileOutputStream("pebl.log");
+
+			//inti out and err duplicators
+			MultiOutputStream multiOut = new MultiOutputStream(System.out, log);
+			MultiOutputStream multiErr = new MultiOutputStream(System.err, log);
+
+			//init new print streams for stout and sterr
+			PrintStream stdout = new PrintStream(multiOut);
+			PrintStream stderr = new PrintStream(multiErr);
+
+			//set new printstreams
+			System.setOut(stdout);
+			System.setErr(stderr);
+
+		} catch (Exception e) {
+			System.err.println("Err: Log file implementation failed. Log file will not be written.");
+		}
+
 		//attempt loading
 		boolean success = load(".pebl.cfg");
 
 		//loop for reattempts at file loading
 		for (int attempts = 2; !success && attempts > 0; attempts--) {
 			//print error message
-			System.err.println("\033[0;91m" + "Err: Config load failed Reattempting (Attempts remaining: " + attempts + ")" + "\033[0m");
+			System.err.println("Err: Config load failed Reattempting (Attempts remaining: " + attempts + ")");
 
 			//call load method on table object
 			success = load(".pebl.cfg");
@@ -47,7 +69,7 @@ public final class Config {
 
 		//print success message
 		if (success) {
-			System.out.println("\033[1;92m" + "Config loaded successfully!" + "\033[0m");
+			System.out.println("Config loaded successfully!");
 		}
 		//File loading failed completely: exit
 		else {
@@ -55,7 +77,7 @@ public final class Config {
 			serverAddr = defaultAddress;
 
 			//print error
-			System.err.println("\033[1;91m" + "Err: Config file \".pebl.cfg\" does not exist. Creating..." + "\033[0m");
+			System.err.println("Err: Config file \".pebl.cfg\" does not exist. Creating...");
 
 			//create file object
 			File cfgFile = new File(".pebl.cfg");
@@ -69,8 +91,8 @@ public final class Config {
 			}
 			catch(IOException e) {
 				//print error to handle exception
-				System.err.println("\033[0;91m" + "Err: IO error: " + e + "\033[0m");
-				System.err.println("\033[1;91m" + "Default Settings will not be saved." + "\033[0m");
+				System.err.println("Err: IO error: " + e);
+				System.err.println("Default Settings will not be saved.");
 			}
 		}
 	}
@@ -96,7 +118,7 @@ public final class Config {
 		//check file exists
 		if (!file.exists()) {
 			//print error message
-			System.err.println("\033[0;91m" + "Err: File does not exist." + "\033[0m");
+			System.err.println("Err: File does not exist.");
 
 			//return false for failure
 			return false;
@@ -105,7 +127,7 @@ public final class Config {
 		//check file is readable
 		if (!file.canRead()) {
 			//print error message
-			System.err.println("\033[0;91m" + "Err: File unreadable." + "\033[0m");
+			System.err.println("Err: File unreadable.");
 
 			//return false for failure
 			return false;
@@ -188,7 +210,7 @@ public final class Config {
 		//if file does not exist
 		if (!file.exists())  {
 			//print error
-			System.err.println("\033[0;91m" + "Err: File does not exist." + "\033[0m");
+			System.err.println("Err: File does not exist.");
 
 			//return false for failure
 			return false;
@@ -197,7 +219,7 @@ public final class Config {
 		//if file is read-only
 		if (!file.canWrite()) {
 			//print error
-			System.err.println("\033[0;91m" + "Err: File read-only." + "\033[0m");
+			System.err.println("Err: File read-only.");
 
 			//return false for failure
 			return false;
@@ -236,7 +258,7 @@ public final class Config {
 		}
     }
 
-	//instance retrival
+	//instance retrieval
 	public static Config getInstance() {
 		return instance;
 	}

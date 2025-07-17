@@ -49,16 +49,14 @@ public class Main extends Application {
 	 * start() method for the GUI. Initializes the login GUI.
 	 *
 	 * @param stage The main stage of the program
-	 * @throws IOException passthrough from fxml loader
 	 */
 	@Override
-	public void start(Stage stage) throws IOException {
+	public void start(Stage stage) {
 		Task<Void> startupTask = new Task<>() {
 			@Override
 			public Void call() {
 			//init bypassLogin
 			boolean bypassLogin = false;
-
 
 			//this code was the auto login but unfortunately it doesn't work due to the server setup atm
 //			try {
@@ -163,6 +161,9 @@ public class Main extends Application {
 
 	}
 
+	/**
+	 * Stop method called on GUI exit. Saves the config file then safely wraps up application threads.
+	 */
 	@Override
 	public void stop() {
 		Task<Void> shutdownTask = new Task<>() {
@@ -400,7 +401,7 @@ public class Main extends Application {
 		//return null incase paramter is null
 
 		if (response == null) {
-			System.err.println("Parameter is null");
+			System.err.println("Err: Parameter is null");
 			return null;
 		}
 
@@ -433,8 +434,9 @@ public class Main extends Application {
 		//return null incase paramter is null
 
 		if (response == null) {
-			System.err.println("Parameter is null");
+			System.err.println("Err: Parameter is null");
 		}
+
 		return new Post(Integer.parseInt(response.get("id").toString()), response.get("author").toString(), response.get("content").toString(), Integer.parseInt(response.get("likes").toString()), Long.parseLong(response.get("time").toString()));
 	}
 
@@ -448,7 +450,7 @@ public class Main extends Application {
 	public static JSONObject getUserAsJSON(User user) {
 		//return null incase paramter is null
 		if (user == null) {
-			System.err.println("User is null");
+			System.err.println("Err: User is null");
 			return null;
 		}
 		//create the temporary JSONObject
@@ -511,21 +513,14 @@ public class Main extends Application {
 
 		//if the process was successful
 		if (response != null) {
-
 			//update the current user by calling getProfile
 			getProfile(username.toLowerCase());
-
 			System.out.println("Registered user: " + username);
-
 			return true;
-
-
-
 		}
-
 		//if fail
 		else {
-			System.err.println("Failed to register user: " + username);
+			System.err.println("Err: Failed to register user: " + username);
 			return false;
 		}
 	}
@@ -538,9 +533,7 @@ public class Main extends Application {
 	 * @throws IOException in case of IOException
 	 * @throws InterruptedException if the http request was interrupted
 	 */
-
 	public static boolean login(String username, String password) throws IOException, InterruptedException {
-
 		//Create body for request and populate it
 		JSONObject obj = new JSONObject();
 		obj.put("username", username.toLowerCase());
@@ -554,14 +547,12 @@ public class Main extends Application {
 				// fetch profile data
 				//update the currentUser by calling getProfile
 				getProfile(username.toLowerCase());
-
 				System.out.println("Logged in");
 				return true;
-
 		}
 		//fail
 		else {
-			System.err.println("ERROR: Could not login user");
+			System.err.println("Err: Could not login user");
 		}
 		//return false if fail
 		return false;
@@ -594,6 +585,12 @@ public class Main extends Application {
 		//create body json object to pass to request
 		JSONObject obj = new JSONObject();
 
+		//adds required fields in the JSONObject
+		//body structure: {"error":"none", "success": "true","token": the auth token}
+		obj.put("token", Config.getInstance().getAuthToken());
+		obj.put("error", "none");
+		obj.put("success", "true");
+
 		//send request
 		JSONObject response = connect.request("checkAuth", obj);
 
@@ -608,7 +605,6 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-
 	public static User getProfile(String username) throws IOException, InterruptedException {
 		//create json body for request and populate it
 		JSONObject obj = new JSONObject();
@@ -616,16 +612,11 @@ public class Main extends Application {
 
 		//send request and store the response
 		JSONObject response = connect.request("profileGet", obj);
-		System.out.println(response);
+
 		//if success
 		if (response != null) {
 			//parse response to a User object
 			User profile = parseUser(response);
-
-
-//			if (Config.getInstance().getCurrentUser().getUsername() == null) {
-//
-//			}
 
 			try {
 				//check if current user is null (that can only happen if user just logged in or registered), in which case, update current user
@@ -639,10 +630,10 @@ public class Main extends Application {
 					Config.getInstance().setCurrentUser(profile);
 				}
 			} catch (NullPointerException e) {
-				System.err.println("WARNING: Could not get current user, ignore if first get");
+				System.err.println("Err: Could not get current user, ignore if first get");
 			}
 
-		return profile;
+			return profile;
 		}
 		else {
 			//return null if failed.
@@ -659,7 +650,6 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-
 	public static boolean updateProfile(int age, boolean gender, String status) throws IOException, InterruptedException {
 		//create json body for request and populate it
 		JSONObject obj = new JSONObject();
@@ -668,7 +658,6 @@ public class Main extends Application {
 		if (age == 0){
 			//get current age
 			obj.put("age", Config.getInstance().getCurrentUser().getAge());
-
 		}
 		else {
 			//else use param age
@@ -677,7 +666,6 @@ public class Main extends Application {
 
 		//gender is a switch, no need to check anything
 		obj.put("gender", ""+gender);
-
 
 		// if status is empty, use current status
 		if (status.isEmpty()){
@@ -688,9 +676,9 @@ public class Main extends Application {
 			//else use param status
 			obj.put("status", status);
 		}
+
 		//send request and store response
 		JSONObject response = connect.request("profileUpdate", obj);
-
 
 		//success
 		if (response != null) {
@@ -707,13 +695,13 @@ public class Main extends Application {
 			}
 			// fail to fetch profile
 			else {
-				System.err.println("Error fetching updated profile");
+				System.err.println("Err: Could not fetch updated profile");
 				return false;
 			}
 		}
 		//fail
 		else {
-			System.err.println("Error updating profile");
+			System.err.println("Err: Could not fetch updated profile");
 			return false;
 		}
 	}
@@ -725,7 +713,6 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-
 	public static Post getPost(int id) throws IOException, InterruptedException {
 
 		//create json body to pass into request and populate it
@@ -742,7 +729,7 @@ public class Main extends Application {
 		}
 
 		// fail
-		System.err.println("Error fetching post");
+		System.err.println("Err: Could not fetch post");
 		return null;
 	}
 
@@ -780,12 +767,11 @@ public class Main extends Application {
 		}
 		//fail
 		else {
-			System.err.println("Error creating post");
+			System.err.println("Err: Could not create post");
 			return false;
 		}
 
 	}
-
 
 	/**
 	 * Method to get feed, returns the latest 50 posts in teh feed
@@ -825,14 +811,10 @@ public class Main extends Application {
 		}
 		//fail
 		else {
-			System.err.println("Error fetching feed");
+			System.err.println("Err: Could not fetch feed");
 			return null;
 		}
 	}
-
-
-
-
 
 	/**
 	 * Method to fetch leaderboard and update the variable leaderboard.
@@ -842,8 +824,6 @@ public class Main extends Application {
 	 * @throws InterruptedException
 	 */
 	public static ArrayList<User> leaderboard() throws IOException, InterruptedException {
-
-
 		//send request and save response
 		JSONArray response = connect.leaderboard();
 
@@ -872,7 +852,7 @@ public class Main extends Application {
 
 		//fail
 		else {
-			System.err.println("Error fetching leaderboard");
+			System.err.println("Err: Could not fetch leaderboard");
 			return null;
 		}
 	}
@@ -887,9 +867,7 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-
 	public static boolean follow(String username) throws IOException, InterruptedException {
-
 		//create json body to pass into request and populate it
 		JSONObject obj = new JSONObject();
 		obj.put("target", username.toLowerCase());
@@ -919,13 +897,13 @@ public class Main extends Application {
 			}
 			// if getting profile failed
 			else {
-				System.err.println("Error updating user profile with new followed username");
+				System.err.println("Err: Could not update user profile with new followed username");
 
 			}
 		}
 		//fail
 		else {
-			System.err.println("Error following user");
+			System.err.println("Err: Could not follow user");
 		}
 		return false;
 	}
@@ -937,7 +915,6 @@ public class Main extends Application {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-
 	public static boolean like(int id) throws IOException, InterruptedException {
 
 		//create json body to pass into request and populate it
@@ -951,15 +928,12 @@ public class Main extends Application {
 		if (response != null) {
 			System.out.println("Liked post!");
 
-			//update current user
-			Config.getInstance().setCurrentUser(getProfile(Config.getInstance().getCurrentUser().getUsername().toLowerCase()));
 			return true;
-
 		}
 
 		//fail
 		else {
-			System.err.println("Error liking post");
+			System.err.println("Err: Could not like post");
 			return false;
 		}
 	}
@@ -968,7 +942,6 @@ public class Main extends Application {
 	 * Method to check if there is current user data stored in Config
 	 * @return True if there is user data stored, False if it is not stored.
 	 */
-
 	public static boolean checkCurrentUser(){
         return Config.getInstance().getCurrentUser() != null;
 	}
@@ -1086,17 +1059,14 @@ public class Main extends Application {
 	 * @return True if successfully updated closeFriends, False if it failed
 	 */
 	public static boolean getCloseFriends() throws IOException, InterruptedException {
-
 		//store the followings list and store it for usage
 		ArrayList<String> following = new ArrayList<String>(Config.getInstance().getCurrentUser().getFollowing());
 
 		//get iterator
 		Iterator<String> iter = following.iterator();
 
-
 		//Store close friends here
 		ArrayList<String> friends = new ArrayList<String>();
-
 
 		// for each follow in following list
 		while (iter.hasNext()) {
@@ -1113,7 +1083,7 @@ public class Main extends Application {
 
 			//if there was an error in getting profile, abort program
 			if (response == null) {
-				System.err.println("Error fetching user profile for close friends fetch");
+				System.err.println("Err: Could not fetch user profile for close friends fetch");
 				return false;
 			}
 
@@ -1121,13 +1091,11 @@ public class Main extends Application {
 			if (((JSONArray)response.get("following")).contains(Config.getInstance().getCurrentUser().getUsername())) {
 				friends.add(username);
 			}
-
 		}
 
 		//return close friends and update
 		closeFriends = friends;
 		return true;
-
 	}
 
 	/**
@@ -1240,7 +1208,6 @@ public class Main extends Application {
 			}
 		} while (choice != null);
 
-
 		do {
 			System.out.println("What would you like to do? Reminder: Leaderboards can only be viewed and refreshed after you create a post\nType a number to select of the following\n1: create post, 2: view specific post, 3: view profile of a user (including yourself), 4: view leaderboard, 5: Like a specific post, 6: Follow a specific user, 7: change your profile (age, gender and status), 8: View the latest 50 posts in the feed, 9: exit");
 			choice = input.next();
@@ -1297,7 +1264,6 @@ public class Main extends Application {
 						updateProfile(age, gender, status);
 					} catch (InputMismatchException e) {
 						System.err.println("You have entered an invalid value for age or gender, please try again later.");
-
 					}
 					break;
 				case "8":
@@ -1316,10 +1282,7 @@ public class Main extends Application {
 					password = input.nextLine();
 					if (username.equals("/exit") || password.equals("/exit")) {
 						login(username, password);
-
-
 					}
-
 
 					break;
 				default:
@@ -1330,6 +1293,9 @@ public class Main extends Application {
 		} while (!choice.equals("9"));
 	}
 
+	/**
+	 * Main Method for Pebl. Calls the javafx launch method.
+	 */
 	public static void main(String[] args) {
 		//init GUI
 		launch(args);
