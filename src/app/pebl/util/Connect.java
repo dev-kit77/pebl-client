@@ -14,14 +14,10 @@ import java.net.http.HttpResponse;
 
 @SuppressWarnings("JavadocDeclaration")
 public class Connect {
-    private final HttpClient client;
+    //fields
+    private final HttpClient client = HttpClient.newHttpClient(); //HTTP client;
     private String auth = Config.getInstance().getAuthToken();
     public static final String api = (Config.getInstance().getServerAddr()+"api/"); //The api path for quick use
-    public Connect() {
-        client = HttpClient.newHttpClient(); //The client
-
-    }
-
 
     /**
      * Updates the value of auth in the .pebl.cfg file
@@ -40,11 +36,11 @@ public class Connect {
     private boolean checkCode(HttpRequest request, HttpResponse<String> response) {
         //success
         if (response.statusCode() == 200) {
-               System.out.println("OK: " + response.statusCode());
+            System.out.println("OK: " + response.statusCode());
             System.out.println("Response Header: "+response.headers()+"\nResponse body: "+response.body());
-               
-               //return true
-               return true;
+
+            //return true
+            return true;
         }
         //server error
         else if (response.statusCode() >= 500 && response.statusCode() < 600) {
@@ -75,7 +71,6 @@ public class Connect {
         switch (type) {
             case "checkOnline": //check if server is online
                 //build request
-
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api))
                         .GET()
@@ -96,13 +91,6 @@ public class Connect {
                 break;
 
             case "checkAuth": //check if auth token is valid
-                //adds required fields in the JSONObject
-
-                //body structure: {"error":"none", "success": "true","token": the auth token}
-                body.put("token", auth);
-                body.put("error", "none");
-                body.put("success", "true");
-
                 //build request
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(api))
@@ -111,10 +99,10 @@ public class Connect {
                         .header("Authorization", auth)
                         .build();
 
-                //what is it doing
+                //Logging request
                 System.out.println("Validating auth token");
 
-                //send it
+                //Send request to server
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 //Process status
@@ -133,25 +121,25 @@ public class Connect {
                 .header("Content-Type", "application/json")
                 .build();
 
-                //what is it doing
+                //Logging request
                 System.out.println("Registering user");
 
-                //send it
+                //Send request to server
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 //Process status
                 if (checkCode(request, response)) {
                         //parse response into JSONObject
                         responseJSON = (JSONObject) JSONValue.parse(response.body());
-                        System.out.println(responseJSON);
+
                         //update auth
-                        auth = (String)responseJSON.get("token"); // update the auth token
+                        auth = (String) responseJSON.get("token"); // update the auth token
                         authUpdate(auth);
                     }
 
                 break;
 
-            case "auth": //send username and password to get new token aka LOGIN
+            case "auth": //NOTE: send username and password to get new token Eg. for login
                 //build
                 request = HttpRequest.newBuilder()
                 .uri(URI.create(api+"auth"))
@@ -159,10 +147,10 @@ public class Connect {
                 .header("Content-Type", "application/json")
                 .build();
 
-                //what is it doing
+                //Logging request
                 System.out.println("Logging in user");
 
-                //send it
+                //Send request to server
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 //Process status
@@ -185,10 +173,10 @@ public class Connect {
                         .header("Content-Type", "application/json")
                         .build();
 
-                //what is it doing
-                System.out.println("Getting user profile of: "+body.get("target").toString());
+                //Logging request
+                System.out.println("Fetching user profile of: "+body.get("target").toString());
 
-                //send it
+                //Send request to server
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 //Process status
                 if (checkCode(request, response)) {
@@ -207,10 +195,10 @@ public class Connect {
                         .header("Authorization", auth)
                         .build();
 
-                //what is it doing
+                //Logging request
                 System.out.println("Updating user profile");
 
-                //send it
+                //Send request to server
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 //Process status
@@ -231,10 +219,10 @@ public class Connect {
                         .header("id", body.get("id").toString())
                         .build();
 
-                //what is it doing
-                System.out.println("Getting post");
+                //Logging request
+                System.out.println("Fetching post");
 
-                //send it
+                //Send request to server
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 //Process status
@@ -254,10 +242,10 @@ public class Connect {
                         .header("Authorization", auth)
                         .build();
 
-                //what is it doing
+                //Logging request
                 System.out.println("Creating post");
 
-                //send it
+                //Send request to server
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 //Process status
@@ -276,10 +264,10 @@ public class Connect {
                         .header("Content-Type", "application/json")
                         .build();
 
-                //what is it doing
-                System.out.println("Getting feed");
+                //Logging request
+                System.out.println("Fetching feed");
 
-                //send it
+                //Send request to server
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 //Process status
@@ -299,10 +287,10 @@ public class Connect {
                         .header("Authorization", auth)
                         .build();
 
-                //send it
+                //Send request to server
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                //what is it doing
+                //Logging request
                 System.out.println("Toggling follow user "+ body.get("target"));
 
                 //Process status
@@ -325,18 +313,21 @@ public class Connect {
                         .header("Authorization", auth)
                         .build();
 
-                //what is it doing
+                //Logging request
                 System.out.println("Liking post: "+body.get("id"));
 
-                //send it
+                //Send request to server
                 response = client.send(request, HttpResponse.BodyHandlers.ofString()); //json body: {"id": id} id is integer id of post
 
-                //check status code
+                //log response
                 checkCode(request, response);
+                
                 break;
 
             default:
-                System.out.println("No such option for request.");
+                //print error
+                System.err.println("No such option for request.");
+                
                 break;
         }
 
@@ -363,10 +354,10 @@ public class Connect {
                 .header("Content-Type", "application/json")
                 .build();
 
-        //what is it doing
-        System.out.println("Getting leaderboard");
+        //Logging request
+        System.out.println("Fetching leaderboard");
 
-        //send it
+        //Send request to server
         response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         //Process status
