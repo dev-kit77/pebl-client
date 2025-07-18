@@ -46,10 +46,8 @@ public class Tester {
 
     /**
      * test registering (better not be used often) (at the moment it passes)
-     * @throws IOException
-     * @throws InterruptedException
      */
-    private static void register(String username, String password, int age, boolean gender) throws IOException, InterruptedException {
+    private static void register(String username, String password, int age, boolean gender) {
         System.out.println("testing REGISTER");
         //make json object to pass to method and populate it
         JSONObject obj = new JSONObject();
@@ -60,17 +58,15 @@ public class Tester {
 
 
         //run the method and display the outcome
-        System.out.println(connect.request("register", obj)+"\n");
+        System.out.println(connect.register(obj)+"\n");
 
-        currentUser = Main.parseUser(connect.request("profileGet", obj));
+        currentUser = Main.parseUser(connect.fetchProfile(obj));
     }
 
     /**
      * test logging in (at the end calls getProfile to set the current user)
-     * @throws IOException
-     * @throws InterruptedException
      */
-    private static void login(String username, String password) throws IOException, InterruptedException {
+    private static void login(String username, String password) {
         System.out.println("testing LOGIN");
         //make json object to pass to method and populate it
 
@@ -79,13 +75,13 @@ public class Tester {
         obj.put("password", password);
 
         //run the method and display the outcome
-         System.out.println(connect.request("auth", obj)+"\n");
+         System.out.println(connect.auth(obj)+"\n");
 
         //add "target" to obj in order to fetch user data
         obj.put("target", username.toLowerCase());
 
         // fetching user data and updating the current user;
-        currentUser = Main.parseUser(connect.request("profileGet", obj));
+        currentUser = Main.parseUser(connect.fetchProfile(obj));
 
     }
 
@@ -96,11 +92,9 @@ public class Tester {
 
     /**
      * Test the functionality of getting close friends (You follow each other)
-     * @throws IOException
-     * @throws InterruptedException
      */
 
-    private static void closeFriends() throws IOException, InterruptedException {
+    private static void closeFriends() {
         System.out.println("testing CLOSE FRIENDS");
 
 
@@ -125,7 +119,7 @@ public class Tester {
             obj.put("username", username);
 
             //send request and store response
-            JSONObject response = connect.request("profileGet", obj);
+            JSONObject response = connect.fetchProfile(obj);
 
             //get following from response and check if it has current users username, if yes, add username to close friends
             if (((JSONArray)response.get("following")).contains(currentUser.getUsername())) {
@@ -142,34 +136,28 @@ public class Tester {
 
     /**
      * Check if server is online
-     * @throws IOException
-     * @throws InterruptedException
      */
-    private static void checkServer() throws IOException, InterruptedException {
+    private static void checkServer() {
         System.out.println("testing CHECK SERVER");
         JSONObject obj = new JSONObject();
-        System.out.print(connect.request("checkOnline", obj)+"\n");
+        System.out.print(connect.ping()+"\n");
     }
 
     /**
      * check if auth token is still valid
-     * @throws IOException
-     * @throws InterruptedException
      */
-    private static void checkAuth() throws IOException, InterruptedException {
+    private static void checkAuth() {
         System.out.println("testing CHECK AUTH");
         JSONObject obj = new JSONObject();
 
-        System.out.println(connect.request("checkAuth", obj)+"\n");
+        System.out.println(connect.checkAuth(obj)+"\n");
     }
 
     /**
      * test getting profile
      * @param username
-     * @throws IOException
-     * @throws InterruptedException
      */
-    private static void getProfile(String username) throws IOException, InterruptedException {
+    private static void getProfile(String username) {
         System.out.println("testing GET PROFILE");
 
         //create body json object and populate it to pass into request
@@ -180,7 +168,7 @@ public class Tester {
         System.out.println("Request body: "+obj);
 
         //send request and store response in variable for use
-        JSONObject response = connect.request("profileGet", obj);
+        JSONObject response = connect.fetchProfile(obj);
         //display response
         System.out.println(response+"\n");
 
@@ -198,10 +186,8 @@ public class Tester {
      * @param age int
      * @param gender boolean
      * @param status String
-     * @throws IOException
-     * @throws InterruptedException
      */
-    private static void updateProfile(int age, boolean gender, String status) throws IOException, InterruptedException {
+    private static void updateProfile(int age, boolean gender, String status) {
         System.out.println("testing UPDATE PROFILE");
 
         //creating json object and populating it
@@ -211,7 +197,7 @@ public class Tester {
         obj.put("status", status);
 
         //send request and save response
-        JSONObject response = connect.request("profileUpdate", obj);
+        JSONObject response = connect.updateProfile(obj);
 
         //update current user
         currentUser = Main.parseUser(response);
@@ -222,27 +208,23 @@ public class Tester {
     /**
      * test getting post by id
      * @param id int
-     * @throws IOException
-     * @throws InterruptedException
      */
-    private static void getPost(int id) throws IOException, InterruptedException {
+    private static void getPost(int id) {
         System.out.println("testing GET POST "+id);
         //create json body to pass into request and populate it
         JSONObject obj = new JSONObject();
         obj.put("id", id);
 
         //send request and display response
-        System.out.println(connect.request("postGet", obj)+"\n");
+        System.out.println(connect.fetchPost(obj)+"\n");
     }
 
 
     /**
      * test creating a post and displaying it right away
      * @param content String
-     * @throws IOException
-     * @throws InterruptedException
      */
-    private static void createPost(String content) throws IOException, InterruptedException {
+    private static void createPost(String content) {
         System.out.println("testing CREATE POST");
 
         //Create body for request and populate
@@ -250,7 +232,7 @@ public class Tester {
         obj.put("content", content);
 
         //store response in a JSONObject to use it for id
-        JSONObject response = connect.request("postCreate", obj);
+        JSONObject response = connect.createPost(obj);
 
         //parse integer id and store in variable id
         int id = Integer.parseInt(response.get("id").toString());
@@ -266,14 +248,14 @@ public class Tester {
     /**
      * testing getting the feed, also updates the feed variable
      */
-    private static void feed() throws IOException, InterruptedException {
+    private static void feed() {
         System.out.println("testing FEED");
 
         //Create empty json object to pass to request
         JSONObject obj = new JSONObject();
 
         //send request and store response for later use
-        JSONObject response = connect.request("feed", obj);
+        JSONObject response = connect.fetchFeed();
 
         //check if response is null
         if (response != null) {
@@ -306,10 +288,8 @@ public class Tester {
      * Makes the current logged-in user follow the entered user, then call getProfile on the current user and then the entered user
      * to check if their respective following and followers lists have been changed
      * @param username String
-     * @throws IOException
-     * @throws InterruptedException
      */
-    private static void toggleFollow(String username) throws IOException, InterruptedException {
+    private static void toggleFollow(String username) {
         System.out.println("testing FOLLOW between "+currentUser.getUsername()+" and "+username);
 
         //creating json object and populating it
@@ -318,7 +298,7 @@ public class Tester {
 
 
         //store response in a variable
-        JSONObject response = connect.request("follow", obj);
+        JSONObject response = connect.toggleFollow(obj);
 
         System.out.println(response+"\n");
 
@@ -340,10 +320,8 @@ public class Tester {
     /**
      * test liking a post, when a user skips a post, they spend one of their own skips. To earn skips, users must create new posts, or earn the skips of others by getting their posts liked (skipped) by others
      * @param id int
-     * @throws IOException
-     * @throws InterruptedException
      */
-    private static void like(int id) throws IOException, InterruptedException {
+    private static void like(int id) {
         System.out.println("testing LIKE id: "+id);
 
 
@@ -359,7 +337,7 @@ public class Tester {
         getPost(id);
 
         //print response which is the remaining skips of user
-        System.out.println(connect.request("like", obj)+"\n");
+        System.out.println(connect.likePost(obj)+"\n");
 
         //call get Profile and getPost(id) a second time to compare with the first time they were called in this function
         getProfile(currentUser.getUsername());
@@ -369,13 +347,11 @@ public class Tester {
 
     /**
      * Test fetching leaderboard
-     * @throws IOException
-     * @throws InterruptedException
      */
-    private static void leaderboard() throws IOException, InterruptedException {
+    private static void leaderboard() {
         System.out.println("testing LEADERBOARD");
 
-        System.out.println(connect.leaderboard()+"\n");
+        System.out.println(connect.fetchLeaderboard()+"\n");
 
     }
 

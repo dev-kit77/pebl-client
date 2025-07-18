@@ -1,11 +1,12 @@
 package app.pebl.util;
 
 //importing packages
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import java.net.URI;
-import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -20,17 +21,8 @@ public class Connect {
     public static final String api = (Config.getInstance().getServerAddr()+"api/"); //The api path for quick use
 
     /**
-     * Updates the value of auth in the .pebl.cfg file
-     * @param newAuth new authentication token to update the config file. Set this to empty string to get the value from the config file or to set the auth token to empty string.
-     */
-    private void authUpdate(String newAuth) {
-        Config.getInstance().setAuthToken(newAuth);
-    }
-
-    /**
-     * Method to display information on console based on status code of http request
-     *
-     * @param request
+     * Method to display information on console based on status code of http request.
+     * @param request the request to display
      * @return true if code is 200, false if it isn't
      */
     private boolean checkCode(HttpRequest request, HttpResponse<String> response) {
@@ -58,317 +50,314 @@ public class Connect {
     }
 
     /**
-     * Method to handle all http requests, just enter from the options [checkOnline, checkAuth, register, auth, profileGet, profileUpdate, postGet, postCreate, feed, leaderboard]
-     * @param type where you are sending the request to
-     * @param body the body
+     * Method to ping the current api server. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * @return JSONObject, representing the server response.
      */
-    public JSONObject request(String type, JSONObject body) throws IOException, InterruptedException{
+    public JSONObject ping() {
+        //create uri
+        URI uri = URI.create(api);
+
+        //log request
+        System.out.println("Pinging server at " + uri);
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(URI.create(api))
+                .GET()
+                .header("Content-Type", "application/json")
+                .build());
+    }
+
+    /**
+     * Method to login the current api server to receive an auth token. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * @param body JSONObject, Containing body structure: {"username":"[username]", "password":"[password]"}.
+     * @return JSONObject, representing the server response.
+     */
+    public JSONObject auth(JSONObject body) {
+        //create uri
+        URI uri = URI.create(api+"auth");
+
+        //log request
+        System.out.println("Logging in user on " + uri);
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(uri)
+                .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                .header("Content-Type", "application/json")
+                .build());
+    }
+
+    /**
+     * Method to check an auth token on the current api server. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * @param body JSONObject, Containing body structure: {"error":"none", "success": "true","token": [auth token}
+     * @return JSONObject, representing the server response.
+     */
+    public JSONObject checkAuth(JSONObject body) {
+        //create uri
+        URI uri = URI.create(api);
+
+        //log request
+        System.out.println("Checking auth token validation on " + uri);
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(uri)
+                .PUT(HttpRequest.BodyPublishers.ofString(body.toJSONString())) // json -> {"error":"none", "success":"true", "token": {the auth token}}
+                .header("Content-Type", "application/json")
+                .header("Authorization", auth)
+                .build());
+    }
+
+    /**
+     * Method to register a new user on the current api server. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * @param body JSONObject, Containing body structure: {"username":"[username]", "password":"[password]", "age":"[age]", "gender":"[gender]"}
+     * @return JSONObject, representing the server response.
+     */
+    public JSONObject register(JSONObject body) {
+        //create uri
+        URI uri = URI.create(api+"register");
+
+        //log request
+        System.out.println("Registering user on " + uri);
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(uri)
+                .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                .header("Content-Type", "application/json")
+                .build());
+    }
+
+    /**
+     * Method to fetch a user profile on the current api server. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * @param body JSONObject, Containing body structure: {"target":"[username]"}
+     * @return JSONObject, representing the server response.
+     */
+    public JSONObject fetchProfile(JSONObject body) {
+        //create uri
+        URI uri = URI.create(api+"user/profile");
+
+        //log request
+        System.out.println("Fetching user profile of: " + body.get("target").toString() + " on " + uri);
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(uri)
+                .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                .header("Content-Type", "application/json")
+                .build());
+    }
+
+    /**
+     * Method to update the current user profile on the current api server. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * @param body JSONObject, Containing body structure: {"age":"[age]", "gender":"[gender]", "status":"[user status]"}
+     * @return JSONObject, representing the server response.
+     */
+    public JSONObject updateProfile(JSONObject body) {
+        //create uri
+        URI uri = URI.create(api+"user/profile");
+
+        //log request
+        System.out.println("Updating user profile on " + uri);
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(uri)
+                .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
+                .header("Content-Type", "application/json")
+                .header("Authorization", auth)
+                .build());
+    }
+
+    /**
+     * Method to toggle following of a user profile on the current api server. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * @param body JSONObject, Containing body structure: {"target":"[username]"}
+     * @return JSONObject, representing the server response.
+     */
+    public JSONObject toggleFollow(JSONObject body) {
+        //create uri
+        URI uri = URI.create(api+"user/toggleFollow");
+
+        //log request
+        System.out.println("Toggling following user: " + body.get("target") + " on " + uri);
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(uri)
+                .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
+                .header("Content-Type", "application/json")
+                .header("Authorization", auth)
+                .build());
+    }
+
+    /**
+     * Method to fetch a post on the current api server. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * @param body JSONObject, Containing body structure: {"id":"[post id]"}
+     * @return JSONObject, representing the server response.
+     */
+    public JSONObject fetchPost(JSONObject body) {
+        //create uri
+        URI uri = URI.create(api+"post/get");
+
+        //log request
+        System.out.println("Fetching post ID: " + body.get("id").toString() + " on " + uri);
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(uri)
+                .GET()
+                .header("Content-Type", "application/json")
+                .header("id", body.get("id").toString())
+                .build());
+    }
+
+    /**
+     * Method to create a post on the current api server. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * @param body JSONObject, Containing body structure: {"content":"[post content]"}
+     * @return JSONObject, representing the server response.
+     */
+    public JSONObject createPost(JSONObject body) {
+        //create uri
+        URI uri = URI.create(api+"post/create");
+
+        //log request
+        System.out.println("Sending new post to " + uri);
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(uri)
+                .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
+                .header("Content-Type", "application/json")
+                .header("Authorization", auth)
+                .build());
+    }
+
+    /**
+     * Method to like a post on the current api server. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * NOTE: liking (skipping) is only possible if user has more than one skip to spare. earn skips by creating posts
+     * 1 new post = 1 skip added to user skip bank
+     * @param body JSONObject, Containing body structure: {"id":"[post id]"}
+     * @return JSONObject, representing the server response.
+     */
+    public JSONObject likePost(JSONObject body) {
+        //create uri
+        URI uri = URI.create(api+"post/skip");
+
+        //log request
+        System.out.println("Liking post: "+body.get("id"));
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(uri)
+                .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
+                .header("Content-Type", "application/json")
+                .header("Authorization", auth)
+                .build());
+    }
+
+    /**
+     * Method to fetch feed on the current api server. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * @return JSONObject, representing the server response.
+     */
+    public JSONObject fetchFeed() {
+        //create uri
+        URI uri = URI.create(api+"feed");
+
+        //log request
+        System.out.println("Fetching feed");
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(uri)
+                .GET()
+                .header("Content-Type", "application/json")
+                .build());
+    }
+
+    /**
+     * Method to request the leaderboard of users on the current api server. Logs the request attempt and then creates a HttpRequest for the api endpoint to be sent to the sendRequest() method.
+     * @return JSONObject, representing the server response.
+     */
+    public JSONObject fetchLeaderboard() {
+        //create uri
+        URI uri = URI.create(api+"leaderboard");
+
+        //log request type
+        System.out.println("Fetching leaderboard on " + uri);
+
+        //build and send request
+        return sendRequest(HttpRequest.newBuilder()
+                .uri(uri)
+                .GET()
+                .header("Content-Type", "application/json")
+                .build());
+    }
+
+    /**
+     * Method to handle all http requests. Sends the request given in the parameter to the server and handles errors/responses.
+     * @param request HttpRequest to be sent from the client.
+     * @return JSONObject, representing the server response.
+     */
+    private JSONObject sendRequest(HttpRequest request) {
         //setting up the requests and responses and the JSON object to be returned
-        HttpRequest request;
         HttpResponse<String> response;
         JSONObject responseJSON = null;
 
-        switch (type) {
-            case "checkOnline": //check if server is online
-                //build request
-                request = HttpRequest.newBuilder()
-                        .uri(URI.create(api))
-                        .GET()
-                        .header("Content-Type", "application/json")
-                        .build();
+        //Send request to server
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            //print error to log
+            System.err.println("Err: Could Not Complete Request to " + request.uri().toString());
+            System.err.println("Message: " + e.getMessage());
 
-                //Logging request
-                System.out.println("Pinging Server");
+            //update GUI
+            Platform.runLater(() -> {
+                //show general error
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Could Not Complete Request to " + request.uri().toString());
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            });
 
-                //Send request to server
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            //return null for error
+            return null;
+        }
 
-                //Process status
-                if (checkCode(request, response)) {
-                    responseJSON = new JSONObject();
-                }
+        //Process status
+		if (checkCode(request, response)) {
+            //response is a JSONObject
+            if (JSONValue.parse(response.body()) instanceof JSONObject) {
+                //parse response into JSON Object
+                responseJSON = (JSONObject) JSONValue.parse(response.body());
+            }
+            //response is a JSONArray
+            else if (JSONValue.parse(response.body()) instanceof JSONArray) {
+                //TODO: Ask Fyrine to encapsulate leaderboard in JSONObject like feed.
+                //create new json object
+                responseJSON = new JSONObject();
+                //encapsulate array in new JSON object
+                responseJSON.put("leaderboard", (JSONArray) JSONValue.parse(response.body()));
+            }
+            //Response is not a JSONObject
+            else {
+                //create new json object
+                responseJSON = new JSONObject();
+                //add response from server into json object
+                responseJSON.put("status", response.body());
+            }
 
-                break;
-
-            case "checkAuth": //check if auth token is valid
-                //build request
-                request = HttpRequest.newBuilder()
-                        .uri(URI.create(api))
-                        .PUT(HttpRequest.BodyPublishers.ofString(body.toJSONString())) // json -> {"error":"none", "success":"true", "token": {the auth token}}
-                        .header("Content-Type", "application/json")
-                        .header("Authorization", auth)
-                        .build();
-
-                //Logging request
-                System.out.println("Validating auth token");
-
-                //Send request to server
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                //Process status
-                if (checkCode(request, response)) {
-                    responseJSON = new JSONObject();
-                }
-
-                break;
-
-
-            case "register": //create new account and get auth token Warning: the username must be all lowercase (), must include{username, password, age, gender}
-                //build request
-                request = HttpRequest.newBuilder()
-                .uri(URI.create(api+"register"))
-                .POST(HttpRequest.BodyPublishers.ofString(body.toJSONString()))
-                .header("Content-Type", "application/json")
-                .build();
-
-                //Logging request
-                System.out.println("Registering user");
-
-                //Send request to server
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                //Process status
-                if (checkCode(request, response)) {
-                        //parse response into JSONObject
-                        responseJSON = (JSONObject) JSONValue.parse(response.body());
-
-                        //update auth
-                        auth = (String) responseJSON.get("token"); // update the auth token
-                        authUpdate(auth);
-                    }
-
-                break;
-
-            case "auth": //NOTE: send username and password to get new token Eg. for login
-                //build
-                request = HttpRequest.newBuilder()
-                .uri(URI.create(api+"auth"))
-                .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
-                .header("Content-Type", "application/json")
-                .build();
-
-                //Logging request
-                System.out.println("Logging in user");
-
-                //Send request to server
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                //Process status
-                if (checkCode(request, response)) {
-                    //parse the response
-                    responseJSON = (JSONObject)JSONValue.parse(response.body()); //parse the response as JSON
-
-                    //update auth
-                    auth = (String)responseJSON.get("token"); // update the auth token
-                    authUpdate(auth);
-                }
-                
-                break;
-
-            case "profileGet": // get user profile json body must have {target: String username of user}
-                //build
-                request = HttpRequest.newBuilder()
-                        .uri(URI.create(api+"user/profile"))
-                        .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
-                        .header("Content-Type", "application/json")
-                        .build();
-
-                //Logging request
-                System.out.println("Fetching user profile of: "+body.get("target").toString());
-
-                //Send request to server
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//Process status
-                if (checkCode(request, response)) {
-                    //parse the response to JSONObject
-                    responseJSON = (JSONObject)JSONValue.parse(response.body());
-                }
-                
-                break;
-
-            case "profileUpdate": //update user profile json must include {"age": integer, "gender": boolean, "status": "String"}
-                //build
-                request = HttpRequest.newBuilder()
-                        .uri(URI.create(api+"user/profile"))
-                        .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
-                        .header("Content-Type", "application/json")
-                        .header("Authorization", auth)
-                        .build();
-
-                //Logging request
-                System.out.println("Updating user profile");
-
-                //Send request to server
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                //Process status
-                if (checkCode(request, response)) {
-                    //return empty object to signify success
-                    responseJSON = new JSONObject();
-                }
-
-                break;
-
-
-            case "postGet": // get specific post by id body structure: {"id": id integer}
-                //build
-                request = HttpRequest.newBuilder()
-                        .uri(URI.create(api+"post/get"))
-                        .GET()
-                        .header("Content-Type", "application/json")
-                        .header("id", body.get("id").toString())
-                        .build();
-
-                //Logging request
-                System.out.println("Fetching post");
-
-                //Send request to server
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                //Process status
-                if (checkCode(request, response)) {
-                    //parsing response to JSONObject
-                    responseJSON = (JSONObject)JSONValue.parse(response.body());
-                }
-
-                break;
-
-            case "postCreate": // make post must include {"content": content String} | responds with {"id": id of post}
-                //build
-                request = HttpRequest.newBuilder()
-                        .uri(URI.create(api+"post/create"))
-                        .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
-                        .header("Content-Type", "application/json")
-                        .header("Authorization", auth)
-                        .build();
-
-                //Logging request
-                System.out.println("Creating post");
-
-                //Send request to server
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                //Process status
-                if (checkCode(request, response)) {
-                    //parsing response to JSONObject
-                    responseJSON = (JSONObject)JSONValue.parse(response.body());
-                }
-
-                break;
-
-            case "feed": // get feed, returns JSONObject of 50 latest posts, body can be empty
-                //build
-                request = HttpRequest.newBuilder()
-                        .uri(URI.create(api+"feed"))
-                        .GET()
-                        .header("Content-Type", "application/json")
-                        .build();
-
-                //Logging request
-                System.out.println("Fetching feed");
-
-                //Send request to server
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                //Process status
-                if (checkCode(request, response)) {
-                    //parsing response to JSONObject
-                    responseJSON = (JSONObject)JSONValue.parse(response.body());
-                }
-
-                break;
-
-            case "follow": //following a user body structure: {"target": username String}
-                //build
-                request = HttpRequest.newBuilder()
-                        .uri(URI.create(api+"user/toggleFollow"))
-                        .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
-                        .header("Content-Type", "application/json")
-                        .header("Authorization", auth)
-                        .build();
-
-                //Send request to server
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                //Logging request
-                System.out.println("Toggling follow user "+ body.get("target"));
-
-                //Process status
-                if (checkCode(request, response)) {
-
-                    //return empty JSONObject to signify success
-                    responseJSON = new JSONObject();
-                }
-                
-                break;
-
-            case "like": //liking post Body must include the post ID {"id": id of post as integer}. Responds with the remaining skips a user has
-                //IMPORTANT: liking (skipping) is only possible if user has more than one skip to spare. earn skips by creating posts
-                // 1 new post = 1 skip added to user skip bank
-                //build
-                request = HttpRequest.newBuilder()
-                        .uri(URI.create(api+"post/skip"))
-                        .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
-                        .header("Content-Type", "application/json")
-                        .header("Authorization", auth)
-                        .build();
-
-                //Logging request
-                System.out.println("Liking post: "+body.get("id"));
-
-                //Send request to server
-                response = client.send(request, HttpResponse.BodyHandlers.ofString()); //json body: {"id": id} id is integer id of post
-
-                //log response
-                checkCode(request, response);
-                
-                break;
-
-            default:
-                //print error
-                System.err.println("No such option for request.");
-                
-                break;
+            //check if response contains new auth token
+            if (responseJSON.containsKey("token")) {
+                //update auth
+                auth = (String) responseJSON.get("token"); // update the auth token
+                Config.getInstance().setAuthToken(auth);
+            }
         }
 
         //return JSON response, Null if not updated on request completion
         return responseJSON;
     }
-
-    /**
-     * Method to request the leaderboard of users
-     * @return JSONArray of users
-     * @throws IOException
-     * @throws InterruptedException
-     */
-    public JSONArray leaderboard() throws IOException, InterruptedException {
-        //Declare request, response, JSONArray response
-        HttpRequest request;
-        HttpResponse<String> response;
-        JSONArray responseJSON = null;
-
-        //build
-        request = HttpRequest.newBuilder()
-                .uri(URI.create(api+"leaderboard"))
-                .GET()
-                .header("Content-Type", "application/json")
-                .build();
-
-        //Logging request
-        System.out.println("Fetching leaderboard");
-
-        //Send request to server
-        response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        //Process status
-        if (checkCode(request, response)) {
-
-            //parse response into JSONArray and return it upon success
-            responseJSON = (JSONArray)JSONValue.parse(response.body());
-        }
-
-        return responseJSON;
-
-    }
-    
 }
