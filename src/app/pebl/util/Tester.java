@@ -427,67 +427,67 @@ public class Tester {
     //main
     public static void main(String[] args) throws Exception {
         //testing if server is online success
-//        checkServer();
+        checkServer();
 
 
         //registering new user test success
-//        register("bob1", "bob", 30, false);
+        register("bob1", "bob", 30, false);
 
         //testing login success
-//        login("bob2", "bob");
+        login("bob2", "bob");
 
         //testing if auth token is still valid success
-//        checkAuth();
+        checkAuth();
 
         //testing get profile success
-//        getProfile("bob2");
-//        getProfile(username2);
-//        getProfile("fýr");
+        getProfile("bob2");
+        getProfile(username2);
+        getProfile("fýr");
 
         //testing update profile success
-//        updateProfile(15, true, "klondike");
-//        getProfile(username1);
+        updateProfile(15, true, "klondike");
+        getProfile(username1);
 
         //testing getPost success
-//        getPost(2);
+        getPost(2);
 
         //testing createPost success
-//        createPost("Hello World");
+        createPost("Hello World");
 
         //testing feed success
-//        feed();
+        feed();
 
         //testing following (bob4 will follow bob2) success
-//        toggleFollow("bob1");
-//        toggleFollow("bob3");
+        toggleFollow("bob1");
+        toggleFollow("bob3");
 
         //testing like (bob2 will like post id: 3) success
-//        like(3);
+        like(3);
 
         //testing leaderboard success
-//        leaderboard();
+        leaderboard();
 
         //test get close friends success
-//        closeFriends();
+        closeFriends();
 
         //testing filter feed success
-//        filterFeed(true);
+        filterFeed(true);
 
         //test cli
-//        Main.cli();
+        Main.cli();
 
-        // testing following each other and getting close friends success
-//        getProfile("bob2");
+        //testing following each other and getting close friends success
+        getProfile("bob2");
 
-//        register("bob1", "bob", 30, false);
-//      login("bob1", "bob");
-//        toggleFollow("bob2");
+        register("bob1", "bob", 30, false);
+        login("bob1", "bob");
+        toggleFollow("bob2");
 
-//        login("bob2", "bob");
-//        toggleFollow("bob1");
+        login("bob2", "bob");
+        toggleFollow("bob1");
 
-//        login("bob1", "bob");
-//        closeFriends();
+        login("bob1", "bob");
+        closeFriends();
 
     }
 
