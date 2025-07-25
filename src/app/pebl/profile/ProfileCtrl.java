@@ -31,6 +31,7 @@ public class ProfileCtrl extends Controller {
 	@FXML private Label lblSkips;
 	@FXML private Label lblAge;
 	@FXML private Label lblGender;
+	@FXML private Label lblLocation;
 	@FXML private ScrollPane scrUserPosts;
 	@FXML private VBox feedUserPosts;
 	@FXML private MenuItem edit;
@@ -103,6 +104,18 @@ public class ProfileCtrl extends Controller {
 						lblFollowing.setText(displayUser.getFollowing().size() + " Following");
 						lblSkips.setText(displayUser.getSkips() + " Skips");
 						lblAge.setText("Age " + displayUser.getAge());
+
+						//check if user has location
+						if (displayUser.getLocation() != null && !displayUser.getLocation().isEmpty()) {
+							//show label
+							lblStatus.setVisible(true);
+
+							//set location
+							lblLocation.setText(displayUser.getLocation());
+						} else {
+							//hide label
+							lblLocation.setVisible(false);
+						}
 
 						//set swedish gender (dont ask)
 						if (displayUser.getGender()) {
