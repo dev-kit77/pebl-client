@@ -31,7 +31,6 @@ public class ProfileCtrl extends Controller {
 	@FXML private Label lblSkips;
 	@FXML private Label lblAge;
 	@FXML private Label lblGender;
-	@FXML private Label lblLocation;
 	@FXML private ScrollPane scrUserPosts;
 	@FXML private VBox feedUserPosts;
 	@FXML private MenuItem edit;

@@ -11,8 +11,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
+<?import javafx.scene.text.Text?>
 <BorderPane fx:id="layoutParent" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../css/Format.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.profile.ProfileCtrl">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
@@ -78,12 +78,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="lblGender" text="Gender">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblLocation" text="Location">
+            <Label fx:id="lblGender" text="Gender: null">
                <font>
                   <Font size="14.0" />
                </font>
