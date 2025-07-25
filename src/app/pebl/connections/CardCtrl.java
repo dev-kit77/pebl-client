@@ -27,6 +27,7 @@ public class CardCtrl extends HBox {
 		if (newUser.getStatus() != null && !newUser.getStatus().isEmpty()) {
 			//show label
 			lblStatus.setVisible(true);
+			lblStatus.setManaged(true);
 
 			//set status
 			lblStatus.setText("\"" + newUser.getStatus() + "\"");
@@ -34,6 +35,7 @@ public class CardCtrl extends HBox {
 		else {
 			//hide label
 			lblStatus.setVisible(false);
+			lblStatus.setManaged(false);
 		}
 
 		//update display user

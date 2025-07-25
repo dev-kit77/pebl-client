@@ -61,6 +61,7 @@ public class ConnectionsCtrl extends Controller {
 						if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
 							//show label
 							lblCurrStatus.setVisible(true);
+							lblCurrStatus.setManaged(true);
 
 							//set status
 							lblCurrStatus.setText("\"" + displayUser.getStatus() + "\"");
@@ -68,6 +69,7 @@ public class ConnectionsCtrl extends Controller {
 						else {
 							//hide label
 							lblCurrStatus.setVisible(false);
+							lblCurrStatus.setManaged(false);
 						}
 
 						if (!displayUser.equals(Config.getInstance().getCurrentUser())) {
