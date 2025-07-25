@@ -107,20 +107,6 @@ public class ProfileCtrl extends Controller {
 						lblSkips.setText(displayUser.getSkips() + " Skips");
 						lblAge.setText("Age " + displayUser.getAge());
 
-						//check if user has location
-						if (displayUser.getLocation() != null && !displayUser.getLocation().isEmpty()) {
-							//show label
-							lblLocation.setVisible(true);
-							lblLocation.setManaged(true);
-
-							//set location
-							lblLocation.setText(displayUser.getLocation());
-						} else {
-							//hide label
-							lblLocation.setVisible(false);
-							lblLocation.setManaged(false);
-						}
-
 						//set swedish gender (dont ask)
 						if (displayUser.getGender()) {
 							lblGender.setText("Gendered");
