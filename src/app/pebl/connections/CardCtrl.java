@@ -24,16 +24,16 @@ public class CardCtrl extends HBox {
 		lblSkips.setText("(" + newUser.getSkips() + " Skips)");
 
 		//check if user has status
-		if (newUser.getStatus() !=null) {
+		if (newUser.getStatus() != null && !newUser.getStatus().isEmpty()) {
 			//show label
-			lblStatus.setVisible(false);
+			lblStatus.setVisible(true);
 
 			//set status
 			lblStatus.setText("\"" + newUser.getStatus() + "\"");
 		}
 		else {
 			//hide label
-			lblStatus.setVisible(true);
+			lblStatus.setVisible(false);
 		}
 
 		//update display user
