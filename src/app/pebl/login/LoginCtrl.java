@@ -49,16 +49,18 @@ public class LoginCtrl extends Controller {
 				Platform.runLater(() -> {
 					//show general error
 					layoutParent.getScene().setCursor(Cursor.WAIT);
+
+					//freeze GUI
+					layoutParent.setDisable(true);
 				});
 
 				//init conditions
-				boolean online = false;
 				boolean success = false;
 
 				//authenticate user with server
 				try {
 					//check server connection
-					online = Main.checkServer();
+					boolean online = Main.checkServer();
 
 					if (online) {
 						success = Main.login(username.getText(), password.getText());
@@ -118,6 +120,9 @@ public class LoginCtrl extends Controller {
 				Platform.runLater(() -> {
 					//show general error
 					layoutParent.getScene().setCursor(Cursor.DEFAULT);
+
+					//unfreeze GUI
+					layoutParent.setDisable(false);
 				});
 
 				//end thread
