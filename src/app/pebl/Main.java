@@ -444,8 +444,6 @@ public class Main extends Application {
 	 * Method to get the JSON representation of a User object
 	 * @param user String
 	 * @return JSONObject representation of the User object
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
 	public static JSONObject getUserAsJSON(User user) {
 		//return null incase paramter is null
@@ -494,10 +492,8 @@ public class Main extends Application {
 	 * @param age integer
 	 * @param gender boolean
 	 * @return True if the register was successful and False if it failed.
-	 * @throws IOException in case of IOException
-	 * @throws InterruptedException if the http request was interrupted
 	 */
-	public static boolean register(String username, String password, int age, boolean gender) throws IOException, InterruptedException {
+	public static boolean register(String username, String password, int age, boolean gender) {
 
 		//create the body object to be passed into connect.request() and populate it with necessary fields
 		JSONObject obj = new JSONObject();
@@ -509,7 +505,7 @@ public class Main extends Application {
 		obj.put("gender", ""+gender);
 
 		//send the request
-		JSONObject response = connect.request("register", obj);
+		JSONObject response = connect.register(obj);
 
 		//if the process was successful
 		if (response != null) {
@@ -530,23 +526,21 @@ public class Main extends Application {
 	 * @param username String
 	 * @param password String
 	 * @return True if login was successful and False if it failed
-	 * @throws IOException in case of IOException
-	 * @throws InterruptedException if the http request was interrupted
 	 */
-	public static boolean login(String username, String password) throws IOException, InterruptedException {
+	public static boolean login(String username, String password) {
 		//Create body for request and populate it
 		JSONObject obj = new JSONObject();
-		obj.put("username", username.toLowerCase());
+		obj.put("username", username);
 		obj.put("password", password);
 
 		//send request nd store response
-		JSONObject response = connect.request("auth", obj);
+		JSONObject response = connect.auth(obj);
 
 		//if successful
 		if (response != null) {
 				// fetch profile data
 				//update the currentUser by calling getProfile
-				getProfile(username.toLowerCase());
+				getProfile(username);
 				System.out.println("Logged in");
 				return true;
 		}
@@ -561,27 +555,17 @@ public class Main extends Application {
 	/**
 	 * Method to check if the server is online
 	 * @return True if server is online and False if it is offline
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	public static boolean checkServer() throws IOException, InterruptedException {
-		//create json obj to pass to connect.request
-		JSONObject obj = new JSONObject();
-
-		//send request
-		JSONObject response = connect.request("checkOnline", obj);
-
-		//returns true if successful, false if failed
-		return  (response != null);
+	public static boolean checkServer() {
+		//ping server, returns true if successful, false if failed
+		return (connect.ping() != null);
 	}
 
 	/**
 	 * Method to check if the auth token is valid
 	 * @return True if the token is valid and False if it is invalid
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	public static boolean checkAuth() throws IOException, InterruptedException {
+	public static boolean checkAuth() {
 		//create body json object to pass to request
 		JSONObject obj = new JSONObject();
 
@@ -592,26 +576,24 @@ public class Main extends Application {
 		obj.put("success", "true");
 
 		//send request
-		JSONObject response = connect.request("checkAuth", obj);
+		JSONObject response = connect.checkAuth(obj);
 
 		//return true if successful, false if fail
-		return  (response != null);
+		return (response != null);
 	}
 
 	/**
 	 * Method to view the profile of a user specified by their username which is put to lowercase
 	 * @param username String
 	 * @return User object if successful or null if failed
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	public static User getProfile(String username) throws IOException, InterruptedException {
+	public static User getProfile(String username) {
 		//create json body for request and populate it
 		JSONObject obj = new JSONObject();
 		obj.put("target", username.toLowerCase());
 
 		//send request and store the response
-		JSONObject response = connect.request("profileGet", obj);
+		JSONObject response = connect.fetchProfile(obj);
 
 		//if success
 		if (response != null) {
@@ -647,10 +629,8 @@ public class Main extends Application {
 	 * @param gender boolean
 	 * @param status String
 	 * @return true if success, false if fail
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	public static boolean updateProfile(int age, boolean gender, String status) throws IOException, InterruptedException {
+	public static boolean updateProfile(int age, boolean gender, String status) {
 		//create json body for request and populate it
 		JSONObject obj = new JSONObject();
 
@@ -678,7 +658,7 @@ public class Main extends Application {
 		}
 
 		//send request and store response
-		JSONObject response = connect.request("profileUpdate", obj);
+		JSONObject response = connect.updateProfile(obj);
 
 		//success
 		if (response != null) {
@@ -720,7 +700,7 @@ public class Main extends Application {
 		obj.put("id", id);
 
 		//send request and save response
-		JSONObject response = connect.request("postGet", obj);
+		JSONObject response = connect.fetchPost(obj);
 
 		//if success
 		if (response != null) {
@@ -746,7 +726,7 @@ public class Main extends Application {
 		obj.put("content", content);
 
 		//send request and save response
-		JSONObject response = connect.request("postCreate", obj);
+		JSONObject response = connect.createPost(obj);
 
 		//success
 		if (response != null) {
@@ -777,15 +757,10 @@ public class Main extends Application {
 	 * Method to get feed, returns the latest 50 posts in teh feed
 	 * This Method must only be called to fetch new data on feed. The variable feed can be accessed at any time, however, its initial value is null
 	 * @return Array list of at max 50 Post objects
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	public static ArrayList<Post> getFeed() throws IOException, InterruptedException {
-		//create json body to pass into request and populate it
-		JSONObject obj = new JSONObject();
-
+	public static ArrayList<Post> getFeed() {
 		//send request and save response
-		JSONObject response = connect.request("feed", obj);
+		JSONObject response = connect.fetchFeed();
 
 		//success
 		if (response != null) {
@@ -796,6 +771,7 @@ public class Main extends Application {
 
 			//temporary jsonArray to
 			JSONArray postsArray = (JSONArray) response.get("feed");
+
 			//iterating over the jsonarray
 			for (int i = 0; i < postsArray.size(); i++) {
 				//convert jsonarray element object to json object
@@ -804,10 +780,12 @@ public class Main extends Application {
 				//parse from JSONObject to post object and add it to posts array list
 				posts.add(parsePost(post));
 			}
+
 			//update feed variable
 			feed = posts;
 
-			return feed; //return feed
+			//return feed
+			return feed;
 		}
 		//fail
 		else {
@@ -820,12 +798,10 @@ public class Main extends Application {
 	 * Method to fetch leaderboard and update the variable leaderboard.
 	 * This Method must only be called to fetch new data on leaderboard. The variable leaderboard can be accessed at any time, however, its initial value is null
 	 * @return ArrayList of User objects
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	public static ArrayList<User> leaderboard() throws IOException, InterruptedException {
+	public static ArrayList<User> leaderboard() {
 		//send request and save response
-		JSONArray response = connect.leaderboard();
+		JSONObject response = connect.fetchLeaderboard();
 
 		//success
 		if (response != null) {
@@ -835,21 +811,21 @@ public class Main extends Application {
 			//temporary list to add User objects from JsonArray of users in response
 			ArrayList<User> users = new ArrayList<User>();
 
-			//iterating over the jsonarray
-			for (int i = 0; i < response.size(); i++) {
+			//temporary jsonArray to
+			JSONArray usersArray = (JSONArray) response.get("leaderboard");
 
+			//iterating over the jsonarray
+			for (int i = 0; i < usersArray.size(); i++) {
 				//convert jsonarray element object to json object
-				JSONObject user = (JSONObject) response.get(i); //convert the jsonarray element object to json object
+				JSONObject user = (JSONObject) usersArray.get(i); //convert the jsonarray element object to json object
 				//create user object and add it to users array list
 				users.add(parseUser(user));
-
 			}
 			//update leaderboard variable and return it
 			leaderboard = users;
 
 			return leaderboard;
 		}
-
 		//fail
 		else {
 			System.err.println("Err: Could not fetch leaderboard");
@@ -857,23 +833,19 @@ public class Main extends Application {
 		}
 	}
 
-
-
 	/**
 	 * Method to toggle following another user.
 	 *
 	 * @param username String of the username you want to follow
 	 * @return True if method was successful, False if method failed
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	public static boolean follow(String username) throws IOException, InterruptedException {
+	public static boolean follow(String username) {
 		//create json body to pass into request and populate it
 		JSONObject obj = new JSONObject();
 		obj.put("target", username.toLowerCase());
 
 		//send request and save response
-		JSONObject response = connect.request("follow", obj);
+		JSONObject response = connect.toggleFollow(obj);
 
 		//success
 		if (response != null) {
@@ -912,17 +884,15 @@ public class Main extends Application {
 	 * Method to like a post
 	 * @param id Integer id of the post
 	 * @return True if liked successfully, false if action failed.
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	public static boolean like(int id) throws IOException, InterruptedException {
+	public static boolean like(int id) {
 
 		//create json body to pass into request and populate it
 		JSONObject obj = new JSONObject();
 		obj.put("id", id);
 
 		//send request and save response
-		JSONObject response = connect.request("like", obj);
+		JSONObject response = connect.likePost(obj);
 
 		//success
 		if (response != null) {
@@ -948,8 +918,6 @@ public class Main extends Application {
 
 	/**
 	 * Method that displays the leaderboard as
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
 	private static void displayLeaderboard() {
 		if (leaderboard != null) {
@@ -1079,7 +1047,7 @@ public class Main extends Application {
 			obj.put("username", username);
 
 			//send request and store response
-			JSONObject response = connect.request("profileGet", obj);
+			JSONObject response = connect.fetchProfile(obj);
 
 			//if there was an error in getting profile, abort program
 			if (response == null) {

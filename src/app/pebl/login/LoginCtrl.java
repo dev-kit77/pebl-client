@@ -23,22 +23,30 @@ public class LoginCtrl extends Controller {
 	private String srvAddress;
 
 	public LoginCtrl() {
+		//get server address from config
 		this.srvAddress = Config.getInstance().getServerAddr();
+
+		//update GUI
+		Platform.runLater(() -> {
+			//hide save login checkbox from messing with layout
+			chkLogin.setVisible(false);
+			chkLogin.setManaged(false);
+		});
 	}
 
 	public void handleLogin() {
-		//check checkbox state
-		if (chkLogin.isSelected()) {
-			//send to log
-			System.out.println("Login Remembered");
-		}
-		else {
-			//print to log
-			System.out.println("Login Not Remembered");
-		}
-
-		//set config
-		Config.getInstance().setUserCache(chkLogin.isSelected());
+//		//check checkbox state
+//		if (chkLogin.isSelected()) {
+//			//send to log
+//			System.out.println("Login Remembered");
+//		}
+//		else {
+//			//print to log
+//			System.out.println("Login Not Remembered");
+//		}
+//
+//		//set config
+//		Config.getInstance().setUserCache(chkLogin.isSelected());
 
 		//set server address in config
 		Config.getInstance().setServerAddr(this.srvAddress);
@@ -49,19 +57,29 @@ public class LoginCtrl extends Controller {
 				Platform.runLater(() -> {
 					//show general error
 					layoutParent.getScene().setCursor(Cursor.WAIT);
+
+					//freeze GUI
+					layoutParent.setDisable(true);
 				});
 
 				//init conditions
-				boolean online = false;
 				boolean success = false;
 
 				//authenticate user with server
 				try {
 					//check server connection
-					online = Main.checkServer();
+					boolean online = Main.checkServer();
 
+					//strip username
+					String strippedUser = username.getText().toLowerCase().replaceAll("\\s+","");
+
+					//check response
 					if (online) {
-						success = Main.login(username.getText(), password.getText());
+						//print username to log
+						System.out.println("Username: " + strippedUser);
+
+						//attempt login
+						success = Main.login(strippedUser, password.getText());
 					} else {
 						//update GUI
 						Platform.runLater(() -> {
@@ -118,6 +136,9 @@ public class LoginCtrl extends Controller {
 				Platform.runLater(() -> {
 					//show general error
 					layoutParent.getScene().setCursor(Cursor.DEFAULT);
+
+					//unfreeze GUI
+					layoutParent.setDisable(false);
 				});
 
 				//end thread
@@ -128,9 +149,6 @@ public class LoginCtrl extends Controller {
 
 		//run thread
 		Main.getExecutor().submit(authUser);
-
-		//print username to log
-		System.out.println("Username: " + username.getText());
 	}
 
 	public void handleSignUp() throws IOException {

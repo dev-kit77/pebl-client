@@ -91,12 +91,14 @@ public class ProfileCtrl extends Controller {
 						if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
 							//show label
 							lblStatus.setVisible(true);
+							lblStatus.setManaged(true);
 
 							//set status
 							lblStatus.setText("\"" + displayUser.getStatus() + "\"");
 						} else {
 							//hide label
 							lblStatus.setVisible(false);
+							lblStatus.setManaged(false);
 						}
 
 						lblFollowers.setText(displayUser.getFollowers().size() + " Followers");

@@ -68,6 +68,7 @@ public class LeaderboardCtrl extends Controller {
 					if (displayUser.getStatus() != null && !displayUser.getStatus().isEmpty()) {
 						//show label
 						lblCurrStatus.setVisible(true);
+						lblCurrStatus.setManaged(true);
 
 						//set status
 						lblCurrStatus.setText("\"" + displayUser.getStatus() + "\"");
@@ -75,6 +76,7 @@ public class LeaderboardCtrl extends Controller {
 					else {
 						//hide label
 						lblCurrStatus.setVisible(false);
+						lblCurrStatus.setManaged(false);
 					}
 
 					//clear current board

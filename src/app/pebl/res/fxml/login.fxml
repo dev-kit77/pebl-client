@@ -13,8 +13,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="layoutParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="250.0" style="-fx-background-color: #c9e6f0;" stylesheets="@../css/Format.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pebl.login.LoginCtrl">
@@ -37,17 +38,12 @@
       </MenuBar>
    </top>
    <bottom>
-      <AnchorPane prefHeight="72.0" prefWidth="250.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
          <children>
-            <Button alignment="CENTER" defaultButton="true" layoutX="97.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleLogin" opacity="0.9" prefHeight="35.0" prefWidth="146.0" text="Login" textFill="#2a3e45">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <CheckBox fx:id="chkLogin" contentDisplay="CENTER" disable="true" layoutX="42.0" layoutY="4.0" mnemonicParsing="false" opacity="0.9" prefHeight="20.0" prefWidth="169.0" stylesheets="@../css/Format.css" text="Save Login Information" textFill="#2a3e45" visible="false">
+            <CheckBox fx:id="chkLogin" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" opacity="0.9" prefHeight="20.0" prefWidth="169.0" stylesheets="@../css/Format.css" text="Save Login Information" textFill="#2a3e45">
                <font>
                   <Font name="Roboto Condensed Regular" size="14.0" />
                </font>
@@ -55,53 +51,70 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </CheckBox>
-            <Button alignment="CENTER" layoutX="9.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleSignUp" opacity="0.9" prefHeight="35.0" prefWidth="79.0" text="Sign Up" textFill="#2a3e45">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
+            <HBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleSignUp" opacity="0.9" prefHeight="35.0" prefWidth="79.0" text="Sign Up" textFill="#2a3e45">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button alignment="CENTER" defaultButton="true" mnemonicParsing="false" onAction="#handleLogin" opacity="0.9" prefHeight="35.0" prefWidth="146.0" text="Login" textFill="#2a3e45">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </HBox>
          </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
          <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
-      </AnchorPane>
+      </VBox>
    </bottom>
    <center>
-      <AnchorPane prefHeight="204.0" prefWidth="250.0" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fitHeight="110.0" fitWidth="110.0" layoutX="10.0" layoutY="14.0" pickOnBounds="true">
-               <image>
-                  <Image url="@../img/pebble.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="114.0" layoutY="20.0" prefHeight="98.0" prefWidth="126.0" stylesheets="@../css/Format.css" text="Pebl Network" textAlignment="CENTER" textFill="#2a3e45" wrapText="true">
-               <font>
-                  <Font name="Roboto Condensed Italic" size="30.0" />
-               </font>
-            </Label>
-            <TextField fx:id="username" layoutX="10.0" layoutY="132.0" opacity="0.9" prefHeight="30.0" prefWidth="235.0" promptText="Username">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <PasswordField fx:id="password" layoutX="10.0" layoutY="169.0" opacity="0.9" prefHeight="30.0" prefWidth="235.0" promptText="Password">
-               <font>
-                  <Font name="Italic" size="14.0" />
-               </font>
-            </PasswordField>
-         </children>
+      <VBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
+         <children>
+            <HBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <ImageView fitHeight="110.0" fitWidth="110.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../img/pebble.png" />
+                     </image>
+                  </ImageView>
+                  <Label prefHeight="98.0" prefWidth="126.0" stylesheets="@../css/Format.css" text="Pebl Network" textAlignment="CENTER" textFill="#2a3e45" wrapText="true">
+                     <font>
+                        <Font name="Roboto Condensed Italic" size="30.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <VBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <TextField fx:id="username" opacity="0.9" prefHeight="30.0" prefWidth="235.0" promptText="Username">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </TextField>
+                  <PasswordField fx:id="password" opacity="0.9" prefHeight="30.0" prefWidth="235.0" promptText="Password">
+                     <font>
+                        <Font name="Italic" size="14.0" />
+                     </font>
+                  </PasswordField>
+               </children>
+            </VBox>
+         </children>
          <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
-      </AnchorPane>
+      </VBox>
    </center>
 </BorderPane>
