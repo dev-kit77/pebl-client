@@ -108,7 +108,7 @@ public class ProfileCtrl extends Controller {
 						//check if user has location
 						if (displayUser.getLocation() != null && !displayUser.getLocation().isEmpty()) {
 							//show label
-							lblStatus.setVisible(true);
+							lblLocation.setVisible(true);
 
 							//set location
 							lblLocation.setText(displayUser.getLocation());
