@@ -628,10 +628,9 @@ public class Main extends Application {
 	 * @param age int
 	 * @param gender boolean
 	 * @param status String
-	 * @param location String
 	 * @return true if success, false if fail
 	 */
-	public static boolean updateProfile(int age, boolean gender, String status, String location) {
+	public static boolean updateProfile(int age, boolean gender, String status) {
 		//create json body for request and populate it
 		JSONObject obj = new JSONObject();
 
@@ -657,9 +656,6 @@ public class Main extends Application {
 			//else use param status
 			obj.put("status", status);
 		}
-
-		//add location
-		obj.put("location", location);
 
 		//send request and store response
 		JSONObject response = connect.updateProfile(obj);
@@ -1233,7 +1229,7 @@ public class Main extends Application {
 						input.nextLine();
 						System.out.println("Enter your new status or type /exit to cancel: ");
 						status = input.nextLine();
-						updateProfile(age, gender, status, "");
+						updateProfile(age, gender, status);
 					} catch (InputMismatchException e) {
 						System.err.println("You have entered an invalid value for age or gender, please try again later.");
 					}

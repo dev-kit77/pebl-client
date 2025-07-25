@@ -20,7 +20,6 @@ public class EditCtrl extends Controller {
 	@FXML private Slider iptAge;
 	@FXML private Label lblAge;
 	@FXML private CheckBox iptGender;
-	@FXML private TextField iptLocation;
 
 	//class fields
 	User currUser;
@@ -34,7 +33,6 @@ public class EditCtrl extends Controller {
 		iptStatus.setText(currUser.getStatus());
 		iptAge.setValue(currUser.getAge());
 		iptGender.setSelected(currUser.getGender());
-		iptLocation.setText(currUser.getLocation());
 
 		//set age
 		lblAge.setText(Long.toString(Math.round((Double) iptAge.getValue())));
@@ -64,7 +62,7 @@ public class EditCtrl extends Controller {
 
 					//create new user on server
 					try {
-						success = Main.updateProfile(Integer.parseInt(lblAge.getText()), iptGender.isSelected(), iptStatus.getText(), iptLocation.getText());
+						success = Main.updateProfile(Integer.parseInt(lblAge.getText()), iptGender.isSelected(), iptStatus.getText());
 					} catch (Exception e) {
 						//print stack trace to console
 						e.printStackTrace();
@@ -82,7 +80,7 @@ public class EditCtrl extends Controller {
 					//update gui depending on success
 					if (success) {
 						Platform.runLater(() -> {
-							//close window back to profile
+							//close window back to login
 							closeWindow();
 						});
 					} else {
