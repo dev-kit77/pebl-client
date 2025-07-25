@@ -23,22 +23,30 @@ public class LoginCtrl extends Controller {
 	private String srvAddress;
 
 	public LoginCtrl() {
+		//get server address from config
 		this.srvAddress = Config.getInstance().getServerAddr();
+
+		//update GUI
+		Platform.runLater(() -> {
+			//hide save login checkbox from messing with layout
+			chkLogin.setVisible(false);
+			chkLogin.setManaged(false);
+		});
 	}
 
 	public void handleLogin() {
-		//check checkbox state
-		if (chkLogin.isSelected()) {
-			//send to log
-			System.out.println("Login Remembered");
-		}
-		else {
-			//print to log
-			System.out.println("Login Not Remembered");
-		}
-
-		//set config
-		Config.getInstance().setUserCache(chkLogin.isSelected());
+//		//check checkbox state
+//		if (chkLogin.isSelected()) {
+//			//send to log
+//			System.out.println("Login Remembered");
+//		}
+//		else {
+//			//print to log
+//			System.out.println("Login Not Remembered");
+//		}
+//
+//		//set config
+//		Config.getInstance().setUserCache(chkLogin.isSelected());
 
 		//set server address in config
 		Config.getInstance().setServerAddr(this.srvAddress);
