@@ -530,7 +530,7 @@ public class Main extends Application {
 	public static boolean login(String username, String password) {
 		//Create body for request and populate it
 		JSONObject obj = new JSONObject();
-		obj.put("username", username.toLowerCase());
+		obj.put("username", username);
 		obj.put("password", password);
 
 		//send request nd store response
@@ -540,7 +540,7 @@ public class Main extends Application {
 		if (response != null) {
 				// fetch profile data
 				//update the currentUser by calling getProfile
-				getProfile(username.toLowerCase());
+				getProfile(username);
 				System.out.println("Logged in");
 				return true;
 		}

@@ -62,8 +62,16 @@ public class LoginCtrl extends Controller {
 					//check server connection
 					boolean online = Main.checkServer();
 
+					//strip username
+					String strippedUser = username.getText().toLowerCase().replaceAll("\\s+","");
+
+					//check response
 					if (online) {
-						success = Main.login(username.getText(), password.getText());
+						//print username to log
+						System.out.println("Username: " + strippedUser);
+
+						//attempt login
+						success = Main.login(strippedUser, password.getText());
 					} else {
 						//update GUI
 						Platform.runLater(() -> {
@@ -133,9 +141,6 @@ public class LoginCtrl extends Controller {
 
 		//run thread
 		Main.getExecutor().submit(authUser);
-
-		//print username to log
-		System.out.println("Username: " + username.getText());
 	}
 
 	public void handleSignUp() throws IOException {
