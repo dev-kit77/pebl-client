@@ -64,7 +64,7 @@
                   <Font name="Roboto Condensed Italic" size="28.0" />
                </font>
             </Label>
-            <Label text="Version 1.01">
+            <Label text="Version 1.02">
                <font>
                   <Font size="14.0" />
                </font>
@@ -79,7 +79,7 @@
                   <Font size="13.0" />
                </font>
             </Label>
-            <Label text="Client Software: Younis Al Riyami and Kit Cochrane">
+            <Label text="Client Software: Younis Al Riyami and Kit Cochrane" wrapText="true">
                <font>
                   <Font size="13.0" />
                </font>
